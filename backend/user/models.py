@@ -2,6 +2,7 @@ from django.db import models
 
 
 class User(models.Model):
+    email = models.EmailField()
     access_token = models.TextField()
     refresh_token = models.TextField()
     user_state = models.BooleanField(default=True)
