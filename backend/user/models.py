@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class User(models.Model):
     email = models.EmailField()
     access_token = models.TextField()
@@ -20,3 +19,10 @@ class User(models.Model):
         upload_to='images path', default='default image path')
     follower_count = models.IntegerField(default=0)
     following_count = models.IntegerField(default=0)
+    following = models.ManyToManyField(
+        "self",
+        verbose_name="팔로우 중인 사용자들",
+        related_name="followers", # 역방향 user1.following / user2.followers
+        symmetrical=False,
+        through="relationships.Relationship",
+    )
