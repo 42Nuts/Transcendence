@@ -1,6 +1,6 @@
 from django.test import TestCase
 from .models import Match, Player
-from user.models import User
+from users.models import User
 
 
 class MatchTest(TestCase):
