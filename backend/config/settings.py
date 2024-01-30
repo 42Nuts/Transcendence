@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user',
+    'users',
+    'matches',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Media files configuration (Default User Profile image)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = [BASE_DIR / 'media']
+
+# 기본 이미지 경로 설정
+DEFAULT_PROFILE_IMAGE_URL = '/image/profile/default_profile.png'
+DEFAULT_TIER_IMAGE_URL = '/images/tier/bronze.svg'
+DEFAULT_GAME_SKIN_IMAGE_URL = '/images/game_skin/ping_pong.svg'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

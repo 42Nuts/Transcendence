@@ -1,7 +1,7 @@
 import requests
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, JsonResponse
-from user.models import User
+from users.models import User
 
 
 def login(request):
