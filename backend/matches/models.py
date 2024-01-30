@@ -1,12 +1,13 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
+
 
 class Player(models.Model):
 	as_user = models.ForeignKey(
 		"user.User",
 		related_name="as_players",
 		on_delete=models.CASCADE
-    )
+	)
 	match = models.ForeignKey(
 		"matches.Match",
 		related_name="players",
@@ -14,16 +15,22 @@ class Player(models.Model):
 	)
 	score = models.IntegerField(default=0)
 	is_winner = models.BooleanField(default=False)
-	paddle_mid = ArrayField()
-	paddle_line = ArrayField()
+	left_arrow = models.BooleanField(default=False)
+	right_arrow = models.BooleanField(default=False)
+	paddle_mid = ArrayField(models.DecimalField(
+		max_digits=24, decimal_places=8), size=2)
+	paddle_line = ArrayField(models.DecimalField(
+		max_digits=24, decimal_places=8), size=2)
 	paddle_length = models.IntegerField()
 
-class Match(models.Model):
-	start_time = models.DateTimeField()
-	mode = models.CharField()
-	round_number = models.IntegerField()
-	ball_position = ArrayField()
-	ball_speed = models.IntegerField()
-	ball_direction = ArrayField()
-	ball_radius = models.IntegerField() 
 
+class Match(models.Model):
+	start_time = models.DateTimeField(auto_now_add=True)
+	mode = models.CharField(max_length=10)
+	round_number = models.IntegerField(default=1)
+	ball_speed = models.IntegerField()
+	ball_radius = models.IntegerField()
+	ball_position = ArrayField(models.DecimalField(
+		max_digits=24, decimal_places=8), size=2)
+	ball_direction = ArrayField(models.DecimalField(
+		max_digits=24, decimal_places=8), size=2)
