@@ -155,8 +155,6 @@ class PongGame:
         # 키보드 입력에 따른 변수 변화
         if user_input:
             player_id = user_input.get("playerId")
-            left_arrow = user_input.get("leftArrow", False)
-            right_arrow = user_input.get("rightArrow", False)
             player = self.player_map.get(player_id)
 
             if player:
