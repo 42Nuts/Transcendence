@@ -61,21 +61,19 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1",
-            angle=0
+            id="player1"
         ))
 
         self.players.append(Paddle(
-            x=(self.canvas.width / 2 - self.canvas.paddle_length) / 2,
-            y=self.canvas.height / 2,
+            x=(self.canvas.width - self.canvas.paddle_length) / 2,
+            y=10,
             width=100,
             height=10,
             score=0,
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2",
-            angle=60
+            id="player2"
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -125,14 +123,6 @@ class PongGame:
 
         # computer ai
         self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
-
-        # 공의 벽 튕김
-        if self.ball.x - self.ball.radius < 0:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.ball.radius 
-        elif self.ball.x + self.ball.radius > self.canvas.width:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.canvas.width - self.ball.radius
 
         # 공의 위치에 따른 플레이어 확인
         player = self.players[0] if self.ball.y + self.ball.radius > self.canvas.height / 2 else self.players[1]
