@@ -29,12 +29,16 @@ http {
 			# login 
         }
 
-        # location  {
-        #     proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
-        # }
+        location /home {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
 
+        location /api {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
     }
 }
 " > /etc/nginx/nginx.conf
 
 nginx -g "daemon off;"
+ 
