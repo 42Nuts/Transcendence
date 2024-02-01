@@ -3,9 +3,10 @@ import json
 import math
 
 class GameCanvas:
-    def __init__(self, width, height):
+    def __init__(self, width, height, paddle_length):
         self.width = width
         self.height = height
+        self.paddle_length = paddle_length
 
 class GameBall:
     def __init__(self, x, y, radius, velocity_x, velocity_y, speed, color):
@@ -49,7 +50,7 @@ class Paddle:
 
 class PongGame:
     def __init__(self):
-        self.canvas = GameCanvas(width=600, height=500)
+        self.canvas = GameCanvas(width=600, height=500, paddle_length=100)
         self.players = []
 
         self.players.append(Paddle(
@@ -123,6 +124,14 @@ class PongGame:
 
         # computer ai
         self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
+
+        # 공의 벽 튕김
+        if self.ball.x - self.ball.radius < 0:
+            self.ball.velocity_x = -self.ball.velocity_x
+            self.ball.x = self.ball.radius 
+        elif self.ball.x + self.ball.radius > self.canvas.width:
+            self.ball.velocity_x = -self.ball.velocity_x
+            self.ball.x = self.canvas.width - self.ball.radius
 
         # 공의 위치에 따른 플레이어 확인
         player = self.players[0] if self.ball.y + self.ball.radius > self.canvas.height / 2 else self.players[1]

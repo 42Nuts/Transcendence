@@ -3,9 +3,10 @@ import json
 import math
 
 class GameCanvas:
-    def __init__(self, width, height):
+    def __init__(self, width, height, paddle_length):
         self.width = width
         self.height = height
+        self.paddle_length = paddle_length
 
 class GameBall:
     def __init__(self, x, y, radius, velocity_x, velocity_y, speed, color):
@@ -49,7 +50,7 @@ class Paddle:
 
 class PongGame:
     def __init__(self):
-        self.canvas = GameCanvas(width=600, height=500)
+        self.canvas = GameCanvas(width=600, height=500, paddle_length=100)
         self.players = []
 
         self.players.append(Paddle(
@@ -61,21 +62,19 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1",
-            angle=0
+            id="player1"
         ))
 
         self.players.append(Paddle(
-            x=(self.canvas.width / 2 - self.canvas.paddle_length) / 2,
-            y=self.canvas.height / 2,
+            x=(self.canvas.width - self.canvas.paddle_length) / 2,
+            y=10,
             width=100,
             height=10,
             score=0,
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2",
-            angle=60
+            id="player2"
         ))
 
         self.player_map = {player.id: player for player in self.players}
