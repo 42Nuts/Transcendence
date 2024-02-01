@@ -29,9 +29,10 @@ http {
 			# login 
         }
 
-        location / {
-            # django wsgi 연결
-        }
+        # location  {
+        #     proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        # }
+
     }
 }
 " > /etc/nginx/nginx.conf
