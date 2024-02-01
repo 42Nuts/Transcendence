@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomePage</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'zinc-700': '#3E4244',
+            'slate-400': '#98BFBF',
+            'gray-200': '#E8EEED',
+            'white': '#FFFFFF'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-200 bg-no-repeat" style="background-image: url(../assets/images/net.svg); background-position: 10% center;">
+  <div class="flex justify-center items-center min-h-screen">
+    <div class="w-[1136px] h-[480px] flex-col justify-start items-start gap-60 inline-flex">
+      <div class="text-zinc-700 text-[80px] font-bold font-['Inter'] leading-[80px] tracking-[4px]">PING PONG</div>
+      <div class="justify-start items-end gap-[863px] inline-flex">
+        <div class="flex-col justify-start items-start gap-8 inline-flex">
+          <div class="play-button px-6 py-3 bg-slate-400 rounded-[28px] justify-center items-center inline-flex">
+            <div class="text-center text-white text-[40px] font-semibold font-['Inter'] leading-10">Play</div>
+          </div>
+          <div class="options-button px-6 py-3 bg-slate-400 rounded-[28px] justify-center items-center inline-flex">
+            <div class="text-center text-white text-[40px] font-semibold font-['Inter'] leading-10">Options</div>
+          </div>
+        </div>
+        <img class="profile-image w-[72px] h-[72px]" src="../assets/images/profile-default.png" />
+      </div>
+    </div>
+  </div>
+</body>
+</html>
