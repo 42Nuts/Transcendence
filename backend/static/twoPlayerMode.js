@@ -1,6 +1,6 @@
 // select canvas element
 const canvas = document.getElementById("game");
-canvas.width = 600;
+canvas.width = 800;
 canvas.height = 500;
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
@@ -43,9 +43,18 @@ function drawArc(x, y, r, color){
 
 // draw text
 function drawText(text,x,y){
-    ctx.fillStyle = "#FFF";
-    ctx.font = "75px fantasy";
+    ctx.fillStyle = "BLACK";
+    ctx.font = "60px 바탕";
     ctx.fillText(text, x, y);
+}
+
+function rotate(x, y, width, height, angle) {
+    // 회전의 중심을 사각형의 중심으로 이동
+    ctx.translate(x + width / 2, y + height / 2);
+    // 지정된 각도로 회전
+    ctx.rotate(angle * Math.PI / 180);
+    // 회전의 중심을 원래 위치로 되돌림
+    ctx.translate(-(x + width / 2), -(y + height / 2));
 }
 
 let keyState = {
@@ -60,7 +69,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -70,24 +79,30 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
 });
 
 // render function, the function that does al the drawing
 function render(data){
     // clear the canvas
-    drawRect(0, 0, canvas.width, canvas.height, "#000");
-    
-    // draw players[0] score to the left
-    drawText(data.players[0].score, canvas.width/4, canvas.height/5);
-    
-    // draw the COM score to the right
-    drawText(data.players[1].score, 3*canvas.width/4, canvas.height/5);
+    drawRect(0, 0, canvas.width/ 4 * 3, canvas.height, "#000");
 
+    // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
+    
     for (var i = 0; i < data.players.length; i++) {
         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
     }
-
+    
     // draw the ball
     drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+    
+    // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
+
+    // clear the score
+    drawRect(canvas.width/5 * 4, 0, canvas.width/5, canvas.height, "#FFF")
+    // draw players[0] score to the left
+    drawText(data.players[0].score, canvas.width/5 * 4, canvas.height/5);
+    
+    // draw the COM score to the right
+    drawText(data.players[1].score, canvas.width/5 * 4, canvas.height/5 * 2);
 }
