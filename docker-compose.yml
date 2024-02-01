@@ -1,5 +1,6 @@
 services:
   nginx:
+    image: nginx
     container_name: nginx
     build:
       context: ./backend/nginx
@@ -7,3 +8,31 @@ services:
     init: true
     ports:
       - "443:443"
+    env_file:
+      - .env
+    networks:
+      - our_net
+    healthcheck:
+      test: touch $DJANGO_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
+
+  django:
+    image: django
+    container_name: django
+    build:
+      context: ./backend/django
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/django/src:/django
+    init: true
+    env_file:
+      - .env
+    networks:
+      - our_net
+
+networks:
+  our_net:
+    name: taeypark_hyeoan_network
+    driver: bridge
