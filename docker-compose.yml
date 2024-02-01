@@ -1,8 +1,9 @@
 services:
   nginx:
     container_name: nginx
-    build: 
+    build:
       context: ./backend/nginx
       dockerfile: Dockerfile
+    init: true
     ports:
       - "443:443"
