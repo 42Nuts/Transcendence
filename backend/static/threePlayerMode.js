@@ -4,6 +4,7 @@ canvas.width = 800;
 canvas.height = 500;
 canvas.game_width = 600;
 
+
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
 
@@ -49,6 +50,17 @@ function drawText(text,x,y){
     ctx.fillText(text, x, y);
 }
 
+function drawTriangle(x1, y1, x2, y2, x3, y3, color) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1); // 첫 번째 꼭짓점
+    ctx.lineTo(x2, y2); // 두 번째 꼭짓점
+    ctx.lineTo(x3, y3); // 세 번째 꼭짓점
+    ctx.closePath(); // 경로 닫기 (첫 번째 꼭짓점과 세 번째 꼭짓점 연결)
+
+    ctx.fillStyle = color;
+    ctx.fill();
+}
+
 function rotate(x, y, width, height, angle) {
     // 회전의 중심을 사각형의 중심으로 이동
     ctx.translate(x + width / 2, y + height / 2);
@@ -86,7 +98,8 @@ document.addEventListener("keyup", function(event) {
 // render function, the function that does al the drawing
 function render(data){
     // clear the canvas
-    drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+    // drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+    drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
 
     // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
     
