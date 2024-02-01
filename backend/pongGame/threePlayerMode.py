@@ -27,7 +27,7 @@ class GameBall:
         }
 
 class Paddle:
-    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id):
+    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id, angle):
         self.x = x
         self.y = y
         self.width = width
@@ -37,6 +37,7 @@ class Paddle:
         self.leftArrow = leftArrow  
         self.rightArrow = rightArrow
         self.id = id
+        self.angle = angle
 
     def to_dict(self):
         return {
@@ -45,7 +46,8 @@ class Paddle:
             "score": self.score, 
             "width": self.width, 
             "height": self.height, 
-            "color": self.color
+            "color": self.color,
+            "angle": self.angle
         }
 
 class PongGame:
@@ -62,19 +64,34 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1"
+            id="player1",
+            angle=0
         ))
 
         self.players.append(Paddle(
-            x=(self.canvas.width - self.canvas.paddle_length) / 2,
-            y=10,
+            x=self.canvas.width / 4 - self.canvas.paddle_length / 2,
+            y=self.canvas.height / 2,
             width=100,
             height=10,
             score=0,
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2"
+            id="player2",
+            angle=60
+        ))
+
+        self.players.append(Paddle(
+            x=self.canvas.width / 4 * 3 - self.canvas.paddle_length / 2,
+            y=self.canvas.height / 2,
+            width=100,
+            height=10,
+            score=0,
+            color="WHITE",
+            leftArrow=False,
+            rightArrow=False,
+            id="player3",
+            angle= -60
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -95,19 +112,38 @@ class PongGame:
         self.ball.velocity_x = -5 if self.ball.velocity_x > 0 else 5
         self.ball.velocity_y = -5 if self.ball.velocity_y > 0 else 5
         self.ball.speed = 7
+    
+    def rotate_point(self, cx, cy, angle, p):
+        s = math.sin(math.radians(angle))
+        c = math.cos(math.radians(angle))
 
-    def collision(self, b, p):
-        p.top = p.y
-        p.bottom = p.y + p.height
-        p.left = p.x
-        p.right = p.x + p.width
+        # 점을 원점으로 이동
+        p[0] -= cx
+        p[1] -= cy
 
-        b.top = b.y - b.radius
-        b.bottom = b.y + b.radius
-        b.left = b.x - b.radius
-        b.right = b.x + b.radius
+        # 점 회전
+        xnew = p[0] * c - p[1] * s
+        ynew = p[0] * s + p[1] * c
 
-        return p.left < b.right and p.top < b.bottom and p.right > b.left and p.bottom > b.top
+        # 원래 위치로 점 이동
+        p[0] = xnew + cx
+        p[1] = ynew + cy
+        return p
+
+    def collision(self, ball, paddle):
+        corners = [
+            # 모서리 정의 생략...
+        ]
+        center_x = paddle.x + paddle.width / 2
+        center_y = paddle.y + paddle.height / 2
+
+        # self를 사용하여 rotate_point 메서드 호출
+        rotated_corners = [self.rotate_point(center_x, center_y, paddle.angle, corner) for corner in corners]
+        # 충돌 검사 로직...
+        for corner in rotated_corners:
+            if (corner[0] - ball.x) ** 2 + (corner[1] - ball.y) ** 2 <= ball.radius ** 2:
+                return True  # 충돌 발생
+        return False  # 충돌 없음
 
     def update(self, user_input=None):
         # score
@@ -123,15 +159,7 @@ class PongGame:
         self.ball.y += self.ball.velocity_y
 
         # computer ai
-        self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
-
-        # 공의 벽 튕김
-        if self.ball.x - self.ball.radius < 0:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.ball.radius 
-        elif self.ball.x + self.ball.radius > self.canvas.width:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.canvas.width - self.ball.radius
+        # self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
 
         # 공의 위치에 따른 플레이어 확인
         player = self.players[0] if self.ball.y + self.ball.radius > self.canvas.height / 2 else self.players[1]

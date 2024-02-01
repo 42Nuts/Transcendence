@@ -104,7 +104,9 @@ function render(data){
     // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
     
     for (var i = 0; i < data.players.length; i++) {
+        rotate(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].angle * -1);
         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
+        rotate(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].angle);
     }
     
     // draw the ball
