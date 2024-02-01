@@ -19,7 +19,7 @@ def nickname(request):
         return Http404()
 
     url = (
-        f'https://api.intra.42.fr/oauth/token?grant_type=authorization_code&client_secret=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&client_id=u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491&redirect_uri=http%3A%2F%2F127.0.0.1%3A8000%2Fnickname&response_type=code&code={authorization_code}')
+        f'https://api.intra.42.fr/oauth/token?grant_type=authorization_code&client_secret=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&client_id=u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491&redirect_uri=https%3A%2F%2F127.0.0.1%2Fhome&response_type=code&code={authorization_code}')
     # 2. access_token 발급 api 호출
     print('url', url)
     response = requests.post(url)

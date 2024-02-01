@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Ping Pong</title>
+	<script type="text/javascript">
+		var csrftoken = '{{ csrf_token }}';
+	</script>
+</head>
+<body>
+	<canvas id="game" width="600" height="500"></canvas>
+	<script src="{% static 'twoPlayerMode.js' %}"></script>
+</body>
+</html>
