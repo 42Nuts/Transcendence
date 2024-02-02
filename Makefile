@@ -17,4 +17,4 @@ rmContainer:
 rmImage: rmContainer
 	docker rmi -f $(shell docker images -q)
 	
-.PHONY: all clean rmContainer rmImage docker
+.PHONY: all clean rmContainer rmImage docker 
