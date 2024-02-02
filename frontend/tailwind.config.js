@@ -20,6 +20,15 @@ module.exports = {
           color3: '#FE4A65',
           color4: '#1FCF7F',
         },
+      },
+      animation: {
+        'bounce': 'bounce 2s infinite',
+      },
+      keyframes: {
+        bounce: {
+          '0%, 50%, 100%': { transform: 'translateY(0)' },
+          '25%': { transform: 'translateY(-10px)' },
+        }
       }
     },
   },
