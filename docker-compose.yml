@@ -12,11 +12,9 @@ services:
       - .env
     networks:
       - our_net
-    healthcheck:
-      test: touch $DJANGO_HEALTH
-      interval: 3s
-      timeout: 2s
-      retries: 30
+    depends_on:
+      django:
+        condition: service_healthy
 
   django:
     image: django
@@ -31,7 +29,34 @@ services:
       - .env
     networks:
       - our_net
+    healthcheck:
+      test: cat $DJANGO_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    depends_on:
+      postgresql:
+        condition: service_healthy
 
+  postgresql:
+    image: postgresql
+    container_name: postgresql
+    build:
+      context: ./backend/PostgreSQL
+      dockerfile: Dockerfile
+    # volumes:
+    #   - 
+    init: true
+    env_file:
+      - .env
+    networks:
+      - our_net 
+    healthcheck:
+      test: cat $POSTGRES_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    
 networks:
   our_net:
     name: taeypark_hyeoan_network
