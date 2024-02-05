@@ -54,6 +54,7 @@ class PongGame:
     def __init__(self):
         self.canvas = GameCanvas(width=600, height=500, paddle_length=100)
         self.players = []
+        self.last_touch_player = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -100,8 +101,8 @@ class PongGame:
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
             radius=10,
-            velocity_x=5,
-            velocity_y=5,
+            velocity_x=3,
+            velocity_y=3,
             speed=7,
             color="WHITE"
         )
@@ -109,8 +110,8 @@ class PongGame:
     def resetBall(self):
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.velocity_x = -5 if self.ball.velocity_x > 0 else 5
-        self.ball.velocity_y = -5 if self.ball.velocity_y > 0 else 5
+        self.ball.velocity_x = -3 if self.ball.velocity_x > 0 else 3
+        self.ball.velocity_y = -3 if self.ball.velocity_y > 0 else 3
         self.ball.speed = 7
     
     def rotate_point(self, cx, cy, angle, p):
@@ -144,15 +145,49 @@ class PongGame:
             if (corner[0] - ball.x) ** 2 + (corner[1] - ball.y) ** 2 <= ball.radius ** 2:
                 return True  # 충돌 발생
         return False  # 충돌 없음
+    
+    def calculate_line_equation(self, point1, point2):
+        (x1, y1), (x2, y2) = point1, point2
+        if x2 - x1 == 0:  # 두 점의 x 좌표가 같을 경우, 기울기가 무한대이므로 수직선 처리
+            return None, None  # 기울기와 y절편을 None으로 반환하여 수직선을 표시
+        m = (y2 - y1) / (x2 - x1)
+        b = y1 - m * x1
+        return m, b
+    
+    def calculate_distance_to_line(self, point, line_equation):
+        x0, y0 = point
+        m, b = line_equation
+        if m is None:  # 수직선의 경우, x0에서 선의 x좌표까지의 거리를 직접 계산
+            return abs(x0 - b)  # 이 경우 b는 선의 x좌표
+        return abs(m * x0 - y0 + b) / (m ** 2 + 1) ** 0.5
+    
+    def update_score(self, ball):
+        canvas_width, canvas_height = self.canvas.width, self.canvas.height
+        # 삼각형의 꼭지점 좌표
+        point1 = (canvas_width / 2, 0)  # 중앙 상단
+        point2 = (0, canvas_height)  # 좌측 하단
+        point3 = (canvas_width, canvas_height)  # 우측 하단
+
+        # # 각 변의 방정식 계산
+        line1 = self.calculate_line_equation(point1, point2)
+        line2 = self.calculate_line_equation(point2, point3)
+        line3 = self.calculate_line_equation(point3, point1)
+
+        # 공과 각 변 사이의 거리 계산
+        distance1 = self.calculate_distance_to_line((ball.x, ball.y), line1)
+        distance2 = self.calculate_distance_to_line((ball.x, ball.y), line2)
+        distance3 = self.calculate_distance_to_line((ball.x, ball.y), line3)
+
+        # 충돌 검사
+        if distance1 <= ball.radius or distance2 <= ball.radius or distance3 <= ball.radius:
+            if self.last_touch_player is not None:
+                self.player_map[self.last_touch_player_id].score += 1  # 점수 업데이트
+            self.resetBall()
+
 
     def update(self, user_input=None):
         # score
-        if self.ball.y - self.ball.radius < 0:
-            self.players[1].score += 1
-            self.resetBall()
-        elif self.ball.y + self.ball.radius > self.canvas.height:
-            self.players[0].score += 1
-            self.resetBall()
+        self.update_score(self.ball)
         
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
@@ -179,6 +214,7 @@ class PongGame:
 
             # 게임 중 스피드가 점차 증가
             self.ball.speed += 0.1
+            self.last_touch_player = player.id
 
         # 키보드 입력에 따른 변수 변화
         if user_input:
