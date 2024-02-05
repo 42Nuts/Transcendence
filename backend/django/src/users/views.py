@@ -1,6 +1,6 @@
 import requests
 from django.shortcuts import render
-from django.http import Http404, HttpResponse, JsonResponse
+from django.http import JsonResponse
 from users.models import User
 
 
@@ -13,10 +13,13 @@ def home(request):
 
 
 def nickname(request):
-    authorization_code = request.GET['code']  # 1. resource owwner 승인
+    if request.method != 'GET':
+        return JsonResponse({'status': 403})
+
+    authorization_code = request.GET.get('code')  # 1. resource owwner 승인
     print("authorization_code = ", authorization_code)
     if authorization_code is None:
-        return Http404()
+        return JsonResponse({'status': 404})
 
     url = (
         f'https://api.intra.42.fr/oauth/token?grant_type=authorization_code&client_secret=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&client_id=u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491&redirect_uri=https%3A%2F%2F127.0.0.1%2Fhome&response_type=code&code={authorization_code}')
@@ -48,19 +51,20 @@ def nickname(request):
         # 생성된 경우와 기존 유저의 경우 확인
         if (created):
             print(f"새로운 유저 생성 = {email}")
-            print('JsonResponse = ',JsonResponse({'user_id': user.id}))
+            print('JsonResponse = ', JsonResponse({'user_id': user.id}))
         else:
             print(f"기존유저 token 업데이트= {email}")
             user.access_token = access_token
             user.refresh_token = refresh_token
             user.save()
 
-    # python 내장함수 vars()로 객체의 __dict__  속성을 반환해서 key, value 출력해보기
+        # python 내장함수 vars()로 객체의 __dict__  속성을 반환해서 key, value 출력해보기
         print('유저 객체의 모든 속성과 값 출력')
         for key, value in vars(user).items():
             print(f"{key}: {value}")
     else:
         print('error 입니다!')
+        return JsonResponse({'status': 500})
 
     return JsonResponse({'user_id': user.id})
 
