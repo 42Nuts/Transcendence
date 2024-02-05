@@ -100,9 +100,7 @@ document.addEventListener("keyup", function(event) {
 
 // render function, the function that does al the drawing
 function render(data){
-    // clear the canvas
-    // drawRect(0, 0, canvas.game_width, canvas.height, "#000");
-    // rotate(0, 0, canvas.game_width, canvas.height, 120);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
     
@@ -116,9 +114,6 @@ function render(data){
     drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
     
     // rotate(0, 0, canvas.game_width, canvas.height, -120);
-
-    // clear the score
-    drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")
 
     for (var i = 0; i < data.players.length; i++) {
         drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
