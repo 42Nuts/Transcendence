@@ -29,11 +29,16 @@ http {
 			# login 
         }
 
-        location / {
-            # django wsgi 연결
+        location /home {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
+
+        location /api {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
     }
 }
 " > /etc/nginx/nginx.conf
 
 nginx -g "daemon off;"
+ 

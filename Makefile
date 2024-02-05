@@ -11,4 +11,10 @@ re:
 	make clean
 	make all
 
-.PHONY: all clean docker
+rmContainer:
+	docker rm -f $(shell docker ps -aq)
+
+rmImage: rmContainer
+	docker rmi -f $(shell docker images -q)
+	
+.PHONY: all clean rmContainer rmImage docker 

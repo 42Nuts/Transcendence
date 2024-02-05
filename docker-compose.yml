@@ -1,5 +1,6 @@
 services:
   nginx:
+    image: nginx
     container_name: nginx
     build:
       context: ./backend/nginx
@@ -7,3 +8,56 @@ services:
     init: true
     ports:
       - "443:443"
+    env_file:
+      - .env
+    networks:
+      - our_net
+    depends_on:
+      django:
+        condition: service_healthy
+
+  django:
+    image: django
+    container_name: django
+    build:
+      context: ./backend/django
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/django/src:/django
+    init: true
+    env_file:
+      - .env
+    networks:
+      - our_net
+    healthcheck:
+      test: cat $DJANGO_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+  postgresql:
+    image: postgresql
+    container_name: postgresql
+    build:
+      context: ./backend/PostgreSQL
+      dockerfile: Dockerfile
+    # volumes:
+    #   - 
+    init: true
+    env_file:
+      - .env
+    networks:
+      - our_net 
+    healthcheck:
+      test: cat $POSTGRES_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    
+networks:
+  our_net:
+    name: taeypark_hyeoan_network
+    driver: bridge
