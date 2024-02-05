@@ -1,8 +1,8 @@
 // select canvas element
 const canvas = document.getElementById("game");
 canvas.width = 800;
-canvas.height = 500;
 canvas.game_width = 600;
+canvas.height = (3 ** 0.5) / 2 * canvas.game_width;
 // canvas.width = 1000;
 // canvas.height = 700;
 // canvas.game_width = 800;
@@ -85,7 +85,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player3', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -95,7 +95,7 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player3', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
 });
 
 // render function, the function that does al the drawing
@@ -104,17 +104,20 @@ function render(data){
     
     drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
     
+    ctx.save();
+    rotate(0, 0, canvas.game_width, 2 *canvas.height - canvas.game_width / (3 ** 0.5), 120);
+
     for (var i = 0; i < data.players.length; i++) {
+        ctx.save();
         rotate(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].angle * -1);
         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
-        rotate(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].angle);
+        ctx.restore();
     }
     
     // draw the ball
     drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+    ctx.restore();
     
-    // rotate(0, 0, canvas.game_width, canvas.height, -120);
-
     for (var i = 0; i < data.players.length; i++) {
         drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
     }
