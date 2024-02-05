@@ -3,6 +3,9 @@ const canvas = document.getElementById("game");
 canvas.width = 800;
 canvas.height = 500;
 canvas.game_width = 600;
+// canvas.width = 1000;
+// canvas.height = 700;
+// canvas.game_width = 800;
 
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
@@ -82,7 +85,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player3', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -92,16 +95,16 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player3', ...keyState }));
 });
 
 // render function, the function that does al the drawing
 function render(data){
     // clear the canvas
     // drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+    // rotate(0, 0, canvas.game_width, canvas.height, 120);
+    
     drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
-
-    // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
     
     for (var i = 0; i < data.players.length; i++) {
         rotate(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].angle * -1);
@@ -112,7 +115,7 @@ function render(data){
     // draw the ball
     drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
     
-    // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
+    // rotate(0, 0, canvas.game_width, canvas.height, -120);
 
     // clear the score
     drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")

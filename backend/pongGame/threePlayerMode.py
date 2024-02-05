@@ -53,6 +53,7 @@ class Paddle:
 class PongGame:
     def __init__(self):
         self.canvas = GameCanvas(width=600, height=500, paddle_length=100)
+        # self.canvas = GameCanvas(width=800, height=700, paddle_length=100)
         self.players = []
         self.last_touch_player = None
 
@@ -71,7 +72,7 @@ class PongGame:
 
         self.players.append(Paddle(
             x=self.canvas.width / 4 - self.canvas.paddle_length / 2,
-            y=self.canvas.height / 2,
+            y=self.canvas.height / 2 + 20,
             width=100,
             height=10,
             score=0,
@@ -84,7 +85,7 @@ class PongGame:
 
         self.players.append(Paddle(
             x=self.canvas.width / 4 * 3 - self.canvas.paddle_length / 2,
-            y=self.canvas.height / 2,
+            y=self.canvas.height / 2 + 20,
             width=100,
             height=10,
             score=0,
@@ -183,6 +184,32 @@ class PongGame:
             if self.last_touch_player is not None:
                 self.player_map[self.last_touch_player_id].score += 1  # 점수 업데이트
             self.resetBall()
+    
+    def update_player_movement(self, index, player):
+        angle_radians = math.radians(180 - player.angle)
+        move_distance = 8  # 움직임의 기본 단위
+        # index 0: 바닥 변을 따라 움직임
+        if index == 0:
+            if player.leftArrow and player.x > 0:
+                player.x -= move_distance
+            if player.rightArrow and player.x < self.canvas.width - player.width:
+                player.x += move_distance
+        # index 1: 왼쪽 변을 따라 움직임
+        elif index == 1:
+            if player.leftArrow and player.y + self.canvas.paddle_length * math.sin(player.angle) - 20 > 0:
+                player.x -= move_distance * math.cos(angle_radians)
+                player.y -= move_distance * math.sin(angle_radians)
+            if player.rightArrow and player.y - self.canvas.paddle_length * math.sin(player.angle) + 20 < self.canvas.height:
+                player.x += move_distance * math.cos(angle_radians)
+                player.y += move_distance * math.sin(angle_radians)
+        # index 2: 오른쪽 변을 따라 움직임
+        elif index == 2:
+            if player.leftArrow and player.y + self.canvas.paddle_length * math.sin(player.angle) + 20 < self.canvas.height:
+                player.x -= move_distance * math.cos(angle_radians)
+                player.y -= move_distance * math.sin(angle_radians)
+            if player.rightArrow and player.y - 50> 0:
+                player.x += move_distance * math.cos(angle_radians)
+                player.y += move_distance * math.sin(angle_radians)
 
 
     def update(self, user_input=None):
@@ -192,9 +219,6 @@ class PongGame:
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
-
-        # computer ai
-        # self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
 
         # 공의 위치에 따른 플레이어 확인
         player = self.players[0] if self.ball.y + self.ball.radius > self.canvas.height / 2 else self.players[1]
@@ -220,24 +244,16 @@ class PongGame:
         if user_input:
             player_id = user_input.get("playerId")
             player = self.player_map.get(player_id)
+            player.leftArrow = user_input.get("leftArrow", False)
+            player.rightArrow = user_input.get("rightArrow", False)
 
-            if player:
-                player.leftArrow = user_input.get("leftArrow", False)
-                player.rightArrow = user_input.get("rightArrow", False)
-
-                # 두 키가 동시에 눌렸을 경우 움직임 없음
-        for cur in self.players:
-           if cur.leftArrow and cur.rightArrow:
-               continue
-
-           if cur.leftArrow and cur.x > 0:
-               cur.x -= 8
-           if cur.rightArrow and cur.x < self.canvas.width - cur.width:
-               cur.x += 8
+        # 플레이어 움직임 기록
+        for index, player in enumerate(self.players):
+            self.update_player_movement(index, player)
 
         # 프론트엔드에 필요한 정보 보내기
         return {
             "ball": self.ball.to_dict(),
-            "players": [player.to_dict() for player in self.players]
+            "players": [player.to_dict() for player in self.players],
         }
 
