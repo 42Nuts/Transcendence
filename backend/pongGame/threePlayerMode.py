@@ -133,19 +133,26 @@ class PongGame:
         return p
 
     def collision(self, ball, paddle):
+        # 패들 모서리 정의
         corners = [
-            # 모서리 정의 생략...
+            [paddle.x, paddle.y],  # 왼쪽 상단
+            [paddle.x + paddle.width, paddle.y],  # 오른쪽 상단
+            [paddle.x, paddle.y + paddle.height],  # 왼쪽 하단
+            [paddle.x + paddle.width, paddle.y + paddle.height],  # 오른쪽 하단
         ]
         center_x = paddle.x + paddle.width / 2
         center_y = paddle.y + paddle.height / 2
 
-        # self를 사용하여 rotate_point 메서드 호출
-        rotated_corners = [self.rotate_point(center_x, center_y, paddle.angle, corner) for corner in corners]
-        # 충돌 검사 로직...
-        for corner in rotated_corners:
-            if (corner[0] - ball.x) ** 2 + (corner[1] - ball.y) ** 2 <= ball.radius ** 2:
-                return True  # 충돌 발생
-        return False  # 충돌 없음
+        # 패들 모서리 회전
+        rotated_corners = [self.rotate_point(center_x, center_y, paddle.angle, corner.copy()) for corner in corners]
+
+        # 충돌 검사
+        # for corner in rotated_corners:
+        #     line = self.calculate_line_equation(corner[0], corner[1])
+        #     distance = self.calculate_distance_to_line((ball.x, ball.y), line)
+        #     if distance <= ball.radius:
+        #         return True
+        # return False  # 충돌 없음
     
     def calculate_line_equation(self, point1, point2):
         (x1, y1), (x2, y2) = point1, point2
@@ -211,6 +218,26 @@ class PongGame:
                 player.x += move_distance * math.cos(angle_radians)
                 player.y += move_distance * math.sin(angle_radians)
 
+    def calculate_distance(self, ball, paddle):
+    # 간단한 예시: 패들 중심과 공 중심 사이의 유클리드 거리
+        paddle_center_x = paddle.x + paddle.width / 2
+        paddle_center_y = paddle.y + paddle.height / 2
+        distance = math.sqrt((paddle_center_x - ball.x) ** 2 + (paddle_center_y - ball.y) ** 2)
+        return distance
+
+    def find_closest_paddle(self):
+        min_distance = float('inf')  # 최소 거리 초기화
+        closest_paddle = None  # 가장 가까운 패들 초기화
+
+        for paddle in self.players:
+            # 공과 패들 중심 사이의 거리 계산
+            distance = self.calculate_distance(ball=self.ball, paddle=paddle)
+            
+            if distance < min_distance:
+                min_distance = distance
+                closest_paddle = paddle
+
+        return closest_paddle
 
     def update(self, user_input=None):
         # score
@@ -221,24 +248,25 @@ class PongGame:
         self.ball.y += self.ball.velocity_y
 
         # 공의 위치에 따른 플레이어 확인
-        player = self.players[0] if self.ball.y + self.ball.radius > self.canvas.height / 2 else self.players[1]
+        player = self.find_closest_paddle()
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
-            collidePoint = (self.ball.x - (player.x + player.width / 2))
-            collidePoint /= (player.width / 2)
+            self.players[0].score += 1
+            # collidePoint = (self.ball.x - (player.x + player.width / 2))
+            # collidePoint /= (player.width / 2)
 
-            angleRad = (math.pi / 4) * collidePoint
+            # angleRad = (math.pi / 4) * collidePoint
 
-            direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
+            # direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
 
-            # 스피드를 공의 움직임에 적용
-            self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
-            self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
+            # # 스피드를 공의 움직임에 적용
+            # self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
+            # self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
 
-            # 게임 중 스피드가 점차 증가
-            self.ball.speed += 0.1
-            self.last_touch_player = player.id
+            # # 게임 중 스피드가 점차 증가
+            # self.ball.speed += 0.1
+            # self.last_touch_player = player.id
 
         # 키보드 입력에 따른 변수 변화
         if user_input:
