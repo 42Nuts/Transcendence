@@ -29,7 +29,7 @@ http {
 			# login 
         }
 
-        location /home {
+        location /auth {
             proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
 

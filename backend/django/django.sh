@@ -2,7 +2,9 @@
 
 ./manage.py makemigrations \
     users \
-    matches
+    matches \
+    relationships \
+    login
 ./manage.py migrate
 
 touch $DJANGO_HEALTH
