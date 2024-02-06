@@ -105,7 +105,7 @@ function render(data){
     drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
     
     ctx.save();
-    rotate(0, 0, canvas.game_width, 2 *canvas.height - canvas.game_width / (3 ** 0.5), 120);
+    // rotate(0, 0, canvas.game_width, 2 *canvas.height - canvas.game_width / (3 ** 0.5), 120);
 
     for (var i = 0; i < data.players.length; i++) {
         ctx.save();

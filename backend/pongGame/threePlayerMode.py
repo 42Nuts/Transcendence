@@ -72,7 +72,7 @@ class PongGame:
 
         self.players.append(Paddle(
             x=self.canvas.width / 4 - self.canvas.paddle_length / 2,
-            y=self.canvas.height / 2 + 20,
+            y=self.canvas.width / 4 * (3 ** 0.5) + 20,
             width=100,
             height=10,
             score=0,
@@ -85,7 +85,7 @@ class PongGame:
 
         self.players.append(Paddle(
             x=self.canvas.width / 4 * 3 - self.canvas.paddle_length / 2,
-            y=self.canvas.height / 2 + 20,
+            y=self.canvas.width / 4 * (3 ** 0.5) + 20,
             width=100,
             height=10,
             score=0,
