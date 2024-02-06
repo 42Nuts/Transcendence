@@ -7,7 +7,7 @@ module.exports = {
         primary: {
           DEFAULT: '#E8EEED',
           road: '#FFFFFA',
-          rogo: '#EF283B',
+          logo: '#EF283B',
           button: '#98BFBF',
           button_hover: '#FDCA6B',
           text: '#3E4244',
