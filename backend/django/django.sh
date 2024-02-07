@@ -7,6 +7,9 @@
     login
 ./manage.py migrate
 
+mkdir logs
+touch logs/log.log
+
 touch $DJANGO_HEALTH
 
 gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT
