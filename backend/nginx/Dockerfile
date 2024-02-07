@@ -13,7 +13,6 @@ RUN openssl req \
     -out /etc/nginx/certificate.crt
 
 COPY ./nginx.sh /usr/bin/nginx.sh
-COPY ./src /var/www/html
 
 RUN chmod +x /usr/bin/nginx.sh
 
