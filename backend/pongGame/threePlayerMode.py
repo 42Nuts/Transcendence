@@ -114,6 +114,7 @@ class PongGame:
         self.ball.velocity_x = -3 if self.ball.velocity_x > 0 else 3
         self.ball.velocity_y = -3 if self.ball.velocity_y > 0 else 3
         self.ball.speed = 7
+        self.last_touch_player = None
     
     def rotate_point(self, cx, cy, angle, p):
         s = math.sin(math.radians(angle))
@@ -134,24 +135,30 @@ class PongGame:
 
     def collision(self, ball, paddle):
         # 패들 모서리 정의
-        corners = [
-            [paddle.x, paddle.y],  # 왼쪽 상단
-            [paddle.x + paddle.width, paddle.y],  # 오른쪽 상단
-            [paddle.x, paddle.y + paddle.height],  # 왼쪽 하단
-            [paddle.x + paddle.width, paddle.y + paddle.height],  # 오른쪽 하단
-        ]
+        corners = (
+           [paddle.x, paddle.y],  # 왼쪽 상단
+           [paddle.x + paddle.width, paddle.y],  # 오른쪽 상단
+           [paddle.x, paddle.y + paddle.height],  # 왼쪽 하단
+           [paddle.x + paddle.width, paddle.y + paddle.height],  # 오른쪽 하단
+        )
         center_x = paddle.x + paddle.width / 2
         center_y = paddle.y + paddle.height / 2
 
         # 패들 모서리 회전
-        rotated_corners = [self.rotate_point(center_x, center_y, paddle.angle, corner.copy()) for corner in corners]
+        rotated_corners = [self.rotate_point(center_x, center_y, paddle.angle, corner) for corner in corners]
 
         # 충돌 검사
-        # for corner in rotated_corners:
-        #     line = self.calculate_line_equation(corner[0], corner[1])
-        #     distance = self.calculate_distance_to_line((ball.x, ball.y), line)
-        #     if distance <= ball.radius:
-        #         return True
+        line1 = self.calculate_line_equation(rotated_corners[0], rotated_corners[1])
+        print(rotated_corners[0])
+        # line1_x = self.calculate_distance(self.ball, rotated_corners[0][0], rotated_corners[1][0])
+
+        # line2 = self.calculate_line_equation(rotated_corners[2], rotated_corners[3])
+        distance1 = self.calculate_distance_to_line((ball.x, ball.y), line1)
+        print(line1)
+        # distance2 = self.calculate_distance_to_line((ball.x, ball.y), line2)
+        # if distance1 <= ball.radius or distance2 <= ball.radius:
+        if distance1 <= ball.radius :
+            return True
         # return False  # 충돌 없음
     
     def calculate_line_equation(self, point1, point2):
@@ -167,7 +174,7 @@ class PongGame:
         m, b = line_equation
         if m is None:  # 수직선의 경우, x0에서 선의 x좌표까지의 거리를 직접 계산
             return abs(x0 - b)  # 이 경우 b는 선의 x좌표
-        return abs(m * x0 - y0 + b) / (m ** 2 + 1) ** 0.5
+        return abs(m * x0 - y0 + b) / ((m ** 2 + 1) ** 0.5)
     
     def update_score(self, ball):
         canvas_width, canvas_height = self.canvas.width, self.canvas.height
@@ -218,11 +225,9 @@ class PongGame:
                 player.x += move_distance * math.cos(angle_radians)
                 player.y += move_distance * math.sin(angle_radians)
 
-    def calculate_distance(self, ball, paddle):
+    def calculate_distance(self, ball, x, y):
     # 간단한 예시: 패들 중심과 공 중심 사이의 유클리드 거리
-        paddle_center_x = paddle.x + paddle.width / 2
-        paddle_center_y = paddle.y + paddle.height / 2
-        distance = math.sqrt((paddle_center_x - ball.x) ** 2 + (paddle_center_y - ball.y) ** 2)
+        distance = math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2)
         return distance
 
     def find_closest_paddle(self):
@@ -231,7 +236,7 @@ class PongGame:
 
         for paddle in self.players:
             # 공과 패들 중심 사이의 거리 계산
-            distance = self.calculate_distance(ball=self.ball, paddle=paddle)
+            distance = self.calculate_distance(self.ball, paddle.x, paddle.y)
             
             if distance < min_distance:
                 min_distance = distance
@@ -248,11 +253,13 @@ class PongGame:
         self.ball.y += self.ball.velocity_y
 
         # 공의 위치에 따른 플레이어 확인
-        player = self.find_closest_paddle()
+        # player = self.find_closest_paddle()
+        player = self.players[1]
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
             self.players[0].score += 1
+            self.resetBall()
             # collidePoint = (self.ball.x - (player.x + player.width / 2))
             # collidePoint /= (player.width / 2)
 
