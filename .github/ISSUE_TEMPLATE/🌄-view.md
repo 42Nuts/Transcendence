@@ -2,7 +2,7 @@
 name: "🌄 VIEW"
 about: 페이지
 title: ''
-labels: ''
+labels: ["🖥 FRONTEND"], ["🌄 VIEW"]
 assignees: ''
 
 ---
