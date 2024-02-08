@@ -1,5 +1,5 @@
 channels==4.0.0
-Django==5.0.1
+djangorestframework-simplejwt==5.3.1 # django, djangorestframework, djangorestframework-simplejwt
 daphne==4.0.0 
 gunicorn==21.2.0
 psycopg2==2.9.9
