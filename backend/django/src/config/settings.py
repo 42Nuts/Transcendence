@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,11 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'login',
+    'login',
     'users',
     'matches',
     'pongGame',
-	'relationships'
+    'relationships',
 ]
 
 MIDDLEWARE = [
@@ -177,4 +178,94 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+
+REST_FRAMEWORK = {
+    # 기본 인증 클래스 설정
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # JWT 인증 방식을 사용
+        # 들어오는 요청의 Authorization 헤더에서 JWT 토큰을 찾아 사용자를 인증한다
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+SIMPLE_JWT = {
+    # ***액세스 토큰의 유효 기간 설정 (예: 5분)
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+
+    # ***리프레시 토큰의 유효 기간 설정 (예: 1일)
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+
+    # 리프레시 토큰을 갱신할 때마다 새로운 리프레시 토큰 발급 여부
+    "ROTATE_REFRESH_TOKENS": False,
+
+    # 리프레시 토큰 회전 후 이전 토큰을 블랙리스트에 추가할지 여부
+    "BLACKLIST_AFTER_ROTATION": False,
+
+    # 로그인 시 'last_login' 필드 업데이트 여부
+    "UPDATE_LAST_LOGIN": False,
+
+    # ***토큰 서명/검증에 사용할 알고리즘 (예: HS256)
+    "ALGORITHM": "HS256",
+
+    # ***토큰 서명에 사용될 키 (Django SECRET_KEY 사용)
+    "SIGNING_KEY": SECRET_KEY,
+
+    # 토큰 검증에 사용될 키 (HMAC 사용 시 SIGNING_KEY와 동일)
+    "VERIFYING_KEY": "",
+
+    # 토큰의 'aud' 클레임 (None일 경우 토큰에서 제외)
+    "AUDIENCE": None,
+
+    # 토큰의 'iss' 클레임 (None일 경우 토큰에서 제외)
+    "ISSUER": None,
+
+    # 사용자 정의 JSON 인코더 (None일 경우 기본 인코더 사용)
+    "JSON_ENCODER": None,
+
+    # 공개키를 제공하는 JWKS URL (None일 경우 사용 안 함)
+    "JWK_URL": None,
+
+    # 토큰 만료 시간에 대한 여유 마진 설정
+    "LEEWAY": 0,
+
+    # 인증 헤더 타입 설정 ('Bearer' 사용)
+    "AUTH_HEADER_TYPES": ("Bearer",),
+
+    # 인증 헤더 이름 설정 ('Authorization' 사용)
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+
+    # 사용자 식별에 사용될 필드 ('id' 사용)
+    "USER_ID_FIELD": "id",
+
+    # 토큰에 포함될 사용자 식별 정보 필드 ('user_id' 사용)
+    "USER_ID_CLAIM": "user_id",
+
+    # 사용자 인증 규칙 설정
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
+
+    # 인증에 사용될 토큰 클래스 설정
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+
+    # 토큰 타입을 나타내는 클레임 이름 설정
+    "TOKEN_TYPE_CLAIM": "token_type",
+
+    # 토큰 사용자 클래스 설정
+    "TOKEN_USER_CLASS": "rest_framework_simplejwt.models.TokenUser",
+
+    # 토큰 고유 식별자(JTI) 클레임 이름 설정
+    "JTI_CLAIM": "jti",
+
+    # 슬라이딩 토큰 유효 기간 및 리프레시 유효 기간 설정
+    "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+
+    # 토큰 발급 및 갱신 등에 사용될 시리얼라이저 설정
+    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
+    "TOKEN_VERIFY_SERIALIZER": "rest_framework_simplejwt.serializers.TokenVerifySerializer",
+    "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
+    "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
+    "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
