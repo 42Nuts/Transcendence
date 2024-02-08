@@ -1,5 +1,5 @@
 ---
-name: "📺 VIEW"
+name: "🌄 VIEW"
 about: 페이지
 title: ''
 labels: ''
