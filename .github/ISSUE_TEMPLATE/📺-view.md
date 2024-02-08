@@ -16,7 +16,7 @@ assignees: ''
 ## 👨‍💻 작업 설명 
 
 
-## 🌄 Components
+## 🎁 Components
 
 - [ ] [component]
 - [ ] [component]
