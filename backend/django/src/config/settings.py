@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'config.middleware.simple_middleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -182,6 +183,9 @@ LOGGING = {
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     # 기본 인증 클래스 설정
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # JWT 인증 방식을 사용
