@@ -53,7 +53,6 @@ class Paddle:
 class PongGame:
     def __init__(self):
         self.canvas = GameCanvas(width=600, height=(3 ** (1/2)) / 2 * 600, paddle_length=100)
-        # self.canvas = GameCanvas(width=800, height=700, paddle_length=100)
         self.players = []
         self.last_touch_player = None
         self.reset_angle = 0
