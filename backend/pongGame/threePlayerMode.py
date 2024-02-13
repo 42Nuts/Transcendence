@@ -206,8 +206,18 @@ class PongGame:
 
         # 충돌 검사
         if distance1 <= ball.radius or distance2 <= ball.radius or distance3 <= ball.radius:
-            if self.last_touch_player is not None:
+            if self.last_touch_player:
                 self.player_map[self.last_touch_player].score += 1  # 점수 업데이트
+            else:
+                if distance1 <= ball.radius:
+                    self.players[0].score += 1
+                    self.players[2].score += 1
+                elif distance2 <= ball.radius:
+                    self.players[1].score += 1
+                    self.players[2].score += 1
+                elif distance3 <= ball.radius:
+                    self.players[0].score += 1
+                    self.players[1].score += 1
             self.resetBall()
     
     def update_player_movement(self, index, player):
@@ -263,20 +273,20 @@ class PongGame:
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
-            # collidePoint = (self.ball.x - (player.x + player.width / 2))
-            # collidePoint /= (player.width / 2)
+            collidePoint = (self.ball.x - (player.x + player.width / 2))
+            collidePoint /= (player.width / 2)
 
-            # angleRad = (math.pi / 4) * collidePoint
+            angleRad = (math.pi / 4) * collidePoint
 
-            # direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
+            direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
 
-            # # 스피드를 공의 움직임에 적용
-            # self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
-            # self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
+            # 스피드를 공의 움직임에 적용
+            self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
+            self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
 
-            # # 게임 중 스피드가 점차 증가
-            # self.ball.speed += 0.1
-            # self.last_touch_player = player.id
+            # 게임 중 스피드가 점차 증가
+            self.ball.speed += 0.1
+            self.last_touch_player = player.id
 
         # 키보드 입력에 따른 변수 변화
         if user_input:
