@@ -273,12 +273,17 @@ class PongGame:
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
-            collidePoint = (self.ball.x - (player.x + player.width / 2))
-            collidePoint /= (player.width / 2)
+            paddle_center_x = player.x + player.width / 2
+            paddle_center_y = player.y + player.height / 2
+            rotated_paddle_x, rotated_paddle_y = self.rotate_point(paddle_center_x, paddle_center_y, player.angle, [self.ball.x, self.ball.y])
+            collidePoint = (rotated_paddle_x - paddle_center_x) / (player.width / 2)
 
-            angleRad = (math.pi / 4) * collidePoint
+            angleRad = (math.pi / 4) * collidePoint + math.radians(player.angle)
 
-            direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
+            if player == self.players[0]:
+                direction = -1
+            else:
+                direction = 1
 
             # 스피드를 공의 움직임에 적용
             self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
