@@ -12,7 +12,7 @@ events {
 http {
     include mime.types;
     server {
-        listen 443 ssl;
+        listen $NGINX_PORT ssl;
 
         ssl_certificate /etc/nginx/certificate.crt;
         ssl_certificate_key /etc/nginx/private.key;
@@ -33,7 +33,15 @@ http {
             proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
 
-        location /api {
+        location /users {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
+
+        location /matches {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
+
+        location /relationships {
             proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
     }
