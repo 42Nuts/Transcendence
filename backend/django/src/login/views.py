@@ -35,7 +35,7 @@ def login(request):
             'grant_type': 'authorization_code',
             'client_id': 'u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491',
             'client_secret': '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',
-            'redirect_uri': 'https://127.0.0.1/auth/',
+            'redirect_uri': 'https://127.0.0.1:5000/auth/',
             'code': authorization_code,
         }
         # 액세스 토큰 요청
