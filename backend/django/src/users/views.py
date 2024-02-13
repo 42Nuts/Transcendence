@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from users.models import User
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
+from django.shortcuts import get_object_or_404
 
 
 def dark_mode_handler(request, user_id):
-    pass
+    user = get_object_or_404(User, pk=user_id)
+    return HttpResponse(user.dark_mode)
 
 
 def theme_handler(request, user_id):
