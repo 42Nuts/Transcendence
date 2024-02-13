@@ -207,7 +207,7 @@ class PongGame:
         # 충돌 검사
         if distance1 <= ball.radius or distance2 <= ball.radius or distance3 <= ball.radius:
             if self.last_touch_player is not None:
-                self.player_map[self.last_touch_player_id].score += 1  # 점수 업데이트
+                self.player_map[self.last_touch_player].score += 1  # 점수 업데이트
             self.resetBall()
     
     def update_player_movement(self, index, player):
@@ -236,18 +236,13 @@ class PongGame:
                 player.x += move_distance * math.cos(angle_radians)
                 player.y += move_distance * math.sin(angle_radians)
 
-    def calculate_distance(self, ball, x, y):
-    # 간단한 예시: 패들 중심과 공 중심 사이의 유클리드 거리
-        distance = math.sqrt((x - ball.x) ** 2 + (y - ball.y) ** 2)
-        return distance
-
     def find_closest_paddle(self):
         min_distance = float('inf')  # 최소 거리 초기화
         closest_paddle = None  # 가장 가까운 패들 초기화
 
         for paddle in self.players:
             # 공과 패들 중심 사이의 거리 계산
-            distance = self.calculate_distance(self.ball, paddle.x, paddle.y)
+            distance = math.sqrt((paddle.x - self.ball.x) ** 2 + (paddle.y - self.ball.y) ** 2)
             
             if distance < min_distance:
                 min_distance = distance
@@ -263,14 +258,11 @@ class PongGame:
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
 
-        # 공의 위치에 따른 플레이어 확인
-        # player = self.find_closest_paddle()
-        player = self.players[0]
+        # 공의 위치에 따른 플레이어 확인 (야매로  함,  확인  필요!)
+        player = self.find_closest_paddle()
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
-            self.players[0].score += 1
-            self.resetBall()
             # collidePoint = (self.ball.x - (player.x + player.width / 2))
             # collidePoint /= (player.width / 2)
 
