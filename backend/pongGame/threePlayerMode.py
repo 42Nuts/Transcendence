@@ -56,6 +56,7 @@ class PongGame:
         # self.canvas = GameCanvas(width=800, height=700, paddle_length=100)
         self.players = []
         self.last_touch_player = None
+        self.reset_angle = 0
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -99,23 +100,29 @@ class PongGame:
         self.player_map = {player.id: player for player in self.players}
 
         self.ball = GameBall(
-            x=self.canvas.width / 2,
-            y=self.canvas.height / 2,
-            radius=10,
-            velocity_x=3,
-            velocity_y=3,
-            speed=7,
-            color="WHITE"
+            x = self.canvas.width / 2,
+            y = self.canvas.height - self.canvas.width / (2 * (3 ** 0.5)),
+            radius = 10,
+            velocity_x = 3 * math.cos(math.radians(self.reset_angle)),
+            velocity_y = 3 * math.sin(math.radians(self.reset_angle)),
+            speed = 3,
+            color = "WHITE"
         )
 
-    def resetBall(self):
+    def reset_ball(self):
+        self.reset_angle += 120
+        if self.reset_angle == 360:
+            self.reset_angle = 0
+
         self.ball.x = self.canvas.width / 2
-        self.ball.y = self.canvas.height / 2
-        self.ball.velocity_x = -3 if self.ball.velocity_x > 0 else 3
-        self.ball.velocity_y = -3 if self.ball.velocity_y > 0 else 3
-        self.ball.speed = 7
+        self.ball.y = self.canvas.height - self.canvas.width / (2 * (3 ** 0.5))
+        self.ball.speed = 3
         self.last_touch_player = None
-    
+
+        angle_radians = math.radians(self.reset_angle)
+        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians)
+        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians)
+
     def rotate_point(self, cx, cy, angle, p):
         s = math.sin(math.radians(angle))
         c = math.cos(math.radians(angle))
@@ -218,7 +225,7 @@ class PongGame:
                 elif distance3 <= ball.radius:
                     self.players[0].score += 1
                     self.players[1].score += 1
-            self.resetBall()
+            self.reset_ball()
     
     def update_player_movement(self, index, player):
         angle_radians = math.radians(180 - player.angle)
