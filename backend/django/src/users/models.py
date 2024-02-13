@@ -3,8 +3,6 @@ from config.settings import DEFAULT_GAME_SKIN_IMAGE_URL, DEFAULT_TIER_IMAGE_URL,
 
 class User(models.Model):
     email = models.EmailField(unique=True)
-    access_token = models.TextField(blank=False)
-    refresh_token = models.TextField(blank=False)
     user_state = models.BooleanField(default=True)
     nickname = models.CharField(max_length=10)
     profile_image_url = models.ImageField(
