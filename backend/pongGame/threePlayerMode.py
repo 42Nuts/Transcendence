@@ -152,7 +152,23 @@ class PongGame:
         line2 = self.calculate_line_equation(rotated_corners[2], rotated_corners[3])
         distance1 = self.calculate_distance_to_line((ball.x, ball.y), line1)
         distance2 = self.calculate_distance_to_line((ball.x, ball.y), line2)
-        if distance1 <= ball.radius or distance2 <= ball.radius:
+
+        # 새로운 직선 방정식 계산
+        line3 = self.calculate_line_equation(rotated_corners[1], rotated_corners[3])
+        line4 = self.calculate_line_equation(rotated_corners[0], rotated_corners[2])
+
+        # 공이 직선 사이에 있는지 확인
+        if line3[0] is not None and line4[0] is not None:  # 두 직선이 모두 수평이 아닌 경우
+            y_on_line3 = line3[0] * ball.x + line3[1]
+            y_on_line4 = line4[0] * ball.x + line4[1]
+            between_lines = min(y_on_line3, y_on_line4) - ball.radius < ball.y < max(y_on_line3, y_on_line4) + ball.radius 
+        elif line3[0] is None or line4[0] is None:  # line3 or line4가 수직선인 경우
+            between_lines = rotated_corners[0][0] - ball.radius < ball.x < rotated_corners[1][0] + ball.radius
+        else:  # 모든 다른 경우
+            between_lines = False
+
+        # 최종 충돌 판단
+        if (distance1 <= ball.radius or distance2 <= ball.radius) and between_lines:
             return True
         return False  # 충돌 없음
     
@@ -249,7 +265,7 @@ class PongGame:
 
         # 공의 위치에 따른 플레이어 확인
         # player = self.find_closest_paddle()
-        player = self.players[2]
+        player = self.players[0]
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
