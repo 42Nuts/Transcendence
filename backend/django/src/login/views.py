@@ -33,9 +33,9 @@ def login(request):
         # 인증 코드를 이용해 액세스 토큰 요청 시 사용할 payload
         payload = {
             'grant_type': 'authorization_code',
-            'client_id': 'u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491',
-            'client_secret': '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',
-            'redirect_uri': 'https://127.0.0.1:5000/auth/',
+            'client_id': 'u-s4t2ud-9380be22ecb707d53962442bf1a1cc52f6babd5997fd64d097888e300dd8f44f',
+            'client_secret': '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',
+            'redirect_uri': 'https://127.0.0.1/auth/',
             'code': authorization_code,
         }
         # 액세스 토큰 요청
@@ -45,8 +45,8 @@ def login(request):
         # 액세스 토큰과 리프레시 토큰을 추출
         access_token = token_response.json().get('access_token')
         refresh_token = token_response.json().get('refresh_token')
-        logger.info('access_token', access_token)
-        logger.info('refresh_token', refresh_token)
+        logger.info('Access token: %s', access_token)
+        logger.info('Refresh token: %s', refresh_token)
 
         # 사용자 정보를 요청하는 URL
         user_info_url = 'https://api.intra.42.fr/v2/me'
@@ -55,7 +55,7 @@ def login(request):
         # HTTP 요청 실패 시 예외 발생
         user_response.raise_for_status()
         email = user_response.json().get('email')
-        logger.info('email', email)
+        logger.info('email: %s', email)
 
         # 이메일을 기반으로 사용자 조회 또는 생성
         user, created = User.objects.get_or_create(email=email)
@@ -65,10 +65,10 @@ def login(request):
         return JsonResponse({'access': tokens['access'], 'refresh': tokens['refresh']})
 
     except requests.RequestException as err:
-        logger.error(f"외부 API 호출 에러: {str(err)}")
+        logger.error("외부 API 호출 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'External API call error'})
     except Exception as err:
-        logger.error(f"그 외 서버 내부 에러: {str(err)}")
+        logger.error("그 외 서버 내부 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'Server internal error'})
 
         # # User 객체 조회 또는 생성
