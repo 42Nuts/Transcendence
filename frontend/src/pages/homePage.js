@@ -2,31 +2,129 @@ import { Component } from "../core/index.js";
 
 class HomePage extends Component {
   render() {
-    const container = document.createElement("div");
-    const element = document.createElement("h1");
-    element.innerHTML = "Home Page";
+    // 최상위 div 생성 및 클래스 추가
+    const bgDiv = document.createElement("div");
+    bgDiv.classList.add("bg-no-repeat", "bg-cover");
+    bgDiv.style.backgroundImage = 'url("./src/assets/images/net.svg")';
+    bgDiv.style.backgroundPosition = "calc(100% + 390px) center";
 
-    const anchor = document.createElement("a");
-    anchor.href = "/options";
-    anchor.innerText = "options";
-    anchor.style.marginRight = "10px";
+    // flex 컨테이너 생성 및 클래스 추가
+    const flexContainer = document.createElement("div");
+    flexContainer.classList.add(
+      "flex",
+      "justify-center",
+      "items-center",
+      "min-h-screen"
+    );
 
-    const anchor2 = document.createElement("a");
-    anchor2.href = "/profile";
-    anchor2.innerText = "profile";
-    anchor2.style.marginRight = "10px";
+    // 메인 컨텐츠 div 생성 및 클래스 추가
+    const mainContentDiv = document.createElement("div");
+    mainContentDiv.classList.add(
+      "w-[1136px]",
+      "h-[480px]",
+      "flex-col",
+      "justify-start",
+      "items-start",
+      "gap-60",
+      "inline-flex"
+    );
 
-    const anchor3 = document.createElement("a");
-    anchor3.href = "/game";
-    anchor3.innerText = "game start";
-    anchor3.style.marginRight = "10px";
+    // 타이틀 div 생성 및 클래스 추가
+    const titleDiv = document.createElement("div");
+    titleDiv.classList.add(
+      "text-primary-text",
+      "text-[80px]",
+      "font-bold",
+      "font-['Inter']",
+      "leading-[80px]",
+      "tracking-[4px]"
+    );
+    titleDiv.textContent = "PING PONG";
 
-    container.appendChild(element);
-    container.appendChild(anchor);
-    container.appendChild(anchor2);
-    container.appendChild(anchor3);
+    // 버튼 컨테이너 div 생성 및 클래스 추가
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add(
+      "justify-start",
+      "items-end",
+      "gap-[863px]",
+      "inline-flex"
+    );
 
-    return container;
+    // Play 버튼 div 생성 및 설정
+    const playButtonDiv = document.createElement("div");
+    playButtonDiv.classList.add(
+      "play-button",
+      "px-6",
+      "py-3",
+      "bg-primary-button",
+      "rounded-[28px]",
+      "justify-center",
+      "items-center",
+      "inline-flex"
+    );
+    const playButtonText = document.createElement("div");
+    playButtonText.classList.add(
+      "text-center",
+      "text-primary-button_text",
+      "text-[40px]",
+      "font-semibold",
+      "font-['Inter']",
+      "leading-10"
+    );
+    playButtonText.textContent = "Play";
+    playButtonDiv.appendChild(playButtonText);
+
+    // Options 버튼 div 생성 및 설정
+    const optionsButtonDiv = document.createElement("div");
+    optionsButtonDiv.classList.add(
+      "options-button",
+      "px-6",
+      "py-3",
+      "bg-primary-button",
+      "rounded-[28px]",
+      "justify-center",
+      "items-center",
+      "inline-flex"
+    );
+    const optionsButtonText = document.createElement("div");
+    optionsButtonText.classList.add(
+      "text-center",
+      "text-primary-button_text",
+      "text-[40px]",
+      "font-semibold",
+      "font-['Inter']",
+      "leading-10"
+    );
+    optionsButtonText.textContent = "Options";
+    optionsButtonDiv.appendChild(optionsButtonText);
+
+    // 프로필 이미지 설정
+    const profileImage = document.createElement("img");
+    profileImage.classList.add("profile-image", "w-[72px]", "h-[72px]");
+    profileImage.src = "./src/assets/images/profile-default.svg";
+
+    // 구조 조립
+    bgDiv.appendChild(flexContainer);
+    flexContainer.appendChild(mainContentDiv);
+    mainContentDiv.appendChild(titleDiv);
+
+    const buttonsFlexContainer = document.createElement("div");
+    buttonsFlexContainer.classList.add(
+      "flex-col",
+      "justify-start",
+      "items-start",
+      "gap-8",
+      "inline-flex"
+    );
+    buttonsFlexContainer.appendChild(playButtonDiv);
+    buttonsFlexContainer.appendChild(optionsButtonDiv);
+
+    buttonContainer.appendChild(buttonsFlexContainer);
+    buttonContainer.appendChild(profileImage);
+    mainContentDiv.appendChild(buttonContainer);
+
+    // 최종적으로 bgDiv를 문서의 body에 추가하거나, 다른 요소에 추가
+    return bgDiv;
   }
 }
 
