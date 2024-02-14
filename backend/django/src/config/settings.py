@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+# 프로젝트에서 사용될 사용자 모델 지정
+AUTH_USER_MODEL = 'users.User'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -180,7 +182,6 @@ LOGGING = {
         },
     },
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
