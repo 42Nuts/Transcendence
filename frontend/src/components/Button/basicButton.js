@@ -27,6 +27,10 @@ class BasicButton extends Component {
       );
     });
 
+    if (this.props.onClick) {
+      buttonDiv.addEventListener("click", this.props.onClick);
+    }
+
     const buttonText = document.createElement("div");
     buttonText.classList.add(
       "text-center",
