@@ -1419,6 +1419,11 @@ video {
   background-color: rgb(152 191 191 / var(--tw-bg-opacity));
 }
 
+.bg-primary-button_hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 202 107 / var(--tw-bg-opacity));
+}
+
 .bg-primary-card_background {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 249 / var(--tw-bg-opacity));

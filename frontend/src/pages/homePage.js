@@ -1,4 +1,5 @@
-import { Component } from "../core/index.js";
+import { Component, createComponent } from "../core/index.js";
+import { BasicButton } from "../components/Button/index.js";
 
 class HomePage extends Component {
   render() {
@@ -51,52 +52,18 @@ class HomePage extends Component {
     );
 
     // Play 버튼 div 생성 및 설정
-    const playButtonDiv = document.createElement("div");
-    playButtonDiv.classList.add(
-      "play-button",
-      "px-6",
-      "py-3",
-      "bg-primary-button",
-      "rounded-[28px]",
-      "justify-center",
-      "items-center",
-      "inline-flex"
-    );
-    const playButtonText = document.createElement("div");
-    playButtonText.classList.add(
-      "text-center",
-      "text-primary-button_text",
-      "text-[40px]",
-      "font-semibold",
-      "font-['Inter']",
-      "leading-10"
-    );
-    playButtonText.textContent = "Play";
-    playButtonDiv.appendChild(playButtonText);
+    const playButtonHref = document.createElement("a");
+    playButtonHref.setAttribute("href", "/game");
+    playButtonHref.setAttribute("class", "play-button");
+    const playButton = createComponent(BasicButton, { text: "Play" });
+    playButtonHref.appendChild(playButton);
 
     // Options 버튼 div 생성 및 설정
-    const optionsButtonDiv = document.createElement("div");
-    optionsButtonDiv.classList.add(
-      "options-button",
-      "px-6",
-      "py-3",
-      "bg-primary-button",
-      "rounded-[28px]",
-      "justify-center",
-      "items-center",
-      "inline-flex"
-    );
-    const optionsButtonText = document.createElement("div");
-    optionsButtonText.classList.add(
-      "text-center",
-      "text-primary-button_text",
-      "text-[40px]",
-      "font-semibold",
-      "font-['Inter']",
-      "leading-10"
-    );
-    optionsButtonText.textContent = "Options";
-    optionsButtonDiv.appendChild(optionsButtonText);
+    const optionsButtonHref = document.createElement("a");
+    optionsButtonHref.setAttribute("href", "/options");
+    optionsButtonHref.setAttribute("class", "options-button");
+    const optionsButton = createComponent(BasicButton, { text: "Options" });
+    optionsButtonHref.appendChild(optionsButton);
 
     // 프로필 이미지 설정
     const profileImage = document.createElement("img");
@@ -116,8 +83,8 @@ class HomePage extends Component {
       "gap-8",
       "inline-flex"
     );
-    buttonsFlexContainer.appendChild(playButtonDiv);
-    buttonsFlexContainer.appendChild(optionsButtonDiv);
+    buttonsFlexContainer.appendChild(playButtonHref);
+    buttonsFlexContainer.appendChild(optionsButtonHref);
 
     buttonContainer.appendChild(buttonsFlexContainer);
     buttonContainer.appendChild(profileImage);
