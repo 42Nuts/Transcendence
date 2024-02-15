@@ -2,7 +2,9 @@
 const canvas = document.getElementById("game");
 canvas.width = 800;
 canvas.game_width = 600;
-canvas.height = (3 ** 0.5) / 2 * canvas.game_width;
+canvas.height =  600;
+
+
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
@@ -49,17 +51,6 @@ function drawText(text,x,y){
     ctx.fillText(text, x, y);
 }
 
-function drawTriangle(x1, y1, x2, y2, x3, y3, color) {
-    ctx.beginPath();
-    ctx.moveTo(x1, y1); // 첫 번째 꼭짓점
-    ctx.lineTo(x2, y2); // 두 번째 꼭짓점
-    ctx.lineTo(x3, y3); // 세 번째 꼭짓점
-    ctx.closePath(); // 경로 닫기 (첫 번째 꼭짓점과 세 번째 꼭짓점 연결)
-
-    ctx.fillStyle = color;
-    ctx.fill();
-}
-
 function rotate(x, y, width, height, angle) {
     // 회전의 중심을 사각형의 중심으로 이동
     ctx.translate(x + width / 2, y + height / 2);
@@ -81,7 +72,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player4', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -91,17 +82,17 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player4', ...keyState }));
 });
 
 // render function, the function that does al the drawing
 function render(data){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
+	drawRect(0, 0, canvas.game_width, canvas.height, "#000");
     
     ctx.save();
-    // rotate(0, 0, canvas.game_width, 2 *canvas.height - canvas.game_width / (3 ** 0.5), 240);
+    // rotate(0, 0, canvas.game_width, canvas.height, -270);
 
     for (var i = 0; i < data.players.length; i++) {
         ctx.save();
