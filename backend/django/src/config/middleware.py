@@ -24,9 +24,16 @@ def simple_middleware(get_response):
             return response
 
         try:
-            response = JWT_authenticator.authenticate(request)
-            user, token = response
-            logger.info("Decoded Token Claims: %s", str(token.payload))
+            token = request.COOKIES.get('access_token')
+            logger.info(f'cookie : {str(token)}')
+            if token is None:
+                raise AuthenticationFailed()
+
+            logger.info('before get_token')
+            validated_token = JWT_authenticator.get_validated_token(token)
+            logger.info('after get_token')
+            user = JWT_authenticator.get_user(validated_token)
+            # logger.info('after get_user')
             logger.info("User: %s", str(user))
             logger.info('미들웨어 통과: 인증 성공')
             response = get_response(request)
@@ -40,7 +47,7 @@ def simple_middleware(get_response):
             return HttpResponse('Invalid token', status=401)
         except Exception as e:
             logger.info("Unexpected error: %s", str(e))
-            return HttpResponse('Unexpected error', status=500)    
+            return HttpResponse('Unexpected error', status=500)
         except:
             logger.info(
                 "no token is provided in the header or the header is missing")

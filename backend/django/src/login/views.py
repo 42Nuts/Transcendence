@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 import requests
@@ -54,50 +54,32 @@ def login(request):
         user_response = requests.get(user_info_url, headers=headers)
         # HTTP 요청 실패 시 예외 발생
         user_response.raise_for_status()
-        email = user_response.json().get('email')
-        logger.info('email: %s', email)
 
         # 이메일을 기반으로 사용자 조회 또는 생성
+        email = user_response.json().get('email')
+        logger.info('email: %s', email)
         user, created = User.objects.get_or_create(email=email)
 
         # 사용자에게 JWT 토큰(access token 및 refresh token) 발급
         tokens = get_tokens_for_user(user)
-        return JsonResponse({'access': tokens['access'], 'refresh': tokens['refresh']})
+
+        response = HttpResponseRedirect('/home')
+        response.set_cookie(key='access_token',
+                            value=tokens['access'], httponly=True, secure=True)
+        response.set_cookie(key='refresh_token',
+                            value=tokens['refresh'], httponly=True, secure=True)
+        return response
 
     except requests.RequestException as err:
         logger.error("외부 API 호출 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'External API call error'})
-    except Exception as err:
-        logger.error("그 외 서버 내부 에러: %s", str(err))
-        return JsonResponse({'status': 500, 'error': 'Server internal error'})
-
-        # # User 객체 조회 또는 생성
-        # user, created = User.objects.get_or_create(
-        #     email=user_data,
-        #     defaults={
-        #         'access_token': access_token,
-        #         'refresh_token': refresh_token
-        #     }
-        # )
-
-        # if created:
-        #     # 새로운 유저 생성 시
-        #     logger.info(f"새로운 유저 생성 = {email}")
-        #     logger.info('JsonResponse = ' +
-        #                 str(JsonResponse({'user_id': user.id})))
-        #     return JsonResponse({'new user_id': user.id})
-        # else:
-        #     # 기존 유저 로그인
-        #     logger.info(f"기존 유저 로그인 = {email}")
-        #     return JsonResponse({'Existing user_id': user.id})
-
-    # except requests.RequestException as err:
-    #     logger.error(f"외부 API 호출 에러: {str(err)}")
-    #     return JsonResponse({'status': 500, 'error': 'External API call error'})
     # except Exception as err:
-    #     logger.error(f"그 외 서버 내부 에러: {str(err)}")
+    #     logger.error("그 외 서버 내부 에러: %s", str(err))
     #     return JsonResponse({'status': 500, 'error': 'Server internal error'})
 
 
 def home(request):
-    pass
+    # require_nickname = user.nickname is None
+    # logger.info('require_nickname: %s', require_nickname)
+    return HttpResponse('minsulee is here')
+
