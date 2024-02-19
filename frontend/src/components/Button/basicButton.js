@@ -2,7 +2,7 @@ import { Component } from "../../core/index.js";
 
 class BasicButton extends Component {
   render() {
-    const buttonDiv = document.createElement("div");
+    const buttonDiv = document.createElement("button");
     buttonDiv.classList.add(
       "px-6",
       "py-3",

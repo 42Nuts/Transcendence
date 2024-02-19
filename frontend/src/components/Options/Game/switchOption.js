@@ -1,4 +1,5 @@
-import { Component } from "../../../core/index.js";
+import { Component, createComponent } from "../../../core/index.js";
+import { ModeButton } from "../../Button/index.js";
 
 class SwitchOption extends Component {
   render() {
@@ -12,19 +13,14 @@ class SwitchOption extends Component {
       "text-center text-primary-text text-[40px] font-semibold font-['Inter'] leading-10";
     optionText.textContent = this.props.textContent;
 
-    // 이미지 컨테이너
-    const imageContainer = document.createElement("div");
-    imageContainer.className = "w-[72px] h-[72px] relative";
-
-    // 이미지
-    const optionImage = document.createElement("img");
-    optionImage.src = this.props.imageSrc;
-    optionImage.className = "w-[72px] h-[72px]";
+    const modeButton = createComponent(ModeButton, {
+      imageSrc: this.props.imageSrc,
+      optionName: this.props.optionName,
+    });
 
     // 구조 조립
-    imageContainer.appendChild(optionImage);
     optionContainer.appendChild(optionText);
-    optionContainer.appendChild(imageContainer);
+    optionContainer.appendChild(modeButton);
 
     return optionContainer;
   }
