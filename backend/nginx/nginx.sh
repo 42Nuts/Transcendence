@@ -33,6 +33,10 @@ http {
             proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
 
+        location /home {
+            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        }
+
         location /users {
             proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
