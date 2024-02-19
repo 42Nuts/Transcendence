@@ -42,26 +42,31 @@ class CustomUserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('email address', unique=True)
-    user_state = models.BooleanField(
-        default=True, help_text='Designates whether this user should be treated as active.')
     nickname = models.CharField(
         max_length=10, help_text='Unique nickname for the user.')
-    profile_image_url = models.ImageField(
-        upload_to='profile/', default=DEFAULT_PROFILE_IMAGE_URL, help_text='URL for the user\'s profile image.')
+    profile_index = models.IntegerField(
+        default=0, help_text='Index of profile')
+    # profile_image_url = models.ImageField(
+    #     upload_to='profile/', default=DEFAULT_PROFILE_IMAGE_URL, help_text='URL for the user\'s profile image.')
+    theme_index = models.ImageField(
+        default=0, help_text='Index of theme.')
+    # game_skin_image_url = models.CharField(
+    # max_length=255, default=DEFAULT_GAME_SKIN_IMAGE_URL, help_text='URL for the user\'s game skin image.')
+    dark_mode = models.BooleanField(
+        default=False, help_text='Whether the user prefers dark mode.')
+
+    user_state = models.BooleanField(
+        default=True, help_text='Designates whether this user should be treated as active.')
     background_color = models.CharField(
         max_length=20, default='black', help_text='Background color for the user profile.')
     tier = models.IntegerField(
         default=0, help_text='User tier, representing their level or rank.')
-    tier_image_url = models.CharField( 
+    tier_image_url = models.CharField(
         max_length=255, default=DEFAULT_TIER_IMAGE_URL, help_text='URL for the user\'s tier image.')
     wins = models.IntegerField(
         default=0, help_text='Number of wins the user has achieved.')
     loses = models.IntegerField(
         default=0, help_text='Number of losses the user has incurred.')
-    dark_mode = models.BooleanField(
-        default=False, help_text='Whether the user prefers dark mode.')
-    game_skin_image_url = models.CharField(
-        max_length=255, default=DEFAULT_GAME_SKIN_IMAGE_URL, help_text='URL for the user\'s game skin image.')
     follower_count = models.IntegerField(
         default=0, help_text='Number of followers the user has.')
     following_count = models.IntegerField(
