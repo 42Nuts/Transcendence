@@ -17,7 +17,7 @@ def simple_middleware(get_response):
         logger.info("Request GET: %s", str(request.GET))
         logger.info("Request Headers: %s", str(request.headers))
 
-        if request.path == '/auth/':
+        if request.path == '/42oauth/':
             logger.info('before response')
             response = get_response(request)
             logger.info('after response')
@@ -29,9 +29,7 @@ def simple_middleware(get_response):
             if token is None:
                 raise AuthenticationFailed()
 
-            logger.info('before get_token')
             validated_token = JWT_authenticator.get_validated_token(token)
-            logger.info('after get_token')
             user = JWT_authenticator.get_user(validated_token)
             # logger.info('after get_user')
             logger.info("User: %s", str(user))

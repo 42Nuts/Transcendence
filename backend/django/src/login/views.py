@@ -3,6 +3,7 @@ from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 import requests
 import logging
+import os
 
 logger = logging.getLogger('django')
 
@@ -29,13 +30,13 @@ def login(request):
 
     try:
         # 액세스 토큰 및 리프레시 토큰을 요청하는 URL
-        token_url = 'https://api.intra.42.fr/oauth/token'
+        token_url = os.environ.get('FOURTYTWO_TOKEN_URI')
         # 인증 코드를 이용해 액세스 토큰 요청 시 사용할 payload
         payload = {
-            'grant_type': 'authorization_code',
-            'client_id': 'u-s4t2ud-9380be22ecb707d53962442bf1a1cc52f6babd5997fd64d097888e300dd8f44f',
-            'client_secret': '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',
-            'redirect_uri': 'https://127.0.0.1/auth/',
+            'grant_type': os.environ.get('FOURTYTWO_GRANT_TYPE'),
+            'client_id': os.environ.get('FOURTYTWO_CLIENT_ID'),
+            'client_secret': os.environ.get('FOURTYTWO_CLIENT_SECRET'),
+            'redirect_uri': os.environ.get('FOURTYTWO_REDIRECT_URI'),
             'code': authorization_code,
         }
         # 액세스 토큰 요청
@@ -49,7 +50,7 @@ def login(request):
         logger.info('Refresh token: %s', refresh_token)
 
         # 사용자 정보를 요청하는 URL
-        user_info_url = 'https://api.intra.42.fr/v2/me'
+        user_info_url = os.environ.get('FOURTYTWO_USER_API')
         headers = {'Authorization': f'Bearer {access_token}'}
         user_response = requests.get(user_info_url, headers=headers)
         # HTTP 요청 실패 시 예외 발생
@@ -58,7 +59,12 @@ def login(request):
         # 이메일을 기반으로 사용자 조회 또는 생성
         email = user_response.json().get('email')
         logger.info('email: %s', email)
-        user, created = User.objects.get_or_create(email=email)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            logger.info('email: %s', email)
+            user = User.objects.create(email=email)
 
         # 사용자에게 JWT 토큰(access token 및 refresh token) 발급
         tokens = get_tokens_for_user(user)
@@ -73,13 +79,12 @@ def login(request):
     except requests.RequestException as err:
         logger.error("외부 API 호출 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'External API call error'})
-    # except Exception as err:
-    #     logger.error("그 외 서버 내부 에러: %s", str(err))
-    #     return JsonResponse({'status': 500, 'error': 'Server internal error'})
+    except Exception as err:
+        logger.error("그 외 서버 내부 에러: %s", str(err))
+        return JsonResponse({'status': 500, 'error': 'Server internal error'})
 
 
 def home(request):
-    # require_nickname = user.nickname is None
+    # require_nickname = user.nickname is None  
     # logger.info('require_nickname: %s', require_nickname)
     return HttpResponse('minsulee is here')
-
