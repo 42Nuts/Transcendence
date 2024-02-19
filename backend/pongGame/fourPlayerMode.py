@@ -72,10 +72,10 @@ class PongGame:
         ))
 
         self.players.append(Paddle(
-            x= -35,
-            y= self.canvas.height / 2,
-            width=100,
-            height=10,
+            x= 10,
+            y= self.canvas.height / 2 - self.canvas.paddle_length / 2,
+            width=10,
+            height=100,
             score=0,
             color="WHITE",
             leftArrow=False,
@@ -98,10 +98,10 @@ class PongGame:
         ))
 
         self.players.append(Paddle(
-            x= self.canvas.width - 65,
-            y=self.canvas.height / 2,
-            width=100,
-            height=10,
+            x= self.canvas.width - 20,
+            y= self.canvas.height / 2 - self.canvas.paddle_length / 2,
+            width=10,
+            height=100,
             score=0,
             color="WHITE",
             leftArrow=False,
@@ -152,16 +152,18 @@ class PongGame:
     def find_closest_paddle(self):
         min_distance = float('inf')  # 최소 거리 초기화
         closest_paddle = None  # 가장 가까운 패들 초기화
+        closest_index = None
 
-        for paddle in self.players:
+        for index, paddle in enumerate(self.players):
             # 공과 패들 중심 사이의 거리 계산
             distance = math.sqrt((paddle.x - self.ball.x) ** 2 + (paddle.y - self.ball.y) ** 2)
             
             if distance < min_distance:
                 min_distance = distance
                 closest_paddle = paddle
+                closest_index = index
 
-        return closest_paddle
+        return closest_index, closest_paddle
     
     def update_player_movement(self, index, player):
         angle_radians = math.radians(180 - player.angle)
@@ -228,26 +230,32 @@ class PongGame:
         # self.players[2].x += ((self.ball.x - (self.players[2].x + self.players[2].width / 2)) * 0.1)
 
         # 공의 위치에 따른 플레이어 확인 (야매로  함,  확인  필요!)
-        player = self.find_closest_paddle()
+        index, player = self.find_closest_paddle()
 
         # 플레이어가 누군지에 따라 공이 중앙에 가까울 수록 0도, 끝에 가까울 수록 45도로 튕기게 설정
         if self.collision(self.ball, player):
-            collidePoint = (self.ball.x - (player.x + player.width / 2))
-            collidePoint /= (player.width / 2)
+            if index % 2:
+                collidePoint = (self.ball.y - (player.y + player.height / 2))
+                collidePoint /= (player.height / 2)
+                direction = 1 if self.ball.x + self.ball.radius < self.canvas.width / 2 else -1
+                angleRad = (math.pi / 4) * collidePoint
 
-            angleRad = (math.pi / 4) * collidePoint
+                self.ball.velocity_x = direction * self.ball.speed * math.cos(angleRad)
+                self.ball.velocity_y = self.ball.speed * math.sin(angleRad)
+            else:
+                collidePoint = (self.ball.x - (player.x + player.width / 2))
+                collidePoint /= (player.width / 2)
+                direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
+                angleRad = (math.pi / 4) * collidePoint
 
-            direction = 1 if self.ball.y + self.ball.radius < self.canvas.height / 2 else -1
-
-            # 스피드를 공의 움직임에 적용
-            self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
-            self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
+                self.ball.velocity_x = self.ball.speed * math.sin(angleRad)
+                self.ball.velocity_y = direction * self.ball.speed * math.cos(angleRad)
 
             # 게임 중 스피드가 점차 증가
             self.ball.speed += 0.1
             self.last_touch_player = player.id
 
-        # 키보드 입력에 따른 변수 변화
+    # 키보드 입력에 따른 변수 변화
         if user_input:
             player_id = user_input.get("playerId")
             player = self.player_map.get(player_id)
