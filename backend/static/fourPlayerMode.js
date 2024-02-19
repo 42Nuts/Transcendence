@@ -72,7 +72,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player4', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -82,7 +82,7 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player4', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
 });
 
 // render function, the function that does al the drawing

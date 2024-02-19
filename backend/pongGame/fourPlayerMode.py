@@ -122,7 +122,7 @@ class PongGame:
             color="WHITE"
         )
 
-    def resetBall(self):
+    def reset_ball(self):
         self.reset_angle += 90
         if self.reset_angle == 360:
             self.reset_angle = 0
@@ -190,14 +190,35 @@ class PongGame:
             if player.leftArrow and player.y + player.width / 2  < self.canvas.height:
                 player.y += move_distance
 
+    def update_score(self, ball):
+        canvas_width, canvas_height = self.canvas.width, self.canvas.height
+        radius = ball.radius
+
+        if ball.x - radius < 0 or ball.x + radius > canvas_width or ball.y - radius < 0 or ball.y + radius > canvas_height:
+            if self.last_touch_player:
+                self.player_map[self.last_touch_player].score += 1  # 점수 업데이트
+            else:
+                if ball.x - radius < 0:
+                    self.players[0].score += 1
+                    self.players[2].score += 1
+                    self.players[3].score += 1
+                elif ball.x + radius > canvas_width:
+                    self.players[0].score += 1
+                    self.players[1].score += 1
+                    self.players[2].score += 1
+                elif ball.y - radius < 0:
+                    self.players[0].score += 1
+                    self.players[1].score += 1
+                    self.players[3].score += 1
+                elif ball.y + radius > canvas_height:
+                    self.players[1].score += 1
+                    self.players[2].score += 1
+                    self.players[3].score += 1
+            self.reset_ball()
+
     def update(self, user_input=None):
         # score
-        if self.ball.y - self.ball.radius < 0:
-            self.players[1].score += 1
-            self.resetBall()
-        elif self.ball.y + self.ball.radius > self.canvas.height:
-            self.players[0].score += 1
-            self.resetBall()
+        self.update_score(self.ball)
         
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
@@ -205,14 +226,6 @@ class PongGame:
 
         # computer ai
         # self.players[2].x += ((self.ball.x - (self.players[2].x + self.players[2].width / 2)) * 0.1)
-
-        # 공의 벽 튕김
-        if self.ball.x - self.ball.radius < 0:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.ball.radius 
-        elif self.ball.x + self.ball.radius > self.canvas.width:
-            self.ball.velocity_x = -self.ball.velocity_x
-            self.ball.x = self.canvas.width - self.ball.radius
 
         # 공의 위치에 따른 플레이어 확인 (야매로  함,  확인  필요!)
         player = self.find_closest_paddle()
@@ -232,6 +245,7 @@ class PongGame:
 
             # 게임 중 스피드가 점차 증가
             self.ball.speed += 0.1
+            self.last_touch_player = player.id
 
         # 키보드 입력에 따른 변수 변화
         if user_input:
