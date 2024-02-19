@@ -1,6 +1,7 @@
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import render
 import requests
 import logging
 import os
@@ -85,6 +86,7 @@ def login(request):
 
 
 def home(request):
-    # require_nickname = user.nickname is None  
-    # logger.info('require_nickname: %s', require_nickname)
-    return HttpResponse('minsulee is here')
+    context = {
+        'requireNickName': (request.user.nickname is None)
+    }
+    return render(request, 'homePage.html', context)
