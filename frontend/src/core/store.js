@@ -66,9 +66,11 @@ class Store {
 
     self.status = "mutation";
 
-    let newState = self.mutations[mutationKey](self.state, payload);
+    self.mutations[mutationKey](self.state, payload);
 
-    self.state = Object.assign(self.state, newState);
+    // let newState = self.mutations[mutationKey](self.state, payload);
+
+    // self.state = Object.assign(self.state, newState);
 
     return true;
   }
