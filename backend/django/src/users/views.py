@@ -31,7 +31,26 @@ def dark_mode_handler(request, user_id):
 
 
 def theme_handler(request, user_id):
-    pass
+    if request.method == 'GET':
+        logger.info("GET: %s", str(request.method))
+        try:
+            user = User.objects.get(pk=user_id)
+            logger.info("GET: %s", str(user))
+        except User.DoesNotExist:
+            raise Http404()
+        return HttpResponse(str(user.theme_index))
+    elif request.method == 'PUT':
+        data = json.loads(request.body.decode('utf-8'))
+        theme_index = data.get('theme_index')
+        logger.info("PUT: %s", str(request.method))
+        logger.info("PUT: %s", str(theme_index))
+        if theme_index is None:
+            return HttpResponse(status=422)
+        request.user.theme_index = theme_index
+        request.user.save()
+        return HttpResponse(str(request.user.theme_index))
+
+    return HttpResponseNotAllowed(['GET', 'PUT'])
 
 
 def nickname_handler(request, user_id):
