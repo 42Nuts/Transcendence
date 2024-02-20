@@ -5,12 +5,19 @@ import {
   AccountOption,
   CreditsOption,
 } from "../components/Options/index.js";
+import { PopUp } from "../components/PopUp/index.js";
+import Store from "../store/index.js";
 
 class OptionsPage extends Component {
   constructor(props) {
     super(props);
     this.state = { activeOption: "Game" };
     this.activeComponentNode = null;
+    Store.events.subscribe("logoutChange", async () => {
+      if (Store.state.logout === true) {
+        document.getElementById("popup").style.display = "flex";
+      }
+    });
   }
 
   setState(newState) {
@@ -74,8 +81,15 @@ class OptionsPage extends Component {
 
     this.updater();
 
+    
+    const popupProps = {
+      title: "Logout",
+      description: "Are you sure you want to logout? This cannot be undone.",
+    };
+    this.logoutPopup = createComponent(PopUp, popupProps);
+    this.gridContainer.appendChild(this.logoutPopup);
+    
     container.appendChild(this.gridContainer);
-
     return container;
   }
 }
