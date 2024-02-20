@@ -17,59 +17,48 @@ def simple_middleware(get_response):
         logger.info("Request GET: %s", str(request.GET))
         logger.info("Request Headers: %s", str(request.headers))
 
-        if request.path == '/42oauth/':
-            logger.info('before response')
-            response = get_response(request)
-            logger.info('after response')
-            return response
-
-        if request.path == '/home' or request.path == '/home/':
-            logger.info('after home')
+        if request.path == '/42oauth/':  # 인증
             response = get_response(request)
             return response
+        else:  # 애플리케이션 사용 (무조건 토큰이 있어야 함)
+            try:
+                # 토큰 검사 (토큰 재발급 로직 필요)
+                token = request.COOKIES.get('access_token')
+                if token is None:
+                    raise AuthenticationFailed()
+                logger.info(f'access_token : {str(token)}')
 
-        try:
-            token = request.COOKIES.get('access_token')
-            logger.info(f'cookie : {str(token)}')
-            if token is None:
-                raise AuthenticationFailed()
+                validated_token = JWT_authenticator.get_validated_token(token)
 
-            validated_token = JWT_authenticator.get_validated_token(token)
-            user = JWT_authenticator.get_user(validated_token)
+                user = JWT_authenticator.get_user(validated_token)
+                # API 유효성 검사
+                splitedUrl = list(request.path.strip('/').split('/'))
+                logger.info(f'len : {len(splitedUrl)}')
+                if splitedUrl[0] == 'v2':
+                    if len(splitedUrl) < 3:
+                        return HttpResponse('Not API URI', status=404)
 
-            logger.info("before split")
-            splitedUrl = list(request.path.strip('/').split('/'))
-            logger.info('after split')
-            logger.info(f'len : {len(splitedUrl)}')
-            if len(splitedUrl) < 2:
-                raise Http404()
+                    logger.info("user pk: %s", str(user.pk))
+                    logger.info("splitedUrl0: %s", str(splitedUrl[1]))
+                    logger.info("splitedUrl1: %s", str(splitedUrl[2]))
+                    if request.method == 'PUT' and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
+                        return HttpResponseForbidden()
 
-            logger.info("user pk: %s", str(user.pk))
-            logger.info("splitedUrl0: %s", str(splitedUrl[0]))
-            logger.info("splitedUrl1: %s", str(splitedUrl[1]))
-            if request.method == 'PUT' and splitedUrl[0] == 'users' and user.pk != int(splitedUrl[1]):
-                return HttpResponseForbidden()
-
-            logger.info('after checck')
-            request.user = user
-            # logger.info('after get_user')
-            logger.info("User: %s", str(user))
-            logger.info('미들웨어 통과: 인증 성공')
-            response = get_response(request)
-            return response
-        # (토큰 검증 성공 후의 로직)
-        except AuthenticationFailed as e:
-            logger.info("Authentication failed: %s", str(e))
-            return HttpResponse('Authentication failed', status=401)
-        except InvalidToken as e:
-            logger.info("Invalid token: %s", str(e))
-            return HttpResponse('Invalid token', status=401)
-        except Exception as e:
-            logger.info("Unexpected error: %s", str(e))
-            return HttpResponse('Unexpected error', status=500)
-        except:
-            logger.info(
-                "no token is provided in the header or the header is missing")
-            return HttpResponse('nope')
+                logger.info('after checck')
+                request.user = user
+                logger.info("User: %s", str(user))
+                logger.info('미들웨어 통과: 인증 성공')
+                response = get_response(request)
+                return response
+            # (토큰 검증 성공 후의 로직)
+            except AuthenticationFailed as e:
+                logger.info("Authentication failed: %s", str(e))
+                return HttpResponse('Authentication failed', status=401)
+            except InvalidToken as e:
+                logger.info("Invalid token: %s", str(e))
+                return HttpResponse('Invalid token', status=401)
+            except Exception as e:
+                logger.info("Unexpected error: %s", str(e))
+                return HttpResponse('Unexpected error', status=500)
 
     return middleware
