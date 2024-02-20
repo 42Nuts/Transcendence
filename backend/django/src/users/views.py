@@ -99,6 +99,12 @@ def profile_url_handler(request, user_id):
     return HttpResponseNotAllowed(['GET', 'PUT'])
 
 
+def account_handler(request, user_id):
+    if request.method == 'DELETE':
+        request.user.delete()
+        return HttpResponseRedirect('/')
+    return HttpResponseNotAllowed(['DELETE'])
+
 
 def background_color_handler(request, user_id):
     pass
