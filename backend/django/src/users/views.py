@@ -54,7 +54,26 @@ def theme_handler(request, user_id):
 
 
 def nickname_handler(request, user_id):
-    pass
+    if request.method == 'GET':
+        logger.info("GET: %s", str(request.method))
+        try:
+            user = User.objects.get(pk=user_id)
+            logger.info("GET: %s", str(user))
+        except User.DoesNotExist:
+            raise Http404()
+        return HttpResponse(str(user.nickname))
+    elif request.method == 'PUT':
+        data = json.loads(request.body.decode('utf-8'))
+        nickname = data.get('nickname')
+        logger.info("PUT: %s", str(request.method))
+        logger.info("PUT: %s", str(nickname))
+        if nickname is None:
+            return HttpResponse(status=422)
+        request.user.nickname = nickname
+        request.user.save()
+        return HttpResponse(str(request.user.nickname))
+
+    return HttpResponseNotAllowed(['GET', 'PUT'])
 
 
 def profile_url_handler(request, user_id):
