@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=0, help_text='Index of profile')
     # profile_image_url = models.ImageField(
     #     upload_to='profile/', default=DEFAULT_PROFILE_IMAGE_URL, help_text='URL for the user\'s profile image.')
-    theme_index = models.ImageField(
+    theme_index = models.IntegerField(
         default=0, help_text='Index of theme.')
     # game_skin_image_url = models.CharField(
     # max_length=255, default=DEFAULT_GAME_SKIN_IMAGE_URL, help_text='URL for the user\'s game skin image.')
