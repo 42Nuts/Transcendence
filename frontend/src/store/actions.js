@@ -13,8 +13,8 @@ export default {
   toggleLogout(context) {
     context.commit("toggleLogout");
   },
-  toggleAccountDelete(context) {
-    context.commit("toggleAccountDelete");
+  toggleDeleteAccount(context) {
+    context.commit("toggleDeleteAccount");
   },
   // Game Mode
   updateGameMode(context) {

@@ -17,7 +17,7 @@ export default {
     state.logout = !state.logout;
     return state;
   },
-  toggleAccountDelete(state) {
+  toggleDeleteAccount(state) {
     state.accountDelete = !state.accountDelete;
     return state;
   },

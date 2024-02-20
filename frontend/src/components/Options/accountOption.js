@@ -12,6 +12,7 @@ class AccountOption extends Component {
       text: "Logout",
       iconSrc: "./src/assets/images/icon-logout.svg",
       bgColorClass: "bg-primary-text",
+      optionName: "toggleLogout"
     });
     
     // Delete account 옵션
@@ -19,6 +20,7 @@ class AccountOption extends Component {
       text: "Delete account",
       iconSrc: "./src/assets/images/icon-delete.svg",
       bgColorClass: "bg-primary-logo",
+      optionName: "toggleDeleteAccount"
     });
 
     container.appendChild(logoutOption);
