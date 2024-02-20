@@ -41,7 +41,7 @@ def simple_middleware(get_response):
                     logger.info("user pk: %s", str(user.pk))
                     logger.info("splitedUrl0: %s", str(splitedUrl[1]))
                     logger.info("splitedUrl1: %s", str(splitedUrl[2]))
-                    if request.method == 'PUT' and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
+                    if (request.method in ['PUT', 'DELETE']) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
                         return HttpResponseForbidden()
 
                 logger.info('after checck')
