@@ -1,12 +1,33 @@
 from django.shortcuts import render
 from users.models import User
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed, Http404
+import json
+import logging
+
+logger = logging.getLogger('django')
 
 
 def dark_mode_handler(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    return HttpResponse(user.dark_mode)
+    if request.method == 'GET':
+        logger.info("GET: %s", str(request.method))
+        try:
+            user = User.objects.get(pk=user_id)
+            logger.info("GET: %s", str(user))
+        except User.DoesNotExist:
+            raise Http404()
+        return HttpResponse(user.dark_mode)
+    elif request.method == 'PUT':
+        data = json.loads(request.body.decode('utf-8'))
+        dark_mode = data.get('dark_mode')
+        logger.info("PUT: %s", str(request.method))
+        logger.info("PUT: %s", str(dark_mode))
+        if dark_mode is None:
+            return HttpResponse(status=422)
+        request.user.dark_mode = dark_mode
+        request.user.save()
+        return HttpResponse(request.user.dark_mode)
+
+    return HttpResponseNotAllowed(['GET', 'PUT'])
 
 
 def theme_handler(request, user_id):
