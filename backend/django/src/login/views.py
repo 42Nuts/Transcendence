@@ -86,7 +86,7 @@ def login(request):
 
 
 def home(request):
-    # context = {
-    #     'requireNickName': (request.user.nickname is None)
-    # }
-    return render(request, 'homePage.html')  # , context
+    context = {
+        'requireNickName': (request.user.nickname is '')
+    }
+    return render(request, 'homePage.html', context)
