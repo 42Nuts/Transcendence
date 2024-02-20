@@ -20,33 +20,24 @@ http {
 
         root /var/www/html;
 
-		location /static {
-            # static 파일
+        location /static {
+          # static 파일
         }
 
         location = / {
-            index loginPage.html;
-			# login 
+          index loginPage.html;
         }
 
         location /42oauth {
-            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
 
         location /home {
-            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
 
-        location /users {
-            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
-        }
-
-        location /matches {
-            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
-        }
-
-        location /relationships {
-            proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+        location /v2 {
+          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
         }
     }
 }
