@@ -77,7 +77,27 @@ def nickname_handler(request, user_id):
 
 
 def profile_url_handler(request, user_id):
-    pass
+    if request.method == 'GET':
+        logger.info("GET: %s", str(request.method))
+        try:
+            user = User.objects.get(pk=user_id)
+            logger.info("GET: %s", str(user))
+        except User.DoesNotExist:
+            raise Http404()
+        return HttpResponse(str(user.profile_index))
+    elif request.method == 'PUT':
+        data = json.loads(request.body.decode('utf-8'))
+        profile_index = data.get('profile_index')
+        logger.info("PUT: %s", str(request.method))
+        logger.info("PUT: %s", str(profile_index))
+        if profile_index is None:
+            return HttpResponse(status=422)
+        request.user.profile_index = profile_index
+        request.user.save()
+        return HttpResponse(str(request.user.profile_index))
+
+    return HttpResponseNotAllowed(['GET', 'PUT'])
+
 
 
 def background_color_handler(request, user_id):
