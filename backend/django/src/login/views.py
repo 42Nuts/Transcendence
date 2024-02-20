@@ -70,7 +70,7 @@ def login(request):
         # 사용자에게 JWT 토큰(access token 및 refresh token) 발급
         tokens = get_tokens_for_user(user)
 
-        response = HttpResponseRedirect('/home')
+        response = HttpResponseRedirect('/home/')
         response.set_cookie(key='access_token',
                             value=tokens['access'], httponly=True, secure=True)
         response.set_cookie(key='refresh_token',
