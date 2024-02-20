@@ -27,7 +27,7 @@ def login(request):
 
     authorization_code = request.GET.get('code')
     if not authorization_code:
-        return JsonResponse({'status': 404})
+        return HttpResponseRedirect('/')
 
     try:
         # 액세스 토큰 및 리프레시 토큰을 요청하는 URL
@@ -86,7 +86,7 @@ def login(request):
 
 
 def home(request):
-    context = {
-        'requireNickName': (request.user.nickname is None)
-    }
-    return render(request, 'homePage.html', context)
+    # context = {
+    #     'requireNickName': (request.user.nickname is None)
+    # }
+    return render(request, 'homePage.html')  # , context
