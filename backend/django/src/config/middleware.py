@@ -1,6 +1,6 @@
 import logging
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseForbidden
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
@@ -23,6 +23,11 @@ def simple_middleware(get_response):
             logger.info('after response')
             return response
 
+        if request.path == '/home' or request.path == '/home/':
+            logger.info('after home')
+            response = get_response(request)
+            return response
+
         try:
             token = request.COOKIES.get('access_token')
             logger.info(f'cookie : {str(token)}')
@@ -31,6 +36,22 @@ def simple_middleware(get_response):
 
             validated_token = JWT_authenticator.get_validated_token(token)
             user = JWT_authenticator.get_user(validated_token)
+
+            logger.info("before split")
+            splitedUrl = list(request.path.strip('/').split('/'))
+            logger.info('after split')
+            logger.info(f'len : {len(splitedUrl)}')
+            if len(splitedUrl) < 2:
+                raise Http404()
+
+            logger.info("user pk: %s", str(user.pk))
+            logger.info("splitedUrl0: %s", str(splitedUrl[0]))
+            logger.info("splitedUrl1: %s", str(splitedUrl[1]))
+            if request.method == 'PUT' and splitedUrl[0] == 'users' and user.pk != int(splitedUrl[1]):
+                return HttpResponseForbidden()
+
+            logger.info('after checck')
+            request.user = user
             # logger.info('after get_user')
             logger.info("User: %s", str(user))
             logger.info('미들웨어 통과: 인증 성공')
