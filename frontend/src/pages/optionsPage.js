@@ -87,9 +87,9 @@ class OptionsPage extends Component {
       description: "Are you sure you want to logout? This cannot be undone.",
     };
     this.logoutPopup = createComponent(PopUp, popupProps);
-    this.gridContainer.appendChild(this.logoutPopup);
     
     container.appendChild(this.gridContainer);
+    container.appendChild(this.logoutPopup);
     return container;
   }
 }
