@@ -16,6 +16,8 @@ class OptionsPage extends Component {
     Store.events.subscribe("logoutChange", async () => {
       if (Store.state.logout === true) {
         document.getElementById("popup").style.display = "flex";
+      } else {
+        document.getElementById("popup").style.display = "none";
       }
     });
   }
@@ -81,13 +83,13 @@ class OptionsPage extends Component {
 
     this.updater();
 
-    
-    const popupProps = {
+    const logoutProps = {
       title: "Logout",
       description: "Are you sure you want to logout? This cannot be undone.",
+      optionName: "toggleLogout",
     };
-    this.logoutPopup = createComponent(PopUp, popupProps);
-    
+    this.logoutPopup = createComponent(PopUp, logoutProps);
+
     container.appendChild(this.gridContainer);
     container.appendChild(this.logoutPopup);
     return container;

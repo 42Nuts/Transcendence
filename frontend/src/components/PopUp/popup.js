@@ -40,6 +40,7 @@ class PopUp extends Component {
     const cancelButton = createComponent(IconButton, {
       iconSrc: "./src/assets/images/icon-close.svg",
       bgColorClass: "bg-primary-text",
+      optionName: this.props.optionName,
     });
 
     const confirmButton = createComponent(IconButton, {
