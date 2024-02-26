@@ -58,6 +58,7 @@ class CreditsOption extends Component {
     // GitHub icon for Licenses section
     const githubIconContainer = document.createElement("div");
     githubIconContainer.className = "w-[25px] h-[25px] relative";
+
     const githubIcon = document.createElement("div");
     githubIcon.className =
       "absolute inset-0 m-auto flex items-center justify-center bg-primary-text rounded-full";
@@ -68,6 +69,13 @@ class CreditsOption extends Component {
     githubIconContainer.appendChild(githubIcon);
     // Assuming the last section is Licenses and it should contain the GitHub icon
     container.lastChild.lastChild.appendChild(githubIconContainer);
+    // Change lastChild class flex-col to flex-row
+    container.lastChild.lastChild.className = "flex-row justify-start items-center gap-2 flex";
+
+    // click event for GitHub icon
+    githubIconContainer.addEventListener("click", () => {
+      window.open("https://github.com/42Nuts/Transcendence", "_blank");
+    });
 
     return container;
   }
