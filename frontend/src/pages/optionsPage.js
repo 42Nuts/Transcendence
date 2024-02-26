@@ -15,9 +15,16 @@ class OptionsPage extends Component {
     this.activeComponentNode = null;
     Store.events.subscribe("logoutChange", async () => {
       if (Store.state.logout === true) {
-        document.getElementById("popup").style.display = "flex";
+        document.getElementById("logoutPopup").style.display = "flex";
       } else {
-        document.getElementById("popup").style.display = "none";
+        document.getElementById("logoutPopup").style.display = "none";
+      }
+    });
+    Store.events.subscribe("deleteAccountChange", async () => {
+      if (Store.state.deleteAccount === true) {
+        document.getElementById("deleteAccountPopup").style.display = "flex";
+      } else {
+        document.getElementById("deleteAccountPopup").style.display = "none";
       }
     });
   }
@@ -85,14 +92,27 @@ class OptionsPage extends Component {
 
     const logoutProps = {
       title: "Logout",
-      description: "Are you sure you want to logout? This cannot be undone.",
+      description: "Are you sure you want to logout?",
+      description2: "This cannot be undone.",
       optionName: "toggleLogout",
       boxWidth: "505px",
+      popupName: "logoutPopup",
     };
     this.logoutPopup = createComponent(PopUp, logoutProps);
 
+    const deleteProps = {
+      title: "Delete Account",
+      description: "Are you sure you want to delete your account?",
+      description2: "This cannot be undone.",
+      optionName: "toggleDeleteAccount",
+      boxWidth: "605px",
+      popupName: "deleteAccountPopup",
+    };
+    this.deleteAccountPopup = createComponent(PopUp, deleteProps);
+
     container.appendChild(this.gridContainer);
     container.appendChild(this.logoutPopup);
+    container.appendChild(this.deleteAccountPopup);
     return container;
   }
 }

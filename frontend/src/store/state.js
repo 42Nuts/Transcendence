@@ -6,7 +6,7 @@ export default {
 
   //Account Options
   logout: false,
-  accountDelete: false,
+  deleteAccount: false,
 
   //Game Mode
   gameMode: 0,

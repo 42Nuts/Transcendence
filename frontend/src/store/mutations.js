@@ -18,7 +18,7 @@ export default {
     return state;
   },
   toggleDeleteAccount(state) {
-    state.accountDelete = !state.accountDelete;
+    state.deleteAccount = !state.deleteAccount;
     return state;
   },
   // Game Mode

@@ -10,7 +10,7 @@ class PopUp extends Component {
     const overlay = document.createElement("div");
     overlay.className =
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
-    overlay.id = "popup";
+    overlay.id = `${this.props.popupName}`;
     overlay.style.display = "none";
     // 이제 box 대신 overlay를 최상위 컨테이너로 사용
 
@@ -31,7 +31,14 @@ class PopUp extends Component {
     const description = document.createElement("div");
     description.className =
       "text-center text-primary-text text-2xl font-medium font-['Inter']";
-    description.textContent = this.props.description;
+    
+    const paragraph = document.createElement("p");
+    paragraph.textContent = this.props.description;
+    description.appendChild(paragraph);
+
+    const paragraph2 = document.createElement("p");
+    paragraph2.textContent = this.props.description2;
+    description.appendChild(paragraph2);
 
     const buttonContainer = document.createElement("div");
     buttonContainer.className =
