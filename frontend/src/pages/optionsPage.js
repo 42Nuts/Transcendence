@@ -87,6 +87,7 @@ class OptionsPage extends Component {
       title: "Logout",
       description: "Are you sure you want to logout? This cannot be undone.",
       optionName: "toggleLogout",
+      boxWidth: "505px",
     };
     this.logoutPopup = createComponent(PopUp, logoutProps);
 

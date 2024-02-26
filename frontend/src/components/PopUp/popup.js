@@ -19,7 +19,7 @@ class PopUp extends Component {
 
     const container = document.createElement("div");
     container.className =
-      "w-[505px] h-[298px] px-16 py-8 bg-primary-card_background rounded-[50px] flex-col justify-start items-center gap-6 inline-flex";
+      `w-[${this.props.boxWidth}] h-[298px] px-16 py-8 bg-primary-card_background rounded-[50px] flex-col justify-start items-center gap-6 inline-flex`;
 
     const textContainer = document.createElement("div");
     textContainer.className = "flex-col justify-start items-center gap-4 flex";
