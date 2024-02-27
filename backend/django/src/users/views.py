@@ -134,10 +134,6 @@ def followings_counnt_handler(request, user_id):
     pass
 
 
-def account_handler(request, user_id):
-    pass
-
-
 '''
 유저 오브젝트 개수 확인
 python3 manage.py shell
