@@ -35,14 +35,12 @@ def simple_middleware(get_response):
                 splitedUrl = list(request.path.strip('/').split('/'))
                 logger.info(f'len : {len(splitedUrl)}')
                 if splitedUrl[0] == 'v2':
-                    if len(splitedUrl) < 3:
-                        return HttpResponse('Not API URI', status=404)
-
-                    logger.info("user pk: %s", str(user.pk))
-                    logger.info("splitedUrl0: %s", str(splitedUrl[1]))
-                    logger.info("splitedUrl1: %s", str(splitedUrl[2]))
-                    if (request.method in ['PUT', 'DELETE']) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
-                        return HttpResponseForbidden()
+                    if len(splitedUrl) >= 3:
+                        logger.info("user pk: %s", str(user.pk))
+                        logger.info("splitedUrl0: %s", str(splitedUrl[1]))
+                        logger.info("splitedUrl1: %s", str(splitedUrl[2]))
+                        if (request.method in ['PUT', 'DELETE']) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
+                            return HttpResponseForbidden()
 
                 logger.info('after checck')
                 request.user = user
