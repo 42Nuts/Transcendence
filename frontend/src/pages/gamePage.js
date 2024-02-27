@@ -4,6 +4,7 @@ import {
   BasicButton,
   ArrowButton,
 } from "../components/Button/index.js";
+import { Card } from "../components/Card/index.js";
 
 class GamePage extends Component {
   render() {
@@ -24,14 +25,16 @@ class GamePage extends Component {
     gameBoard.className = "absolute w-[4040px] h-[417.50px]";
 
     const rightArrowContainer = document.createElement("div");
-    rightArrowContainer.className = "w-[72px] h-[72px] left-[2224px] top-[174.75px] absolute";
+    rightArrowContainer.className =
+      "w-[72px] h-[72px] left-[2224px] top-[174.75px] absolute";
     const rightArrowButton = createComponent(ArrowButton, {
       iconSrc: "./src/assets/images/icon-arrow-forward-ios.svg",
     });
     rightArrowContainer.appendChild(rightArrowButton);
 
     const leftArrowContainer = document.createElement("div");
-    leftArrowContainer.className = "w-[72px] h-[72px] left-[1744px] top-[174.75px] absolute";
+    leftArrowContainer.className =
+      "w-[72px] h-[72px] left-[1744px] top-[174.75px] absolute";
     const leftArrowButton = createComponent(ArrowButton, {
       iconSrc: "./src/assets/images/icon-arrow-back-ios.svg",
     });
@@ -39,6 +42,55 @@ class GamePage extends Component {
 
     gameBoard.appendChild(rightArrowContainer);
     gameBoard.appendChild(leftArrowContainer);
+
+    const card1 = createComponent(Card, {
+      title: "2 Players",
+      imageSrc: "./src/assets/images/character-VS.svg",
+      left: "[1855px]",
+    });
+    card1.classList.add('scale-125');
+
+    const card2 = createComponent(Card, {
+      title: "3 Players",
+      imageSrc: "./src/assets/images/character-triangle.svg",
+      left: "[2336px]",
+    });
+    card2.classList.add('top-[41.75px]');
+
+    const card3 = createComponent(Card, {
+      title: "4 Players",
+      imageSrc: "./src/assets/images/character-sonny.svg",
+      left: "[2696px]",
+    });
+    card3.classList.add('top-[41.75px]');
+
+    const card4 = createComponent(Card, {
+      title: "5 Players",
+      imageSrc: "./src/assets/images/character-pentagon.svg",
+      left: "[3056px]",
+    });
+    card4.classList.add('top-[41.75px]');
+
+    const card5 = createComponent(Card, {
+      title: "Tournament",
+      imageSrc: "./src/assets/images/character-champion.svg",
+      left: "[3416px]",
+    });
+    card5.classList.add('top-[41.75px]');
+
+    const card6 = createComponent(Card, {
+      title: "AI",
+      imageSrc: "./src/assets/images/character-AI.svg",
+      left: "[3776px]",
+    });
+    card6.classList.add('top-[41.75px]');
+
+    gameBoard.appendChild(card1);
+    gameBoard.appendChild(card2);
+    gameBoard.appendChild(card3);
+    gameBoard.appendChild(card4);
+    gameBoard.appendChild(card5);
+    gameBoard.appendChild(card6);
 
     // play button
     const playButtonPos = document.createElement("div");
