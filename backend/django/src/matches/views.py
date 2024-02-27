@@ -1,12 +1,16 @@
-from django.shortcuts import render
 from matches.models import Match
+import logging
 
-def history_handler(request, user_id):
-	pass
+logger = logging.getLogger('django')
+
 
 def match_handler(request):
-	pass
+    pass
+
 
 def in_match_handler(request, match_id):
-	pass
+    pass
 
+
+def history_handler(request, user_id):
+    pass
