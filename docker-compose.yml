@@ -9,7 +9,7 @@ services:
       - ./backend/nginx/src:/var/www/html
     init: true
     ports:
-      - "443:443"
+      - "$NGINX_PORT:$NGINX_PORT"
     env_file:
       - .env
     networks:

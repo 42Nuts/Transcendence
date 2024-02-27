@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,17 +7,20 @@
 </head>
 <body class="flex justify-center items-center h-screen bg-custom-background">
   <div class="flex flex-col items-center justify-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-    <div class="title">
-      <img src="/static/images/PingPongLogo.svg" />
+    <div class=title>
+      <img src=/static/images/PingPongLogo.svg />
     </div>
+
+    
     <button id="myButton" class="bg-custom-LIGHT-button text-white text-4xl font-extrabold px-8 py-3 rounded-full mt-1 hover:bg-custom-LIGHT-button-hover">
       Login
     </button>
   </div>
   <script>
-      document.getElementById("myButton").onclick = function () {
-        location.href = "https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491&redirect_uri=https%3A%2F%2F127.0.0.1%2Fauth%2F&response_type=code";
-      };
+    document.getElementById('myButton').onclick = function () {
+      location.href = 'https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-9380be22ecb707d53962442bf1a1cc52f6babd5997fd64d097888e300dd8f44f&redirect_uri=https://127.0.0.1:5000/42oauth/&response_type=code';
+    };
   </script>
 </body>
 </html>
+

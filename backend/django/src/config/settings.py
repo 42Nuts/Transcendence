@@ -14,6 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 import os
 
+# 프로젝트에서 사용될 사용자 모델 지정
+AUTH_USER_MODEL = 'users.User'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -55,11 +57,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'config.middleware.simple_middleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES_DIR = BASE_DIR / 'templates'
+
 
 TEMPLATES = [
     {
@@ -180,8 +184,10 @@ LOGGING = {
     },
 }
 
-
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     # 기본 인증 클래스 설정
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # JWT 인증 방식을 사용
@@ -191,7 +197,7 @@ REST_FRAMEWORK = {
 }
 SIMPLE_JWT = {
     # ***액세스 토큰의 유효 기간 설정 (예: 5분)
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 
     # ***리프레시 토큰의 유효 기간 설정 (예: 1일)
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),

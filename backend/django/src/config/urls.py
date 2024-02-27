@@ -19,9 +19,9 @@ from django.urls import path, include
 from login.views import login, home
 
 urlpatterns = [
-    path('auth/', login),
+    path('42oauth/', login),
     path('home/', home),
-    path('users/', include('users.urls')),
-    path('matches/', include('matches.urls')),
-    path('relationships/', include('relationships.urls')),
+    path('v2/users/', include('users.urls')),
+    # path('v2/matches/', include('matches.urls')),
+    # path('v2/relationships/', include('relationships.urls')),
 ]

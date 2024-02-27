@@ -1,8 +1,10 @@
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.shortcuts import render
 import requests
 import logging
+import os
 
 logger = logging.getLogger('django')
 
@@ -25,17 +27,17 @@ def login(request):
 
     authorization_code = request.GET.get('code')
     if not authorization_code:
-        return JsonResponse({'status': 404})
+        return HttpResponseRedirect('/')
 
     try:
         # 액세스 토큰 및 리프레시 토큰을 요청하는 URL
-        token_url = 'https://api.intra.42.fr/oauth/token'
+        token_url = os.environ.get('FOURTYTWO_TOKEN_URI')
         # 인증 코드를 이용해 액세스 토큰 요청 시 사용할 payload
         payload = {
-            'grant_type': 'authorization_code',
-            'client_id': 'u-s4t2ud-d10a9ce21bddf5c5122891fa28175e899c5994149a2c95ab9178de72cb1eb491',
-            'client_secret': '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',
-            'redirect_uri': 'https://127.0.0.1/auth/',
+            'grant_type': os.environ.get('FOURTYTWO_GRANT_TYPE'),
+            'client_id': os.environ.get('FOURTYTWO_CLIENT_ID'),
+            'client_secret': os.environ.get('FOURTYTWO_CLIENT_SECRET'),
+            'redirect_uri': os.environ.get('FOURTYTWO_REDIRECT_URI'),
             'code': authorization_code,
         }
         # 액세스 토큰 요청
@@ -45,59 +47,46 @@ def login(request):
         # 액세스 토큰과 리프레시 토큰을 추출
         access_token = token_response.json().get('access_token')
         refresh_token = token_response.json().get('refresh_token')
-        logger.info('access_token', access_token)
-        logger.info('refresh_token', refresh_token)
+        logger.info('Access token: %s', access_token)
+        logger.info('Refresh token: %s', refresh_token)
 
         # 사용자 정보를 요청하는 URL
-        user_info_url = 'https://api.intra.42.fr/v2/me'
+        user_info_url = os.environ.get('FOURTYTWO_USER_API')
         headers = {'Authorization': f'Bearer {access_token}'}
         user_response = requests.get(user_info_url, headers=headers)
         # HTTP 요청 실패 시 예외 발생
         user_response.raise_for_status()
-        email = user_response.json().get('email')
-        logger.info('email', email)
 
         # 이메일을 기반으로 사용자 조회 또는 생성
-        user, created = User.objects.get_or_create(email=email)
+        email = user_response.json().get('email')
+        logger.info('email: %s', email)
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            logger.info('email: %s', email)
+            user = User.objects.create(email=email)
 
         # 사용자에게 JWT 토큰(access token 및 refresh token) 발급
         tokens = get_tokens_for_user(user)
-        return JsonResponse({'access': tokens['access'], 'refresh': tokens['refresh']})
+
+        response = HttpResponseRedirect('/home/')
+        response.set_cookie(key='access_token',
+                            value=tokens['access'], httponly=True, secure=True)
+        response.set_cookie(key='refresh_token',
+                            value=tokens['refresh'], httponly=True, secure=True)
+        return response
 
     except requests.RequestException as err:
-        logger.error(f"외부 API 호출 에러: {str(err)}")
+        logger.error("외부 API 호출 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'External API call error'})
     except Exception as err:
-        logger.error(f"그 외 서버 내부 에러: {str(err)}")
+        logger.error("그 외 서버 내부 에러: %s", str(err))
         return JsonResponse({'status': 500, 'error': 'Server internal error'})
-
-        # # User 객체 조회 또는 생성
-        # user, created = User.objects.get_or_create(
-        #     email=user_data,
-        #     defaults={
-        #         'access_token': access_token,
-        #         'refresh_token': refresh_token
-        #     }
-        # )
-
-        # if created:
-        #     # 새로운 유저 생성 시
-        #     logger.info(f"새로운 유저 생성 = {email}")
-        #     logger.info('JsonResponse = ' +
-        #                 str(JsonResponse({'user_id': user.id})))
-        #     return JsonResponse({'new user_id': user.id})
-        # else:
-        #     # 기존 유저 로그인
-        #     logger.info(f"기존 유저 로그인 = {email}")
-        #     return JsonResponse({'Existing user_id': user.id})
-
-    # except requests.RequestException as err:
-    #     logger.error(f"외부 API 호출 에러: {str(err)}")
-    #     return JsonResponse({'status': 500, 'error': 'External API call error'})
-    # except Exception as err:
-    #     logger.error(f"그 외 서버 내부 에러: {str(err)}")
-    #     return JsonResponse({'status': 500, 'error': 'Server internal error'})
 
 
 def home(request):
-    pass
+    context = {
+        'requireNickName': (request.user.nickname is '')
+    }
+    return render(request, 'homePage.html', context)
