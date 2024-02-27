@@ -3,7 +3,7 @@ import { Component } from "../../core/index.js";
 class Card extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = `left-${this.props.left} absolute`;
+    container.className = `${this.props.left} absolute`;
 
     const cardBoard = document.createElement("div");
     cardBoard.className =
