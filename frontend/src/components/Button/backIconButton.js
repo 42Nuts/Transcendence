@@ -7,7 +7,7 @@ class BackIconButton extends Component {
     icon.className = "w-[72px] h-[72px] mt-32 inline-block";
 
     const image = document.createElement("img");
-    image.src = "./src/assets/images/icon-arrow_back.svg";
+    image.src = "./src/assets/images/icon-arrow-back.svg";
     image.className = "w-[72px] h-[72px]";
     image.alt = "Back to home";
 
