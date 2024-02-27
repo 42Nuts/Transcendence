@@ -46,21 +46,21 @@ class GamePage extends Component {
     const card1 = createComponent(Card, {
       title: "2 Players",
       imageSrc: "./src/assets/images/character-VS.svg",
-      left: "[1855px]",
+      left: "left-[1855px]",
     });
     card1.classList.add('scale-125');
 
     const card2 = createComponent(Card, {
       title: "3 Players",
       imageSrc: "./src/assets/images/character-triangle.svg",
-      left: "[2336px]",
+      left: "left-[2336px]",
     });
     card2.classList.add('top-[41.75px]');
 
     const card3 = createComponent(Card, {
       title: "4 Players",
       imageSrc: "./src/assets/images/character-sonny.svg",
-      left: "[2696px]",
+      left: "left-[2696px]",
     });
     card3.classList.add('top-[41.75px]');
 
