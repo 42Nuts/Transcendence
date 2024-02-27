@@ -64,6 +64,7 @@ ROOT_URLCONF = 'config.urls'
 
 TEMPLATES_DIR = BASE_DIR / 'templates'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -196,7 +197,7 @@ REST_FRAMEWORK = {
 }
 SIMPLE_JWT = {
     # ***액세스 토큰의 유효 기간 설정 (예: 5분)
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 
     # ***리프레시 토큰의 유효 기간 설정 (예: 1일)
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
