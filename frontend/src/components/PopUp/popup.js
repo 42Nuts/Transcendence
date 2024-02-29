@@ -2,10 +2,6 @@ import { Component, createComponent } from "../../core/index.js";
 import { IconButton } from "../Button/index.js";
 
 class PopUp extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const overlay = document.createElement("div");
     overlay.className =
