@@ -12,4 +12,5 @@ touch logs/log.log
 
 touch $DJANGO_HEALTH
 
-gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT
+gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT #--workers=1 --threads=2 --worker-class=gthread
+
