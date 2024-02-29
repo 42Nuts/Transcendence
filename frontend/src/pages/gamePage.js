@@ -22,7 +22,8 @@ class GamePage extends Component {
 
     // game board
     const gameBoard = document.createElement("div");
-    gameBoard.className = "absolute w-[1080px] h-[608px] flex-col justify-start items-start gap-20 inline-flex";
+    gameBoard.className =
+      "absolute w-[1080px] h-[608px] flex-col justify-start items-start gap-20 inline-flex";
 
     const gameBoardUp = document.createElement("div");
     gameBoardUp.className = "justify-start items-start gap-36 inline-flex";
@@ -31,18 +32,24 @@ class GamePage extends Component {
       title: "2 Players",
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-VS.svg",
+      gameMode: "0",
+      optionName: "updateGameMode"
     });
 
     const card2 = createComponent(Card, {
       title: "3 Players",
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-triangle.svg",
+      gameMode: "1",
+      optionName: "updateGameMode"
     });
 
     const card3 = createComponent(Card, {
       title: "4 Players",
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-sonny.svg",
+      gameMode: "2",
+      optionName: "updateGameMode"
     });
 
     gameBoardUp.appendChild(card1);
@@ -63,6 +70,8 @@ class GamePage extends Component {
       title: "Tournament",
       titleLeft: "left-[27px]",
       image: "./src/assets/images/character-champion.svg",
+      gameMode: "3",
+      optionName: "updateGameMode"
     });
 
     const card6 = createComponent(LockCard, {

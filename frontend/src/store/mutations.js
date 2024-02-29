@@ -22,8 +22,8 @@ export default {
     return state;
   },
   // Game Mode
-  updateGameMode(state) {
-    state.gameMode += 1;
+  updateGameMode(state, payload) {
+    state.gameMode = payload;
     return state;
   },
 };

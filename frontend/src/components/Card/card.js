@@ -1,13 +1,29 @@
 import { Component } from "../../core/index.js";
+import Store from "../../store/index.js";
 
 class Card extends Component {
+  constructor(props) {
+    super(props);
+    Store.events.subscribe("gameModeChange", () => {
+      if (Store.state.gameMode === this.props.gameMode) {
+        this.cardBoard.classList.add("border-8", "border-primary-button");
+      } else {
+        this.cardBoard.classList.remove("border-8", "border-primary-button");
+      }
+    });
+  }
+
+  handleClick() {
+    Store.dispatch(this.props.optionName, this.props.gameMode);
+  }
+
   render() {
     const card = document.createElement("button");
     card.className = "w-[264px] h-[264px] relative";
 
-    const cardBoard = document.createElement("div");
-    cardBoard.className = "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
-    cardBoard.classList.add("shadow-md");
+    this.cardBoard = document.createElement("div");
+    this.cardBoard.className = "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
+    this.cardBoard.classList.add("shadow-md");
 
     const cardImage = document.createElement("img");
     cardImage.className = "w-60 h-60 left-[12px] top-0 absolute";
@@ -18,16 +34,18 @@ class Card extends Component {
     cardTitle.innerText = this.props.title;
 
     card.addEventListener("mouseover", () => {
-      cardBoard.classList.add("border-8", "border-primary-button");
+      card.classList.add("scale-110");
     });
 
     card.addEventListener("mouseout", () => {
-      cardBoard.classList.remove("border-8", "border-primary-button");
+      card.classList.remove("scale-110");
     });
 
-    card.appendChild(cardBoard);
+    card.appendChild(this.cardBoard);
     card.appendChild(cardImage);
     card.appendChild(cardTitle);
+
+    card.addEventListener("click", this.handleClick.bind(this));
 
     return card;
   }

@@ -24,6 +24,13 @@ class LockCard extends Component {
     cardLock.className = "w-24 h-24 left-[84px] top-[84px] absolute";
     cardLock.src = this.props.lock;
 
+    card.addEventListener("mouseover", () => {
+      card.classList.add("scale-110");
+    });
+
+    card.addEventListener("mouseout", () => {
+      card.classList.remove("scale-110");
+    });
 
     card.appendChild(cardBoard);
     card.appendChild(cardImage);

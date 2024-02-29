@@ -17,7 +17,7 @@ export default {
     context.commit("toggleDeleteAccount");
   },
   // Game Mode
-  updateGameMode(context) {
-    context.commit("updateGameMode");
+  updateGameMode(context, payload) {
+    context.commit("updateGameMode", payload);
   },
 };
