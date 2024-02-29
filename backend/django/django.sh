@@ -12,6 +12,5 @@ touch logs/log.log
 
 touch $DJANGO_HEALTH
 
-# gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT #--workers=1 --threads=2 --worker-class=gthread
-daphne config.asgi:application --bind $DJANGO_IP --port $DJANGO_PORT #--workers=1 --threads=2 --worker-class=gthread
-
+gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT & #--workers=1 --threads=2 --worker-class=gthread
+daphne config.asgi:application --bind $DJANGO_IP --port $WS_PORT #--workers=1 --threads=2 --worker-class=gthread
