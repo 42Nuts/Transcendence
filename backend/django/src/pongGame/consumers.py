@@ -1,8 +1,11 @@
 # consumers.py
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .twoPlayerMode import PongGame
+from .fourPlayerMode import PongGame
 import json
+import logging
+
+logger = logging.getLogger('django')
 
 class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -11,6 +14,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.update_task = None
 
     async def connect(self):
+        logger.info('websocket connect')
         await self.accept()
         self.update_task = asyncio.ensure_future(self.game_update_task())
 

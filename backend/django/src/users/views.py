@@ -28,7 +28,7 @@ def dark_mode_handler(request, user_id):
         return HttpResponse(request.user.dark_mode)
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
-
+ 
 
 def theme_handler(request, user_id):
     if request.method == 'GET':

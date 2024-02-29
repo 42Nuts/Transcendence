@@ -17,11 +17,13 @@ Including another URLconf
 
 from django.urls import path, include
 from login.views import login, home
+from pongGame.views import game
 
 urlpatterns = [
     path('42oauth/', login),
     path('home/', home),
     path('v2/users/', include('users.urls')),
+    path('v2/game/', game),
     # path('v2/matches/', include('matches.urls')),
     # path('v2/relationships/', include('relationships.urls')),
 ]

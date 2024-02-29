@@ -29,15 +29,23 @@ http {
         }
 
         location /42oauth {
-          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
         }
 
         location /home {
-          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
         }
 
         location /v2 {
-          proxy_pass http://$DJANGO_CONTAINER:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
+        }
+
+        location /ws {
+          proxy_pass http://$DJANGO_IP:$WS_PORT;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade \$http_upgrade;
+          proxy_set_header Connection "Upgrade";
+          proxy_set_header Host \$host;
         }
     }
 }
