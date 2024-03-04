@@ -1,5 +1,6 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
+import { NickNamePopup } from "../components/PopUp/index.js";
 
 class HomePage extends Component {
   render() {
@@ -90,7 +91,10 @@ class HomePage extends Component {
     buttonContainer.appendChild(profileImage);
     mainContentDiv.appendChild(buttonContainer);
 
-    // 최종적으로 bgDiv를 문서의 body에 추가하거나, 다른 요소에 추가
+    // 닉네임 팝업 컴포넌트 추가
+    const nickNamePopup = createComponent(NickNamePopup, {});
+    bgDiv.appendChild(nickNamePopup);
+
     return bgDiv;
   }
 }

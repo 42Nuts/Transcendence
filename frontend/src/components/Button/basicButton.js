@@ -3,15 +3,8 @@ import { Component } from "../../core/index.js";
 class BasicButton extends Component {
   render() {
     const buttonDiv = document.createElement("button");
-    buttonDiv.classList.add(
-      "px-6",
-      "py-3",
-      "bg-primary-button",
-      "rounded-[28px]",
-      "justify-center",
-      "items-center",
-      "inline-flex"
-    );
+    buttonDiv.className =
+      "px-6 py-3 bg-primary-button rounded-[28px] justify-center items-center inline-flex";
 
     buttonDiv.addEventListener("mouseenter", () => {
       buttonDiv.classList.replace(
@@ -32,14 +25,8 @@ class BasicButton extends Component {
     }
 
     const buttonText = document.createElement("div");
-    buttonText.classList.add(
-      "text-center",
-      "text-primary-button_text",
-      "text-[40px]",
-      "font-semibold",
-      "font-['Inter']",
-      "leading-10"
-    );
+    buttonText.className =
+      "text-center text-primary-button_text text-[40px] font-semibold font-['Inter'] leading-10";
     buttonText.textContent = this.props.text;
 
     buttonDiv.appendChild(buttonText);
