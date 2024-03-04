@@ -1,14 +1,16 @@
 // select canvas element
 const canvas = document.getElementById("game");
 canvas.width = 800;
-canvas.height = 500;
 canvas.game_width = 600;
+canvas.height =  600;
+
+
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'ws://' + window.location.host + '/ws/game/'
+    'wss://' + window.location.host + '/ws/game/'
 );
 
 // gameSocket.onopen = function() {
@@ -70,7 +72,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -80,28 +82,28 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
 });
 
 // render function, the function that does al the drawing
 function render(data){
-    // clear the canvas
-    drawRect(0, 0, canvas.game_width, canvas.height, "#000");
-
-    // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+	drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+    
+    ctx.save();
+    // rotate(0, 0, canvas.game_width, canvas.height, -270);
+
     for (var i = 0; i < data.players.length; i++) {
+        ctx.save();
         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
+        ctx.restore();
     }
     
     // draw the ball
     drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+    ctx.restore();
     
-    // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
-
-    // clear the score
-    drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")
-
     for (var i = 0; i < data.players.length; i++) {
         drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
     }

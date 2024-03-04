@@ -11,4 +11,4 @@ RUN  pip install --upgrade pip && pip install \
 
 WORKDIR /django
 
-ENTRYPOINT ["django.sh"]
+CMD ["django.sh"]

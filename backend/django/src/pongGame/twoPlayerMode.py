@@ -89,7 +89,7 @@ class PongGame:
             color="WHITE"
         )
 
-    def resetBall(self):
+    def reset_ball(self):
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
         self.ball.velocity_x = -5 if self.ball.velocity_x > 0 else 5
@@ -113,10 +113,10 @@ class PongGame:
         # score
         if self.ball.y - self.ball.radius < 0:
             self.players[1].score += 1
-            self.resetBall()
+            self.reset_ball()
         elif self.ball.y + self.ball.radius > self.canvas.height:
             self.players[0].score += 1
-            self.resetBall()
+            self.reset_ball()
         
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
