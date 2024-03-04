@@ -1,12 +1,22 @@
 import { Component, createComponent } from "../../core/index.js";
+import Store from "../../store/index.js";
 
 class NickNamePopUp extends Component {
+  constructor(props) {
+    super(props);
+    this.name = "";
+  }
+
   render() {
     const overlay = document.createElement("div");
     overlay.className =
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
     overlay.id = "nickName";
-    overlay.style.display = "flex";
+    if (Store.state.nickName === true) {
+      overlay.style.display = "none";
+    } else {
+      overlay.style.display = "flex";
+    }
 
     const box = document.createElement("div");
     box.className = "flex justify-center items-center min-h-screen";
@@ -56,16 +66,44 @@ class NickNamePopUp extends Component {
       if (input.value.length > 0) {
         checkContainer.classList.replace("opacity-50", "opacity-100");
         check.classList.replace("bg-primary-text", "bg-primary-color4");
-        inputContainer.classList.replace("border-primary-text", "border-primary-color4");
+        inputContainer.classList.replace(
+          "border-primary-text",
+          "border-primary-color4"
+        );
         buttonContainer.classList.replace("opacity-50", "opacity-100");
-        buttonContainer.classList.replace("bg-primary-text", "bg-primary-color4");
+        buttonContainer.classList.replace(
+          "bg-primary-text",
+          "bg-primary-color4"
+        );
       } else {
         checkContainer.classList.replace("opacity-100", "opacity-50");
         check.classList.replace("bg-primary-color4", "bg-primary-text");
-        inputContainer.classList.replace("border-primary-color4", "border-primary-text");
+        inputContainer.classList.replace(
+          "border-primary-color4",
+          "border-primary-text"
+        );
         buttonContainer.classList.replace("opacity-100", "opacity-50");
-        buttonContainer.classList.replace("bg-primary-color4", "bg-primary-text");
+        buttonContainer.classList.replace(
+          "bg-primary-color4",
+          "bg-primary-text"
+        );
       }
+    });
+
+    input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        this.name = input.value;
+        overlay.style.display = "none";
+        Store.dispatch("updateNickName");
+        console.log(this.name);
+      }
+    });
+
+    buttonContainer.addEventListener("click", () => {
+      this.name = input.value;
+      overlay.style.display = "none";
+        Store.dispatch("updateNickName");
+      console.log(this.name);
     });
 
     textContainer.appendChild(title);

@@ -2,10 +2,6 @@ import { Component } from "../../core/index.js";
 import Store from "../../store/index.js";
 
 class IconButton extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleClick() {
     Store.dispatch(this.props.optionName);
   }
