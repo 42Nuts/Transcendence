@@ -8,7 +8,7 @@ canvas.height = (3 ** 0.5) / 2 * canvas.game_width;
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'ws://' + window.location.host + '/ws/game/'
+    'wss://' + window.location.host + '/ws/game/'
 );
 
 // gameSocket.onopen = function() {

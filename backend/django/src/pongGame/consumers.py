@@ -1,7 +1,7 @@
 # consumers.py
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .fourPlayerMode import PongGame
+from .twoPlayerMode import PongGame
 import json
 import logging
 
