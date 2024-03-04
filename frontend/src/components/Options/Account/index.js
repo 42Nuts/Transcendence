@@ -1,1 +1,1 @@
-export {default as ExitOption} from './exitOption.js';
+export { default as ExitOption } from "./exitOption.js";

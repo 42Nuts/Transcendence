@@ -6,7 +6,8 @@ class LockCard extends Component {
     card.className = "w-[264px] h-[264px] relative";
 
     const cardBoard = document.createElement("div");
-    cardBoard.className = "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
+    cardBoard.className =
+      "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
     cardBoard.classList.add("shadow-md");
 
     const cardImage = document.createElement("img");
@@ -18,7 +19,8 @@ class LockCard extends Component {
     cardTitle.innerText = this.props.title;
 
     const cardOverlay = document.createElement("div");
-    cardOverlay.className = "w-[264px] h-[264px] left-0 top-0 absolute opacity-10 bg-primary-text rounded-[60px]";
+    cardOverlay.className =
+      "w-[264px] h-[264px] left-0 top-0 absolute opacity-10 bg-primary-text rounded-[60px]";
 
     const cardLock = document.createElement("img");
     cardLock.className = "w-24 h-24 left-[84px] top-[84px] absolute";

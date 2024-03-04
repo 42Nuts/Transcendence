@@ -14,8 +14,7 @@ class PopUp extends Component {
     box.className = "flex justify-center items-center min-h-screen";
 
     const container = document.createElement("div");
-    container.className =
-      `w-[${this.props.boxWidth}] h-[298px] px-16 py-8 bg-primary-card_background rounded-[50px] flex-col justify-start items-center gap-6 inline-flex`;
+    container.className = `w-[${this.props.boxWidth}] h-[298px] px-16 py-8 bg-primary-card_background rounded-[50px] flex-col justify-start items-center gap-6 inline-flex`;
 
     const textContainer = document.createElement("div");
     textContainer.className = "flex-col justify-start items-center gap-4 flex";
@@ -27,7 +26,7 @@ class PopUp extends Component {
     const description = document.createElement("div");
     description.className =
       "text-center text-primary-text text-2xl font-medium font-['Inter']";
-    
+
     const paragraph = document.createElement("p");
     paragraph.textContent = this.props.description;
     description.appendChild(paragraph);

@@ -1,1 +1,1 @@
-export {default as SwitchOption} from './switchOption.js';
+export { default as SwitchOption } from "./switchOption.js";

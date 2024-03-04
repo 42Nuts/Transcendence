@@ -102,7 +102,7 @@ class NickNamePopUp extends Component {
     buttonContainer.addEventListener("click", () => {
       this.name = input.value;
       overlay.style.display = "none";
-        Store.dispatch("updateNickName");
+      Store.dispatch("updateNickName");
       console.log(this.name);
     });
 

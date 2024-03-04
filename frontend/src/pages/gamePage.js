@@ -33,7 +33,7 @@ class GamePage extends Component {
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-VS.svg",
       gameMode: "0",
-      optionName: "updateGameMode"
+      optionName: "updateGameMode",
     });
 
     const card2 = createComponent(Card, {
@@ -41,7 +41,7 @@ class GamePage extends Component {
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-triangle.svg",
       gameMode: "1",
-      optionName: "updateGameMode"
+      optionName: "updateGameMode",
     });
 
     const card3 = createComponent(Card, {
@@ -49,7 +49,7 @@ class GamePage extends Component {
       titleLeft: "left-[52px]",
       image: "./src/assets/images/character-sonny.svg",
       gameMode: "2",
-      optionName: "updateGameMode"
+      optionName: "updateGameMode",
     });
 
     gameBoardUp.appendChild(card1);
@@ -71,7 +71,7 @@ class GamePage extends Component {
       titleLeft: "left-[27px]",
       image: "./src/assets/images/character-champion.svg",
       gameMode: "3",
-      optionName: "updateGameMode"
+      optionName: "updateGameMode",
     });
 
     const card6 = createComponent(LockCard, {

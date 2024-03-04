@@ -22,7 +22,8 @@ class Card extends Component {
     card.className = "w-[264px] h-[264px] relative";
 
     this.cardBoard = document.createElement("div");
-    this.cardBoard.className = "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
+    this.cardBoard.className =
+      "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
     this.cardBoard.classList.add("shadow-md");
 
     const cardImage = document.createElement("img");

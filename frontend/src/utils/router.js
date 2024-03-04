@@ -15,10 +15,10 @@ class Router {
 
     this.routing(window.location.pathname);
 
-    window.addEventListener('click', (e) => {
-      if (e.target.closest('a')) {
+    window.addEventListener("click", (e) => {
+      if (e.target.closest("a")) {
         e.preventDefault();
-        this.routePush(e.target.closest('a').href);
+        this.routePush(e.target.closest("a").href);
       }
     });
 
@@ -31,7 +31,7 @@ class Router {
   }
 
   routing(pathname) {
-    let page = '';
+    let page = "";
 
     if (this.routes[pathname]) {
       const component = new this.routes[pathname]();
@@ -45,7 +45,7 @@ class Router {
 
   render(page) {
     const rootElement = document.querySelector(this.rootElementId);
-    rootElement.innerHTML = '';
+    rootElement.innerHTML = "";
     rootElement.appendChild(page);
   }
 }

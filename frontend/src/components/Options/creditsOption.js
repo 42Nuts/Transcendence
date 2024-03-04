@@ -70,7 +70,8 @@ class CreditsOption extends Component {
     // Assuming the last section is Licenses and it should contain the GitHub icon
     container.lastChild.lastChild.appendChild(githubIconContainer);
     // Change lastChild class flex-col to flex-row
-    container.lastChild.lastChild.className = "flex-row justify-start items-center gap-2 flex";
+    container.lastChild.lastChild.className =
+      "flex-row justify-start items-center gap-2 flex";
 
     // click event for GitHub icon
     githubIconContainer.addEventListener("click", () => {
