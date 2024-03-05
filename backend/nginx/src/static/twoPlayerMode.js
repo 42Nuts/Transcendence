@@ -8,7 +8,7 @@ canvas.game_width = 600;
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'wss://' + window.location.host + '/ws/game/'
+    'wss://' + window.location.host + '/ws/game/123/'
 );
 
 // gameSocket.onopen = function() {
