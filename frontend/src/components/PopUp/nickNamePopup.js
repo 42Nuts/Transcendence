@@ -1,5 +1,4 @@
 import { Component, createComponent } from "../../core/index.js";
-import Store from "../../store/index.js";
 
 class NickNamePopUp extends Component {
   constructor(props) {
@@ -12,10 +11,10 @@ class NickNamePopUp extends Component {
     overlay.className =
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
     overlay.id = "nickName";
-    if (Store.state.nickName === true) {
-      overlay.style.display = "none";
-    } else {
+    if (requireNickName === 'True') {
       overlay.style.display = "flex";
+    } else {
+      overlay.style.display = "none";
     }
 
     const box = document.createElement("div");
@@ -95,7 +94,7 @@ class NickNamePopUp extends Component {
       if (event.key === "Enter" && input.value.length > 0) {
         this.name = input.value;
         overlay.style.display = "none";
-        Store.dispatch("updateNickName");
+        requireNickName = false;
         console.log(this.name);
       }
     });
@@ -104,7 +103,7 @@ class NickNamePopUp extends Component {
       if (input.value.length > 0) {
         this.name = input.value;
         overlay.style.display = "none";
-        Store.dispatch("updateNickName");
+        requireNickName = false;
         console.log(this.name);
       }
     });
