@@ -21,6 +21,7 @@ http {
         root /var/www/html;
 
         location /static {
+          alias /var/www/html/;
           # static 파일
         }
 
