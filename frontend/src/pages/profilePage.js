@@ -7,7 +7,7 @@ class ProfilePage extends Component {
     element.innerHTML = "Profile Page";
 
     const anchor = document.createElement("a");
-    anchor.href = "/";
+    anchor.href = "/home/";
     anchor.innerText = "Go Home";
 
     container.appendChild(element);

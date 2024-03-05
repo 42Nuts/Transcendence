@@ -52,7 +52,7 @@ class NickNamePopUp extends Component {
 
     const checkIcon = document.createElement("img");
     checkIcon.className = "w-6 h-6 left-[6px] top-[6px] absolute";
-    checkIcon.src = "./src/assets/images/icon-check.svg";
+    checkIcon.src = "/static/assets/images/icon-check.svg";
 
     const buttonContainer = document.createElement("button");
     buttonContainer.className =

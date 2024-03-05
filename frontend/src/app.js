@@ -10,10 +10,10 @@ class App {
     const { el } = this.props;
 
     this.router = new Router({
-      "/": HomePage,
-      "/options": OptionsPage,
-      "/profile": ProfilePage,
-      "/game": GamePage,
+      "/home/": HomePage,
+      "/options/": OptionsPage,
+      "/profile/": ProfilePage,
+      "/game/": GamePage,
     });
 
     this.router.init(el);

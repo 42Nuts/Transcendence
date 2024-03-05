@@ -10,21 +10,21 @@ class GameOption extends Component {
     // Nickname 옵션
     const nicknameOption = createComponent(SwitchOption, {
       textContent: "Nickname",
-      imageSrc: "./src/assets/images/profile-default.svg",
+      imageSrc: "/static/assets/images/profile-default.svg",
       optionName: "updateNickName",
     });
 
     // Theme 옵션
     const themeOption = createComponent(SwitchOption, {
       textContent: "Theme",
-      imageSrc: "./src/assets/images/ball-pingpong.svg",
+      imageSrc: "/static/assets/images/ball-pingpong.svg",
       optionName: "updateTheme",
     });
 
     // Dark Mode 옵션
     const darkModeOption = createComponent(SwitchOption, {
       textContent: "Dark Mode",
-      imageSrc: "./src/assets/images/darkMode-light.svg",
+      imageSrc: "/static/assets/images/darkMode-light.svg",
       optionName: "toggleDarkMode",
     });
 

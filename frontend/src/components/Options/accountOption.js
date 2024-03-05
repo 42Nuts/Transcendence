@@ -10,7 +10,7 @@ class AccountOption extends Component {
     // Logout 옵션
     const logoutOption = createComponent(ExitOption, {
       text: "Logout",
-      iconSrc: "./src/assets/images/icon-logout.svg",
+      iconSrc: "/static/assets/images/icon-logout.svg",
       bgColorClass: "bg-primary-text",
       optionName: "toggleLogout",
     });
@@ -18,7 +18,7 @@ class AccountOption extends Component {
     // Delete account 옵션
     const deleteAccountOption = createComponent(ExitOption, {
       text: "Delete account",
-      iconSrc: "./src/assets/images/icon-delete.svg",
+      iconSrc: "/static/assets/images/icon-delete.svg",
       bgColorClass: "bg-primary-logo",
       optionName: "toggleDeleteAccount",
     });

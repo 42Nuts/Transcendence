@@ -11,7 +11,7 @@ class CreditsOption extends Component {
     logoContainer.className =
       "w-[92px] h-[92px] px-[7.50px] pt-[4.50px] pb-[4.51px] justify-center items-center inline-flex";
     const logoImg = document.createElement("img");
-    logoImg.src = "./src/assets/images/42Nuts-logo.svg";
+    logoImg.src = "/static/assets/images/42Nuts-logo.svg";
     logoImg.className = "w-[80px] h-[80px]";
     logoContainer.appendChild(logoImg);
     container.appendChild(logoContainer);
@@ -63,7 +63,7 @@ class CreditsOption extends Component {
     githubIcon.className =
       "absolute inset-0 m-auto flex items-center justify-center bg-primary-text rounded-full";
     const githubImg = document.createElement("img");
-    githubImg.src = "./src/assets/images/icon-github.svg";
+    githubImg.src = "/static/assets/images/icon-github.svg";
     githubImg.className = "w-[20px] h-[20px]";
     githubIcon.appendChild(githubImg);
     githubIconContainer.appendChild(githubIcon);
