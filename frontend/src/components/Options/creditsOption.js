@@ -11,7 +11,7 @@ class CreditsOption extends Component {
     logoContainer.className =
       "w-[92px] h-[92px] px-[7.50px] pt-[4.50px] pb-[4.51px] justify-center items-center inline-flex";
     const logoImg = document.createElement("img");
-    logoImg.src = "/static/assets/images/42Nuts-logo.svg";
+    logoImg.src = "/static/assets/images/logo-42Nuts.svg";
     logoImg.className = "w-[80px] h-[80px]";
     logoContainer.appendChild(logoImg);
     container.appendChild(logoContainer);

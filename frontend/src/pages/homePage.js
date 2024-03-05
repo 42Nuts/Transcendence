@@ -7,7 +7,7 @@ class HomePage extends Component {
     // 최상위 div 생성 및 클래스 추가
     const bgDiv = document.createElement("div");
     bgDiv.classList.add("bg-no-repeat", "bg-cover");
-    bgDiv.style.backgroundImage = 'url(\"/static/assets/images/net.svg\")';
+    bgDiv.style.backgroundImage = 'url("/static/assets/images/net.svg")';
     bgDiv.style.backgroundPosition = "calc(100% + 390px) center";
 
     // flex 컨테이너 생성 및 클래스 추가

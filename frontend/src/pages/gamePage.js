@@ -31,7 +31,7 @@ class GamePage extends Component {
     const card1 = createComponent(Card, {
       title: "2 Players",
       titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-VS.svg",
+      image: "/static/assets/images/character-vs.svg",
       gameMode: "0",
       optionName: "updateGameMode",
     });
