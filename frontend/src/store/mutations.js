@@ -1,7 +1,7 @@
 export default {
   // Game Options
   updateNickName(state) {
-    state.nickName = !state.nickName;
+    state.nickName = (state.nickName + 1) % 5;
     return state;
   },
   updateTheme(state) {
