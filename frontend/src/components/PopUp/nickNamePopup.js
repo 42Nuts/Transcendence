@@ -40,6 +40,7 @@ class NickNamePopUp extends Component {
     input.className =
       "w-full opacity-50 text-primary-text text-2xl font-medium font-['Inter'] outline-none";
     input.setAttribute("type", "text");
+    input.setAttribute("maxlength", "10");
     input.setAttribute("placeholder", "search");
 
     const checkContainer = document.createElement("div");
@@ -91,7 +92,7 @@ class NickNamePopUp extends Component {
     });
 
     input.addEventListener("keypress", (event) => {
-      if (event.key === "Enter") {
+      if (event.key === "Enter" && input.value.length > 0) {
         this.name = input.value;
         overlay.style.display = "none";
         Store.dispatch("updateNickName");
@@ -100,10 +101,12 @@ class NickNamePopUp extends Component {
     });
 
     buttonContainer.addEventListener("click", () => {
-      this.name = input.value;
-      overlay.style.display = "none";
-      Store.dispatch("updateNickName");
-      console.log(this.name);
+      if (input.value.length > 0) {
+        this.name = input.value;
+        overlay.style.display = "none";
+        Store.dispatch("updateNickName");
+        console.log(this.name);
+      }
     });
 
     textContainer.appendChild(title);
