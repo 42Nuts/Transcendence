@@ -40,7 +40,6 @@ class NickNamePopUp extends Component {
     input.className =
       "w-full opacity-50 text-primary-text text-2xl font-medium font-['Inter'] outline-none";
     input.setAttribute("type", "text");
-    input.setAttribute("minlength", "1");
     input.setAttribute("maxlength", "10");
     input.setAttribute("placeholder", "search");
 
