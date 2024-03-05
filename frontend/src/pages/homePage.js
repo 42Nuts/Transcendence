@@ -7,7 +7,7 @@ class HomePage extends Component {
     // 최상위 div 생성 및 클래스 추가
     const bgDiv = document.createElement("div");
     bgDiv.classList.add("bg-no-repeat", "bg-cover");
-    bgDiv.style.backgroundImage = 'url("./src/assets/images/net.svg")';
+    bgDiv.style.backgroundImage = 'url("/static/assets/images/net.svg")';
     bgDiv.style.backgroundPosition = "calc(100% + 390px) center";
 
     // flex 컨테이너 생성 및 클래스 추가
@@ -54,14 +54,14 @@ class HomePage extends Component {
 
     // Play 버튼 div 생성 및 설정
     const playButtonHref = document.createElement("a");
-    playButtonHref.setAttribute("href", "/game");
+    playButtonHref.setAttribute("href", "/game/");
     playButtonHref.setAttribute("class", "play-button");
     const playButton = createComponent(BasicButton, { text: "Play" });
     playButtonHref.appendChild(playButton);
 
     // Options 버튼 div 생성 및 설정
     const optionsButtonHref = document.createElement("a");
-    optionsButtonHref.setAttribute("href", "/options");
+    optionsButtonHref.setAttribute("href", "/options/");
     optionsButtonHref.setAttribute("class", "options-button");
     const optionsButton = createComponent(BasicButton, { text: "Options" });
     optionsButtonHref.appendChild(optionsButton);
@@ -69,7 +69,7 @@ class HomePage extends Component {
     // 프로필 이미지 설정
     const profileImage = document.createElement("img");
     profileImage.classList.add("profile-image", "w-[72px]", "h-[72px]");
-    profileImage.src = "./src/assets/images/profile-default.svg";
+    profileImage.src = "/static/assets/images/profile-default.svg";
 
     // 구조 조립
     bgDiv.appendChild(flexContainer);

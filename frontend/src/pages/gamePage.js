@@ -31,7 +31,7 @@ class GamePage extends Component {
     const card1 = createComponent(Card, {
       title: "2 Players",
       titleLeft: "left-[52px]",
-      image: "./src/assets/images/character-VS.svg",
+      image: "/static/assets/images/character-vs.svg",
       gameMode: "0",
       optionName: "updateGameMode",
     });
@@ -39,7 +39,7 @@ class GamePage extends Component {
     const card2 = createComponent(Card, {
       title: "3 Players",
       titleLeft: "left-[52px]",
-      image: "./src/assets/images/character-triangle.svg",
+      image: "/static/assets/images/character-triangle.svg",
       gameMode: "1",
       optionName: "updateGameMode",
     });
@@ -47,7 +47,7 @@ class GamePage extends Component {
     const card3 = createComponent(Card, {
       title: "4 Players",
       titleLeft: "left-[52px]",
-      image: "./src/assets/images/character-sonny.svg",
+      image: "/static/assets/images/character-sonny.svg",
       gameMode: "2",
       optionName: "updateGameMode",
     });
@@ -62,14 +62,14 @@ class GamePage extends Component {
     const card4 = createComponent(LockCard, {
       title: "5 Players",
       titleLeft: "left-[52px]",
-      image: "./src/assets/images/character-pentagon.svg",
-      lock: "./src/assets/images/icon-lock.svg",
+      image: "/static/assets/images/character-pentagon.svg",
+      lock: "/static/assets/images/icon-lock.svg",
     });
 
     const card5 = createComponent(Card, {
       title: "Tournament",
       titleLeft: "left-[27px]",
-      image: "./src/assets/images/character-champion.svg",
+      image: "/static/assets/images/character-champion.svg",
       gameMode: "3",
       optionName: "updateGameMode",
     });
@@ -77,8 +77,8 @@ class GamePage extends Component {
     const card6 = createComponent(LockCard, {
       title: "AI",
       titleLeft: "left-[114px]",
-      image: "./src/assets/images/character-AI.svg",
-      lock: "./src/assets/images/icon-lock.svg",
+      image: "/static/assets/images/character-AI.svg",
+      lock: "/static/assets/images/icon-lock.svg",
     });
 
     gameBoardDown.appendChild(card4);

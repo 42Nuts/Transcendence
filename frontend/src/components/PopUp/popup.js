@@ -40,13 +40,13 @@ class PopUp extends Component {
       "justify-center items-center gap-16 inline-flex";
 
     const cancelButton = createComponent(IconButton, {
-      iconSrc: "./src/assets/images/icon-close.svg",
+      iconSrc: "/static/assets/images/icon-close.svg",
       bgColorClass: "bg-primary-text",
       optionName: this.props.optionName,
     });
 
     const confirmButton = createComponent(IconButton, {
-      iconSrc: "./src/assets/images/icon-check.svg",
+      iconSrc: "/static/assets/images/icon-check.svg",
       bgColorClass: "bg-primary-text",
     });
 
