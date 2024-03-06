@@ -92,6 +92,13 @@ def loginPage(request):
     return render(request, 'index.html', context)
 
 
+def logout(request):
+    response = HttpResponseRedirect('/')
+    response.set_cookie('access_token', '', max_age=0)
+    response.set_cookie('refresh_token', '', max_age=0)
+    return response
+
+
 def home(request):
     context = {
         'requireNickName': (request.user.nickname is ''),
