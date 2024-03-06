@@ -6,8 +6,9 @@ services:
       context: ./backend/nginx
       dockerfile: Dockerfile
     volumes:
-      - ./backend/nginx/src:/var/www/html
+      # - ./backend/nginx/src:/var/www/html
       - ./backend/nginx/logs:/var/log/nginx
+      - ./frontend/src:/var/www/html
     init: true
     ports:
       - "$NGINX_PORT:$NGINX_PORT"

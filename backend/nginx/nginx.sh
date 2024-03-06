@@ -21,6 +21,7 @@ http {
         root /var/www/html;
 
         location /static {
+          alias /var/www/html/;
           # static 파일
         }
 
@@ -56,16 +57,16 @@ echo "
 <html>
 <head>
   <meta charset=\"utf-8\" />
-  <link href=\"/static/output.css\" rel=\"stylesheet\">
+  <link href=\"/static/assets/styles/output.css\" rel=\"stylesheet\">
 </head>
-<body class=\"flex justify-center items-center h-screen bg-custom-background\">
+<body class=\"flex justify-center items-center h-screen bg-primary\">
   <div class=\"flex flex-col items-center justify-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2\">
     <div class="title">
-      <img src="/static/images/PingPongLogo.svg" />
+      <img src="/static/assets/images/logo-pingpong.svg" />
     </div>
 
     
-    <button id=\"myButton\" class=\"bg-custom-LIGHT-button text-white text-4xl font-extrabold px-8 py-3 rounded-full mt-1 hover:bg-custom-LIGHT-button-hover\">
+    <button id=\"myButton\" class=\"bg-primary-button text-primary-button_text text-4xl font-extrabold px-8 py-3 rounded-full mt-1 hover:bg-primary-button_hover\">
       Login
     </button>
   </div>
