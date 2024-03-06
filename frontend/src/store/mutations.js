@@ -5,7 +5,7 @@ export default {
     return state;
   },
   updateTheme(state) {
-    state.theme += 1;
+    state.theme = (state.theme + 1) % 6;
     return state;
   },
   toggleDarkMode(state) {
