@@ -62,7 +62,6 @@ let keyState = {
     leftArrow: false,
     rightArrow: false
 };
-
 // 키보드 누름 이벤트 핸들러
 document.addEventListener("keydown", function(event) {
     if (event.keyCode === 37) { // 왼쪽 화살표 키
@@ -70,7 +69,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -80,7 +79,7 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 // render function, the function that does al the drawing

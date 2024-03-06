@@ -62,7 +62,7 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1"
+            id="1"
         ))
 
         self.players.append(Paddle(
@@ -74,7 +74,7 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2"
+            id="2"
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -83,18 +83,18 @@ class PongGame:
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
             radius=10,
-            velocity_x=5,
-            velocity_y=5,
-            speed=7,
+            velocity_x=2,
+            velocity_y=2,
+            speed=2,
             color="WHITE"
         )
 
     def reset_ball(self):
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.velocity_x = -5 if self.ball.velocity_x > 0 else 5
-        self.ball.velocity_y = -5 if self.ball.velocity_y > 0 else 5
-        self.ball.speed = 7
+        self.ball.velocity_x = -2 if self.ball.velocity_x > 0 else 2
+        self.ball.velocity_y = -2 if self.ball.velocity_y > 0 else 2
+        self.ball.speed = 2
 
     def collision(self, b, p):
         p.top = p.y
@@ -123,7 +123,7 @@ class PongGame:
         self.ball.y += self.ball.velocity_y
 
         # computer ai
-        self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
+        # self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
 
         # 공의 벽 튕김
         if self.ball.x - self.ball.radius < 0:
