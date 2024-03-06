@@ -12,45 +12,20 @@ class HomePage extends Component {
 
     // flex 컨테이너 생성 및 클래스 추가
     const flexContainer = document.createElement("div");
-    flexContainer.classList.add(
-      "flex",
-      "justify-center",
-      "items-center",
-      "min-h-screen"
-    );
+    flexContainer.className = "flex justify-center items-center min-h-screen";
 
     // 메인 컨텐츠 div 생성 및 클래스 추가
     const mainContentDiv = document.createElement("div");
-    mainContentDiv.classList.add(
-      "w-[1136px]",
-      "h-[480px]",
-      "flex-col",
-      "justify-start",
-      "items-start",
-      "gap-60",
-      "inline-flex"
-    );
+    mainContentDiv.className = "w-[1136px] h-[480px] flex-col justify-start items-start gap-60 inline-flex";
 
     // 타이틀 div 생성 및 클래스 추가
     const titleDiv = document.createElement("div");
-    titleDiv.classList.add(
-      "text-primary-text",
-      "text-[80px]",
-      "font-bold",
-      "font-['Inter']",
-      "leading-[80px]",
-      "tracking-[4px]"
-    );
+    titleDiv.className = "text-primary-text text-[80px] font-bold font-['Inter'] leading-[80px] tracking-[4px]";
     titleDiv.textContent = "PING PONG";
 
     // 버튼 컨테이너 div 생성 및 클래스 추가
     const buttonContainer = document.createElement("div");
-    buttonContainer.classList.add(
-      "justify-start",
-      "items-end",
-      "gap-[863px]",
-      "inline-flex"
-    );
+    buttonContainer.className = "justify-start items-end gap-[863px] inline-flex"
 
     // Play 버튼 div 생성 및 설정
     const playButtonHref = document.createElement("a");
@@ -77,13 +52,7 @@ class HomePage extends Component {
     mainContentDiv.appendChild(titleDiv);
 
     const buttonsFlexContainer = document.createElement("div");
-    buttonsFlexContainer.classList.add(
-      "flex-col",
-      "justify-start",
-      "items-start",
-      "gap-8",
-      "inline-flex"
-    );
+    buttonsFlexContainer.className = "flex-col justify-start items-start gap-8 inline-flex";
     buttonsFlexContainer.appendChild(playButtonHref);
     buttonsFlexContainer.appendChild(optionsButtonHref);
 
