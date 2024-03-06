@@ -16,11 +16,12 @@ Including another URLconf
 """
 
 from django.urls import path, include
-from login.views import login, home
+from login.views import fourtytwo_oauth, home, loginPage
 from pongGame.views import game
 
 urlpatterns = [
-    path('42oauth/', login),
+    path('', loginPage),
+    path('42oauth/', fourtytwo_oauth),
     path('home/', home),
     path('v2/users/', include('users.urls')),
     path('v2/game/', game),

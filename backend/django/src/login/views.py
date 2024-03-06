@@ -21,7 +21,7 @@ def get_tokens_for_user(user):
     }
 
 
-def login(request):
+def fourtytwo_oauth(request):
     if request.method != 'GET':
         return JsonResponse({'status': 403})
 
@@ -85,8 +85,17 @@ def login(request):
         return JsonResponse({'status': 500, 'error': 'Server internal error'})
 
 
+def loginPage(request):
+    context = {
+        'isHomePage': False,
+    }
+    return render(request, 'index.html', context)
+
+
 def home(request):
     context = {
-        'requireNickName': (request.user.nickname is '')
+        'requireNickName': (request.user.nickname is ''),
+        'isHomePage': True,
+        'userId': request.user.pk,
     }
-    return render(request, 'homePage.html', context)
+    return render(request, 'index.html', context)
