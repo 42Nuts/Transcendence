@@ -33,7 +33,7 @@ class NickNamePopUp extends Component {
     this.overlay = document.createElement("div");
     this.overlay.className =
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
-    this.overlay.id = "nickName";
+    this.overlay.id = "nickname";
     if (requireNickName === "True") {
       this.overlay.style.display = "flex";
     } else {
