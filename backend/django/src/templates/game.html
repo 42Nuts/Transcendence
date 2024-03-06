@@ -6,10 +6,11 @@
 	<title>Ping Pong</title>
 	<script type="text/javascript">
 		var csrftoken = '{{ csrf_token }}';
+		var userId = '{{ userId }}';
 	</script>
 </head>
 <body>
 	<canvas id="game"></canvas>
-	<script src="{% static 'fourPlayerMode.js' %}"></script>
+	<script src="{% static 'twoPlayerMode.js' %}"></script>
 </body>
 </html>
