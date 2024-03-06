@@ -58,7 +58,7 @@ def tokenCheck(get_response):
             if request.path in ('/', '/42oauth/'):  # 인증
                 response = get_response(request)
                 return response
-            return HttpResponse(str(e), status=401)
+            return HttpResponseRedirect('/')
         except Exception as e:
             logger.info("Unexpected error: %s", str(e))
             return HttpResponse('Unexpected error', status=500)
