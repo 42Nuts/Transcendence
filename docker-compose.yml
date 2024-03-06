@@ -40,6 +40,25 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+   
+  redis-cache:
+    image: redis-cache
+    container_name: redis-cache
+    build:
+      context: ./backend/redis-cache
+      dockerfile: Dockerfile
+    init: true
+    env_file:
+      - .env
+    networks:
+      - our_net
+    healthcheck:
+      test: cat $REDIS_HEALTH
+      interval: 3s
+      timeout: 2s
+      retries: 30
 
   postgresql:
     image: postgresql
