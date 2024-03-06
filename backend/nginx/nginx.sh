@@ -18,26 +18,12 @@ http {
         ssl_certificate_key /etc/nginx/private.key;
         ssl_protocols TLSv1.2 TLSv1.3;
 
-        root /var/www/html;
-
         location /static {
           alias /var/www/html/;
           # static 파일
         }
 
-        location = / {
-          index loginPage.html;
-        }
-
-        location /42oauth {
-          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
-        }
-
-        location /home {
-          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
-        }
-
-        location /v2 {
+        location / {
           proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
         }
 
@@ -51,33 +37,6 @@ http {
     }
 }
 " > /etc/nginx/nginx.conf
-
-echo "
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset=\"utf-8\" />
-  <link href=\"/static/assets/styles/output.css\" rel=\"stylesheet\">
-</head>
-<body class=\"flex justify-center items-center h-screen bg-primary\">
-  <div class=\"flex flex-col items-center justify-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2\">
-    <div class="title">
-      <img src="/static/assets/images/logo-pingpong.svg" />
-    </div>
-
-    
-    <button id=\"myButton\" class=\"bg-primary-button text-primary-button_text text-4xl font-extrabold px-8 py-3 rounded-full mt-1 hover:bg-primary-button_hover\">
-      Login
-    </button>
-  </div>
-  <script>
-    document.getElementById('myButton').onclick = function () {
-      location.href = '"$FOURTYTWO_OAUTH_CODE_URI?client_id=$FOURTYTWO_CLIENT_ID\&redirect_uri=$FOURTYTWO_REDIRECT_URI\&response_type=$FOURTYTWO_RESPONSE_TYPE"';
-    };
-  </script>
-</body>
-</html>
-" > /var/www/html/loginPage.html
 
 nginx -g "daemon off;"
  
