@@ -87,6 +87,7 @@ def login(request):
 
 def home(request):
     context = {
-        'requireNickName': (request.user.nickname is '')
+        'requireNickName': (request.user.nickname is ''),
+        'userId': request.user.pk,
     }
     return render(request, 'homePage.html', context)
