@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from config.settings import DEFAULT_GAME_SKIN_IMAGE_URL, DEFAULT_TIER_IMAGE_URL, DEFAULT_PROFILE_IMAGE_URL
-
+import pyotp
 # 커스텀 유저 모델을 생성하고 관리하는 클래스
 
 
@@ -41,6 +41,15 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    # 비밀 키 필드
+    otp_secret_key = models.CharField(max_length=100, blank=True)
+
+    # 각 사용자마다 고유한 OTP 키를 부여함
+    def save(self, *args, **kargs):
+        if not self.otp_secret_key:
+            self.otp_secret_key = pyotp.random_base32()
+        super().save(*args, **kargs)
+
     email = models.EmailField('email address', unique=True)
     nickname = models.CharField(
         max_length=10, help_text='Unique nickname for the user.')
