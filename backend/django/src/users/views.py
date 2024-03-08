@@ -116,7 +116,19 @@ def account_handler(request, user_id):
         return HttpResponseRedirect('/')
     return HttpResponseNotAllowed(['DELETE'])
 
+def send_deletion_email(request, user):
+    logger.info("send_deletion_email 실행")
 
+    totp = pyotp.TOTP(user.otp_secret_key, digits=6, interval=180)
+    otp_code = totp.now()
+    logger.info("verify : %s", str(totp.verify(otp_code)))
+
+    subject = 'Transcendence 인증코드'
+    message = '인증코드 : ' + otp_code
+    logger.info(f"message : {message}")
+
+    send_mail(subject, message, 'hjoon0303@gmail.com', [user.email])
+    logger.info(f"이메일 발송 완료: {user.email}")
 def background_color_handler(request, user_id):
     pass
 
