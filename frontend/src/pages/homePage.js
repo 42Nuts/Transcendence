@@ -5,6 +5,59 @@ import { profileImages } from "../config/index.js";
 import Store from "../store/index.js";
 
 class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.initState();
+  }
+
+  initState() {
+    fetch("/v2/users/1/profile-index/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        Store.state.nickname = data.profile_index;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+    });
+    fetch("/v2/users/1/theme-index", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        Store.state.theme = data.theme_index;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+    });
+    fetch("/v2/users/1/dark-mode/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        Store.state.darkMode = data.dark_mode;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+    });
+  }
+
   render() {
     // 최상위 div 생성 및 클래스 추가
     const bgDiv = document.createElement("div");
