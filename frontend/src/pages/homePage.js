@@ -1,6 +1,8 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { NickNamePopup } from "../components/PopUp/index.js";
+import { profileImages } from "../config/index.js";
+import Store from "../store/index.js";
 
 class HomePage extends Component {
   render() {
@@ -44,7 +46,7 @@ class HomePage extends Component {
     // 프로필 이미지 설정
     const profileImage = document.createElement("img");
     profileImage.classList.add("profile-image", "w-[72px]", "h-[72px]");
-    profileImage.src = "/static/assets/images/profile-default.svg";
+    profileImage.src = profileImages[Store.state.nickname];
 
     // 구조 조립
     bgDiv.appendChild(flexContainer);
