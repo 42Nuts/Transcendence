@@ -1,12 +1,12 @@
-from django.shortcuts import render
-from users.models import User
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse, HttpResponseNotAllowed, Http404
+from django.http import HttpResponse, HttpResponseForbidden, Http404, HttpResponseRedirect, HttpResponseNotAllowed, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
+import pyotp
 import json
 import logging
+from .models import User
 
 logger = logging.getLogger('django')
-
-
 def dark_mode_handler(request, user_id):
     if request.method == 'GET':
         logger.info("GET: %s", str(request.method))
@@ -28,7 +28,7 @@ def dark_mode_handler(request, user_id):
         return HttpResponse(request.user.dark_mode)
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
- 
+
 
 def theme_handler(request, user_id):
     if request.method == 'GET':
@@ -129,6 +129,28 @@ def send_deletion_email(request, user):
 
     send_mail(subject, message, 'hjoon0303@gmail.com', [user.email])
     logger.info(f"이메일 발송 완료: {user.email}")
+
+def verify_code_handler(request, user_id):
+    # GET 요청을 받는 경우
+    if request.method == 'GET':
+        try:
+            user = User.objects.get(pk=user_id)
+            # URL의 쿼리 파라미터에서 인증 코드를 추출
+            input_code = request.GET.get('code')
+            
+            if not input_code:
+                return JsonResponse({'message': 'No verification code provided'}, status=400) # 인증 코드 제공되지 않은 경우
+            
+            totp = pyotp.TOTP(user.otp_secret_key, digits=6, interval=180)
+            if totp.verify(input_code):
+                return JsonResponse({'message': 'Verification successful'}, status=200) # 인증 성공
+            else:
+                return JsonResponse({'message': 'Invalid verification code'}, status=400) # 잘못된 인증
+        except User.DoesNotExist:
+            return JsonResponse({'message': 'User not found'}, status=404) # 사용자를 찾을 수 없음
+    else:
+        return JsonResponse({'message': 'Invalid request method'}, status=405) # 유효하지 않은 요청 방식
+    
 def background_color_handler(request, user_id):
     pass
 
