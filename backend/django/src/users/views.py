@@ -98,8 +98,19 @@ def profile_url_handler(request, user_id):
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
 
-
 def account_handler(request, user_id):
+    logger.info("account_handler 실행")
+    if request.method == 'GET':
+        user = get_object_or_404(User, pk=user_id)
+        if request.user != user:
+            return HttpResponseForbidden("해당 계정의 삭제를 시작할 권한이 없습니다.")
+        
+        # 이메일 인증을 위한 이메일 전송 로직 호출
+        send_deletion_email(request, user)
+        logger.info(f"user.email : {user.email}")
+        return HttpResponse("확인 이메일이 발송되었습니다. 계정 삭제를 확인하려면 이메일을 확인해주세요.", status=200)
+    else:
+        return HttpResponse("요청된 URL에 대해 이 방법은 허용되지 않습니다.", status=405)
     if request.method == 'DELETE':
         request.user.delete()
         return HttpResponseRedirect('/')
