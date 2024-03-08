@@ -1,6 +1,7 @@
 import { Component, createComponent } from "../../core/index.js";
 import { SwitchOption } from "./Game/index.js";
 import { profileImages, themeImages, darkModeImages } from "../../config/index.js";
+import Store from "../../store/index.js";
 
 class GameOption extends Component {
   render() {
@@ -12,6 +13,7 @@ class GameOption extends Component {
     const nicknameOption = createComponent(SwitchOption, {
       textContent: "Nickname",
       imageSrc: profileImages,
+      startIndex: Store.state.nickname,
       optionName: "updateNickName",
     });
 
@@ -19,6 +21,7 @@ class GameOption extends Component {
     const themeOption = createComponent(SwitchOption, {
       textContent: "Theme",
       imageSrc: themeImages,
+      startIndex: Store.state.theme,
       optionName: "updateTheme",
     });
 
@@ -26,6 +29,7 @@ class GameOption extends Component {
     const darkModeOption = createComponent(SwitchOption, {
       textContent: "Dark Mode",
       imageSrc: darkModeImages,
+      startIndex: Store.state.darkMode ? 1 : 0,
       optionName: "toggleDarkMode",
     });
 

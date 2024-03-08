@@ -16,6 +16,7 @@ class SwitchOption extends Component {
     const modeButton = createComponent(ModeButton, {
       imageSrc: this.props.imageSrc,
       optionName: this.props.optionName,
+      startIndex: this.props.startIndex,
     });
 
     // 구조 조립

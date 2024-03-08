@@ -36,7 +36,7 @@ class ModeButton extends Component {
       "w-[72px] h-[72px] relative inline-flex justify-center items-center";
 
     const image = document.createElement("img");
-    image.src = this.props.imageSrc[0];
+    image.src = this.props.imageSrc[this.props.startIndex];
     image.className = "w-[72px] h-[72px]";
     this.button.appendChild(image);
 
