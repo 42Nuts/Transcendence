@@ -44,9 +44,13 @@ class HomePage extends Component {
     optionsButtonHref.appendChild(optionsButton);
 
     // 프로필 이미지 설정
+    const profileImageHref = document.createElement("a");
+    profileImageHref.setAttribute("href", "/options/");
+
     const profileImage = document.createElement("img");
-    profileImage.classList.add("profile-image", "w-[72px]", "h-[72px]");
+    profileImage.className = "profile-image w-[72px] h-[72px]";
     profileImage.src = profileImages[Store.state.nickname];
+    profileImageHref.appendChild(profileImage);
 
     // 구조 조립
     bgDiv.appendChild(flexContainer);
@@ -59,7 +63,7 @@ class HomePage extends Component {
     buttonsFlexContainer.appendChild(optionsButtonHref);
 
     buttonContainer.appendChild(buttonsFlexContainer);
-    buttonContainer.appendChild(profileImage);
+    buttonContainer.appendChild(profileImageHref);
     mainContentDiv.appendChild(buttonContainer);
 
     // 닉네임 팝업 컴포넌트 추가
