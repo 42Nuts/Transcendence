@@ -27,7 +27,7 @@ echo "
     var userId = '{{ userId }}'
   </script>
 </head>
-<body class=\"bg-primary\">
+<body class=\"bg-primary dark:bg-secondary\">
   <div id=\"root\"></div>
   <script type=\"module\" src=\"/static/index.js\"></script>
 </body>
@@ -39,7 +39,7 @@ echo "
   <meta charset=\"utf-8\" />
   <link href=\"/static/assets/styles/output.css\" rel=\"stylesheet\">
 </head>
-<body class=\"flex justify-center items-center h-screen bg-primary\">
+<body class=\"flex justify-center items-center h-screen bg-primary dark:bg-secondary\">
   <div class=\"flex flex-col items-center justify-center fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2\">
     <div class="title">
       <img src="/static/assets/images/logo-pingpong.svg" />

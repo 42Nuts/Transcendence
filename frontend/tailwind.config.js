@@ -30,7 +30,7 @@ module.exports = {
           ruby_from: "#CE5C59",
           ruby_to: "#EF8E89",
         },
-        second: {
+        secondary: {
           DEFAULT: "#272A2D",
           text: "#EEEBDE",
           card_background: "#3D434A",
