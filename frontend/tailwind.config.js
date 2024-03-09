@@ -30,6 +30,16 @@ module.exports = {
           ruby_from: "#CE5C59",
           ruby_to: "#EF8E89",
         },
+        second: {
+          DEFAULT: "#272A2D",
+          text: "#EEEBDE",
+          card_background: "#3D434A",
+          button: "#98BFBF",
+          button_hover: "#FDCA6B",
+          button_text: "#FFFFFF",
+          inner_card_top: "#677076",
+          inner_card_board: "#F6F7F6",
+        },
       },
       animation: {
         bounce: "bounce 2s infinite",
