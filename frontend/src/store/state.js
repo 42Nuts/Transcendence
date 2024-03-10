@@ -9,5 +9,5 @@ export default {
   deleteAccount: false,
 
   //Game Mode
-  gameMode: 0,
+  gameMode: "2player",
 };
