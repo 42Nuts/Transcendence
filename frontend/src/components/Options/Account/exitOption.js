@@ -8,7 +8,7 @@ class ExitOption extends Component {
 
     const optionText = document.createElement("div");
     optionText.className =
-      "text-center text-primary-text text-[40px] font-semibold font-['Inter'] leading-10";
+      "text-center text-primary-text dark:text-secondary-text text-[40px] font-semibold font-['Inter'] leading-10";
     optionText.textContent = this.props.text;
 
     const iconContainer = createComponent(IconButton, {

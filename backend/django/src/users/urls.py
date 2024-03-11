@@ -12,6 +12,6 @@ urlpatterns = [
     path('<int:user_id>/wins', views.wins_handler),
     path('<int:user_id>/loses/', views.loses_handler),
     path('<int:user_id>/followers-count/', views.followers_count_handler),
-    path('<int:user_id>/followings-count/', views.followings_counnt_handler),
+    path('<int:user_id>/followings-count/', views.followings_count_handler),
     path('<int:user_id>/', views.account_handler),
 ]

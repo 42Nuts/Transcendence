@@ -1,5 +1,7 @@
 import { Component, createComponent } from "../../core/index.js";
 import { SwitchOption } from "./Game/index.js";
+import { profileImages, themeImages, darkModeImages } from "../../config/index.js";
+import Store from "../../store/index.js";
 
 class GameOption extends Component {
   render() {
@@ -10,21 +12,24 @@ class GameOption extends Component {
     // Nickname 옵션
     const nicknameOption = createComponent(SwitchOption, {
       textContent: "Nickname",
-      imageSrc: "/static/assets/images/profile-default.svg",
+      imageSrc: profileImages,
+      startIndex: Store.state.nickname,
       optionName: "updateNickName",
     });
 
     // Theme 옵션
     const themeOption = createComponent(SwitchOption, {
       textContent: "Theme",
-      imageSrc: "/static/assets/images/ball-pingpong.svg",
+      imageSrc: themeImages,
+      startIndex: Store.state.theme,
       optionName: "updateTheme",
     });
 
     // Dark Mode 옵션
     const darkModeOption = createComponent(SwitchOption, {
       textContent: "Dark Mode",
-      imageSrc: "/static/assets/images/darkMode-light.svg",
+      imageSrc: darkModeImages,
+      startIndex: Store.state.darkMode ? 1 : 0,
       optionName: "toggleDarkMode",
     });
 

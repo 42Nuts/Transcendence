@@ -1,10 +1,7 @@
 import { Component, createComponent } from "../core/index.js";
-import {
-  BackIconButton,
-  BasicButton,
-  ArrowButton,
-} from "../components/Button/index.js";
+import { BackIconButton, BasicButton } from "../components/Button/index.js";
 import { Card, LockCard } from "../components/Card/index.js";
+import Store from "../store/index.js";
 
 class GamePage extends Component {
   render() {
@@ -63,7 +60,6 @@ class GamePage extends Component {
       title: "5 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-pentagon.svg",
-      lock: "/static/assets/images/icon-lock.svg",
     });
 
     const card5 = createComponent(Card, {
@@ -78,7 +74,6 @@ class GamePage extends Component {
       title: "AI",
       titleLeft: "left-[114px]",
       image: "/static/assets/images/character-AI.svg",
-      lock: "/static/assets/images/icon-lock.svg",
     });
 
     gameBoardDown.appendChild(card4);
@@ -91,7 +86,28 @@ class GamePage extends Component {
     // play button
     const playButtonPos = document.createElement("div");
     playButtonPos.className = "absolute top-[80%]";
-    const playButton = createComponent(BasicButton, { text: "Play" });
+    const playButton = createComponent(BasicButton, {
+      text: "Play",
+      // onClink: () => {
+      //   fetch("/v2/users/1/profile-index/", {
+      //     method: "PUT",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       "X-CSRFToken": document.cookie.split("=")[1],
+      //     },
+      //     body: JSON.stringify({
+      //       profile_index: Store.state.nickname,
+      //     }),
+      //   })
+      //     .then((response) => response.json())
+      //     .then((data) => {
+      //       console.log(data);
+      //     })
+      //     .catch((error) => {
+      //       console.error("Error:", error);
+      //     });
+      // },
+    });
     playButtonPos.appendChild(playButton);
 
     container.appendChild(this.gridContainer);

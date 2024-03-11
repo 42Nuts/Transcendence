@@ -41,6 +41,10 @@ class OptionsPage extends Component {
       this.gridContainer.removeChild(this.activeComponentNode);
     }
 
+    if (this.state.activeOption != "Game") {
+      this.sendOptionSetting();
+    }
+
     // 상태에 따라 새로운 activeComponent 추가
     let activeComponent;
     switch (this.state.activeOption) {
@@ -60,6 +64,67 @@ class OptionsPage extends Component {
     this.gridContainer.appendChild(this.activeComponentNode);
   }
 
+  sendOptionSetting() {
+    fetch("/v2/users/1/profile-index/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+      body: JSON.stringify({
+        profile_index: Store.state.nickname,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    fetch("/v2/users/1/theme-index/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+      body: JSON.stringify({
+        theme_index: Store.state.theme,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+    fetch("/v2/users/1/dark-mode/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+      body: JSON.stringify({
+        dark_mode: Store.state.darkMode,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text(); // 서버 응답을 텍스트로 변환
+      })
+      .then((text) => {
+        // "True" 또는 "False" 문자열을 boolean 값으로 변환
+        const data = text.toLowerCase() === "true" ? true : false;
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   render() {
     const container = document.createElement("div");
     container.className = "container mx-auto";
@@ -71,6 +136,10 @@ class OptionsPage extends Component {
     // BackIconButton 추가
     const backIcon = createComponent(BackIconButton, {});
     this.gridContainer.appendChild(backIcon);
+
+    backIcon.addEventListener("click", () => {
+      this.sendOptionSetting();
+    });
 
     // 메뉴 버튼들을 포함할 div 생성
     const menuContainer = document.createElement("div");

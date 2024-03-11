@@ -6,15 +6,38 @@ class NickNamePopUp extends Component {
     this.name = "";
   }
 
+  putNickName() {
+    this.name = this.input.value;
+    this.overlay.style.display = "none";
+    requireNickName = false;
+    console.log(this.name);
+    // fetch nickname to server
+    fetch("/v2/users/1/nickname/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+      body: JSON.stringify({ nickname: this.name }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   render() {
-    const overlay = document.createElement("div");
-    overlay.className =
+    this.overlay = document.createElement("div");
+    this.overlay.className =
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
-    overlay.id = "nickName";
-    if (requireNickName === 'True') {
-      overlay.style.display = "flex";
+    this.overlay.id = "nickname";
+    if (requireNickName === "True") {
+      this.overlay.style.display = "flex";
     } else {
-      overlay.style.display = "none";
+      this.overlay.style.display = "none";
     }
 
     const box = document.createElement("div");
@@ -35,12 +58,12 @@ class NickNamePopUp extends Component {
     inputContainer.className =
       "w-[466px] px-6 py-2 bg-white rounded-[89px] border-2 border-primary-text justify-between items-center inline-flex";
 
-    const input = document.createElement("input");
-    input.className =
+    this.input = document.createElement("input");
+    this.input.className =
       "w-full opacity-50 text-primary-text text-2xl font-medium font-['Inter'] outline-none";
-    input.setAttribute("type", "text");
-    input.setAttribute("maxlength", "10");
-    input.setAttribute("placeholder", "search");
+    this.input.setAttribute("type", "text");
+    this.input.setAttribute("maxlength", "10");
+    this.input.setAttribute("placeholder", "search");
 
     const checkContainer = document.createElement("div");
     checkContainer.className = "w-9 h-9 relative opacity-50";
@@ -62,8 +85,8 @@ class NickNamePopUp extends Component {
       "text-center text-primary-button_text text-[32px] font-semibold font-['Inter'] leading-8";
     confirmButton.textContent = "OK";
 
-    input.addEventListener("input", () => {
-      if (input.value.length > 0) {
+    this.input.addEventListener("input", () => {
+      if (this.input.value.length > 0) {
         checkContainer.classList.replace("opacity-50", "opacity-100");
         check.classList.replace("bg-primary-text", "bg-primary-color4");
         inputContainer.classList.replace(
@@ -90,28 +113,22 @@ class NickNamePopUp extends Component {
       }
     });
 
-    input.addEventListener("keypress", (event) => {
-      if (event.key === "Enter" && input.value.length > 0) {
-        this.name = input.value;
-        overlay.style.display = "none";
-        requireNickName = false;
-        console.log(this.name);
+    this.input.addEventListener("keypress", (event) => {
+      if (event.key === "Enter" && this.input.value.length > 0) {
+        this.putNickName();
       }
     });
 
     buttonContainer.addEventListener("click", () => {
-      if (input.value.length > 0) {
-        this.name = input.value;
-        overlay.style.display = "none";
-        requireNickName = false;
-        console.log(this.name);
+      if (this.input.value.length > 0) {
+        this.putNickName();
       }
     });
 
     textContainer.appendChild(title);
     checkContainer.appendChild(check);
     check.appendChild(checkIcon);
-    inputContainer.appendChild(input);
+    inputContainer.appendChild(this.input);
     inputContainer.appendChild(checkContainer);
     buttonContainer.appendChild(confirmButton);
     container.appendChild(textContainer);
@@ -119,9 +136,9 @@ class NickNamePopUp extends Component {
     container.appendChild(buttonContainer);
 
     box.appendChild(container);
-    overlay.appendChild(box);
+    this.overlay.appendChild(box);
 
-    return overlay;
+    return this.overlay;
   }
 }
 
