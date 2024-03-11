@@ -23,21 +23,18 @@ class HomePage extends Component {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": document.cookie.split("=")[1],
         },
       }).then((response) => response.json()),
-      fetch("/v2/users/1/theme-index", {
+      fetch("/v2/users/1/theme-index/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": document.cookie.split("=")[1],
         },
       }).then((response) => response.json()),
       fetch("/v2/users/1/dark-mode/", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": document.cookie.split("=")[1],
         },
       }).then((response) => response.json()),
     ])
