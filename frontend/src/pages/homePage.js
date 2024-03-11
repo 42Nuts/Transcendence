@@ -8,6 +8,13 @@ class HomePage extends Component {
   constructor(props) {
     super(props);
     this.initState();
+    Store.events.subscribe("darkModeChange", () => {
+      if (Store.state.darkMode) {
+        this.bgDiv.style.backgroundImage = 'url("/static/assets/images/net-dark.svg")';
+      } else {
+        this.bgDiv.style.backgroundImage = 'url("/static/assets/images/net.svg")';
+      } 
+    });
   }
 
   initState() {
@@ -60,10 +67,14 @@ class HomePage extends Component {
 
   render() {
     // 최상위 div 생성 및 클래스 추가
-    const bgDiv = document.createElement("div");
-    bgDiv.classList.add("bg-no-repeat", "bg-cover");
-    bgDiv.style.backgroundImage = 'url("/static/assets/images/net.svg")';
-    bgDiv.style.backgroundPosition = "calc(100% + 390px) center";
+    this.bgDiv = document.createElement("div");
+    this.bgDiv.classList.add("bg-no-repeat", "bg-cover");
+    if (Store.state.darkMode) {
+      this.bgDiv.style.backgroundImage = 'url("/static/assets/images/net-dark.svg")';
+    } else {
+      this.bgDiv.style.backgroundImage = 'url("/static/assets/images/net.svg")';
+    }
+    this.bgDiv.style.backgroundPosition = "calc(100% + 390px) center";
 
     // flex 컨테이너 생성 및 클래스 추가
     const flexContainer = document.createElement("div");
@@ -109,7 +120,7 @@ class HomePage extends Component {
     profileImageHref.appendChild(profileImage);
 
     // 구조 조립
-    bgDiv.appendChild(flexContainer);
+    this.bgDiv.appendChild(flexContainer);
     flexContainer.appendChild(mainContentDiv);
     mainContentDiv.appendChild(titleDiv);
 
@@ -125,9 +136,9 @@ class HomePage extends Component {
 
     // 닉네임 팝업 컴포넌트 추가
     const nickNamePopup = createComponent(NickNamePopup, {});
-    bgDiv.appendChild(nickNamePopup);
+    this.bgDiv.appendChild(nickNamePopup);
 
-    return bgDiv;
+    return this.bgDiv;
   }
 }
 
