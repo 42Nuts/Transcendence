@@ -34,6 +34,7 @@ module.exports = {
         secondary: {
           DEFAULT: "#272A2D",
           text: "#EEEBDE",
+          button: "#5B7072",
           card_background: "#3D434A",
           inner_card_top: "#677076",
           inner_card_board: "#F6F7F6",

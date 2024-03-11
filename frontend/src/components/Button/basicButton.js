@@ -4,12 +4,16 @@ class BasicButton extends Component {
   render() {
     const buttonDiv = document.createElement("button");
     buttonDiv.className =
-      "px-6 py-3 bg-primary-button rounded-[28px] justify-center items-center inline-flex";
+      "px-6 py-3 bg-primary-button dark:bg-secondary-button rounded-[28px] justify-center items-center inline-flex";
 
     buttonDiv.addEventListener("mouseenter", () => {
       buttonDiv.classList.replace(
         "bg-primary-button",
         "bg-primary-button_hover"
+      );
+      buttonDiv.classList.replace(
+        "dark:bg-secondary-button",
+        "dark:bg-primary-button_hover"
       );
     });
 
@@ -17,6 +21,10 @@ class BasicButton extends Component {
       buttonDiv.classList.replace(
         "bg-primary-button_hover",
         "bg-primary-button"
+      );
+      buttonDiv.classList.replace(
+        "dark:bg-primary-button_hover",
+        "dark:bg-secondary-button"
       );
     });
 

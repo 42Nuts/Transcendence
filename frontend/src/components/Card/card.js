@@ -6,9 +6,9 @@ class Card extends Component {
     super(props);
     Store.events.subscribe("gameModeChange", () => {
       if (Store.state.gameMode === this.props.gameMode) {
-        this.cardBoard.classList.add("border-8", "border-primary-button");
+        this.cardBoard.classList.add("border-8", "border-primary-button dark:border-secondary-button");
       } else {
-        this.cardBoard.classList.remove("border-8", "border-primary-button");
+        this.cardBoard.classList.remove("border-8", "border-primary-button dark:border-secondary-button");
       }
     });
   }

@@ -1214,9 +1214,24 @@ video {
   background-color: rgb(253 202 107 / var(--tw-bg-opacity));
 }
 
+:is(.dark .dark\:border-secondary-button) {
+  --tw-border-opacity: 1;
+  border-color: rgb(91 112 114 / var(--tw-border-opacity));
+}
+
+:is(.dark .dark\:bg-primary-button_hover) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 202 107 / var(--tw-bg-opacity));
+}
+
 :is(.dark .dark\:bg-secondary) {
   --tw-bg-opacity: 1;
   background-color: rgb(39 42 45 / var(--tw-bg-opacity));
+}
+
+:is(.dark .dark\:bg-secondary-button) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(91 112 114 / var(--tw-bg-opacity));
 }
 
 :is(.dark .dark\:bg-secondary-card_background) {
