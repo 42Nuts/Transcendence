@@ -41,6 +41,9 @@ class HomePage extends Component {
 
         // 모든 fetch 요청이 완료된 후에 UI 업데이트를 위한 코드 실행
         this.updateUI();
+        if (Store.state.darkMode) {
+          document.documentElement.classList.add("dark");
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
