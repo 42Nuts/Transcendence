@@ -23,7 +23,7 @@ class Card extends Component {
 
     this.cardBoard = document.createElement("div");
     this.cardBoard.className =
-      "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background rounded-[60px]";
+      "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background dark:bg-secondary-card_background rounded-[60px]";
     this.cardBoard.classList.add("shadow-md");
 
     const cardImage = document.createElement("img");
@@ -31,7 +31,7 @@ class Card extends Component {
     cardImage.src = this.props.image;
 
     const cardTitle = document.createElement("div");
-    cardTitle.className = `${this.props.titleLeft} top-[204px] absolute text-center text-primary-text text-4xl font-semibold font-['Inter'] leading-9`;
+    cardTitle.className = `${this.props.titleLeft} top-[204px] absolute text-center text-primary-text dark:text-secondary-text text-4xl font-semibold font-['Inter'] leading-9`;
     cardTitle.innerText = this.props.title;
 
     card.addEventListener("mouseover", () => {

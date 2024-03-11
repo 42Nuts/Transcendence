@@ -74,7 +74,7 @@ class HomePage extends Component {
     // 타이틀 div 생성 및 클래스 추가
     const titleDiv = document.createElement("div");
     titleDiv.className =
-      "text-primary-text text-[80px] font-bold font-['Inter'] leading-[80px] tracking-[4px]";
+      "text-primary-text dark:text-secondary-text text-[80px] font-bold font-['Inter'] leading-[80px] tracking-[4px]";
     titleDiv.textContent = "PING PONG";
 
     // 버튼 컨테이너 div 생성 및 클래스 추가
