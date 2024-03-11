@@ -18,6 +18,7 @@ class ModeButton extends Component {
     } else if (this.props.optionName === "toggleDarkMode") {
       const darkModeValue = newState.darkMode ? 1 : 0;
       newImageSrc = this.props.imageSrc[darkModeValue];
+      document.documentElement.classList.toggle("dark");
     }
 
     this.updateImage(newImageSrc);

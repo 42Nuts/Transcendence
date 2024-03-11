@@ -60,7 +60,6 @@ class GamePage extends Component {
       title: "5 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-pentagon.svg",
-      lock: "/static/assets/images/icon-lock.svg",
     });
 
     const card5 = createComponent(Card, {
@@ -75,7 +74,6 @@ class GamePage extends Component {
       title: "AI",
       titleLeft: "left-[114px]",
       image: "/static/assets/images/character-AI.svg",
-      lock: "/static/assets/images/icon-lock.svg",
     });
 
     gameBoardDown.appendChild(card4);
