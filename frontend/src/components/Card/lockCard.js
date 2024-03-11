@@ -53,7 +53,7 @@ class LockCard extends Component {
     });
 
     card.appendChild(cardBoard);
-    card.appendChild(cardImage);
+    // card.appendChild(cardImage);
     card.appendChild(cardTitle);
     card.appendChild(cardOverlay);
     card.appendChild(this.cardLock);
