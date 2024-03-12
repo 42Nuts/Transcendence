@@ -1,5 +1,5 @@
 import { Router } from "./utils/index.js";
-import { HomePage, OptionsPage, ProfilePage, GamePage } from "./pages/index.js";
+import { HomePage, OptionsPage, ProfilePage, GameModePage } from "./pages/index.js";
 
 class App {
   constructor(props) {
@@ -13,7 +13,8 @@ class App {
       "/home/": HomePage,
       "/options/": OptionsPage,
       "/profile/": ProfilePage,
-      "/gameMode/": GamePage,
+      "/gameMode/": GameModePage,
+      // "/game/": GamePage,
     });
 
     this.router.init(el);

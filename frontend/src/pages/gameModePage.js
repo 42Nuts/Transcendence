@@ -3,7 +3,7 @@ import { BackIconButton, BasicButton } from "../components/Button/index.js";
 import { Card, LockCard } from "../components/Card/index.js";
 import Store from "../store/index.js";
 
-class GamePage extends Component {
+class GameModePage extends Component {
   render() {
     const container = document.createElement("div");
     container.className =
@@ -117,4 +117,4 @@ class GamePage extends Component {
   }
 }
 
-export default GamePage;
+export default GameModePage;
