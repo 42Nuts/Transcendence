@@ -5,6 +5,7 @@ class LoadingPage extends Component {
     console.log("LoadingPage mounted");
     setTimeout(() => {
       this.route("/gameMode/");
+      // window.location.href = "/gameMode/";
     }, 3000);
   }
 
@@ -23,22 +24,22 @@ class LoadingPage extends Component {
     loadingText.className = "justify-start items-baseline inline-flex";
 
     const loadingTextTitle = document.createElement("div");
-    loadingTextTitle.className = "text-center text-primary-text text-[40px] font-semibold font-['Inter'] leading-10";
+    loadingTextTitle.className = "text-center text-primary-text dark:text-secondary-text text-[40px] font-semibold font-['Inter'] leading-10";
     loadingTextTitle.innerText = "Looking for players";
 
     const loading = document.createElement("div");
     loading.className = "loading w-[37px] h-[17px] relative";
 
     const dot1 = document.createElement("div");
-    dot1.className = "w-1.5 h-1.5 left-[5px] top-[11px] absolute bg-primary-text rounded-full animate-bounce";
+    dot1.className = "w-1.5 h-1.5 left-[5px] top-[11px] absolute bg-primary-text dark:bg-secondary-text rounded-full animate-bounce";
     dot1.style = "animation-delay: 0s;";
 
     const dot2 = document.createElement("div");
-    dot2.className = "w-1.5 h-1.5 left-[16px] top-[11px] absolute bg-primary-text rounded-full animate-bounce";
+    dot2.className = "w-1.5 h-1.5 left-[16px] top-[11px] absolute bg-primary-text dark:bg-secondary-text rounded-full animate-bounce";
     dot2.style = "animation-delay: 0.2s;";
 
     const dot3 = document.createElement("div");
-    dot3.className = "w-1.5 h-1.5 left-[27px] top-[11px] absolute bg-primary-text rounded-full animate-bounce";
+    dot3.className = "w-1.5 h-1.5 left-[27px] top-[11px] absolute bg-primary-text dark:bg-secondary-text rounded-full animate-bounce";
     dot3.style = "animation-delay: 0.4s;";
 
     loading.appendChild(dot1);
