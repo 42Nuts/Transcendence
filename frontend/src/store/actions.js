@@ -1,7 +1,7 @@
 export default {
   // Game Options
-  updateNickName(context) {
-    context.commit("updateNickName");
+  updateProfile(context) {
+    context.commit("updateProfile");
   },
   updateTheme(context) {
     context.commit("updateTheme");

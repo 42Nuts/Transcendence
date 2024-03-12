@@ -1,6 +1,6 @@
 export default {
   //Game Options
-  nickname: 0,
+  profile: 0,
   theme: 0,
   darkMode: false,
 
