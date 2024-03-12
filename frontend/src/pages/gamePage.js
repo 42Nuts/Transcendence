@@ -15,6 +15,13 @@ class GamePage extends Component {
     script.src = "/static/game/twoPlayerMode.js";
     script.type = "text/javascript";
 
+    // score
+    const scoreContainer = document.createElement("div");
+    scoreContainer.id = "scoreContainer";
+    scoreContainer.className = "absolute top-[5%] left-[5%] text-primary-text dark:text-secondary-text text-[20px] font-semibold font-['Inter'] leading-10";
+    scoreContainer.innerText = "player1: 0, player2: 0";
+
+    // button to exit the game
     const exitButtonPos = document.createElement("div");
     exitButtonPos.className = "absolute top-[85%]";
 
@@ -30,6 +37,7 @@ class GamePage extends Component {
     flexContainer.appendChild(script);
     flexContainer.appendChild(exitButtonPos);
 
+    container.appendChild(scoreContainer);
     container.appendChild(flexContainer);
     return container;
   }
