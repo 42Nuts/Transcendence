@@ -99,9 +99,9 @@ function render(data){
     // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
 
     // clear the score
-    drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")
+    // drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")
 
-    for (var i = 0; i < data.players.length; i++) {
-        drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
-    }
+    // for (var i = 0; i < data.players.length; i++) {
+    //     drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
+    // }
 }

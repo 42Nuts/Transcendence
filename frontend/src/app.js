@@ -5,6 +5,7 @@ import {
   ProfilePage,
   GameModePage,
   LoadingPage,
+  GamePage,
 } from "./pages/index.js";
 import Component from "./core/component.js";
 
@@ -22,7 +23,7 @@ class App {
       "/profile/": ProfilePage,
       "/gameMode/": GameModePage,
       "/loading/": LoadingPage,
-      // "/game/": GamePage,
+      "/game/": GamePage,
     });
 
     Object.values(this.router.routes).forEach((Page) => {

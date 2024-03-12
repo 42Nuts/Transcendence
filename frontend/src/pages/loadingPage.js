@@ -4,7 +4,7 @@ class LoadingPage extends Component {
   componentDidMount() {
     console.log("LoadingPage mounted");
     setTimeout(() => {
-      this.route("/gameMode/");
+      this.route("/game/");
       // window.location.href = "/gameMode/";
     }, 3000);
   }
