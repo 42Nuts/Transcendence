@@ -26,10 +26,12 @@ gameSocket.onmessage = function (e) {
 };
 
 function updateScore(players) {
-  const scoreContainer = document.getElementById("scoreContainer");
-  if (scoreContainer) {
-    scoreContainer.innerText = `player1: ${players[0].score}, player2: ${players[1].score}`;
-  }
+    const player1 = document.getElementById("player1");
+    const player2 = document.getElementById("player2");
+    if (player1 && player2) {
+        player1.innerText = players[0].score;
+        player2.innerText = players[1].score;
+    }
 }
 
 gameSocket.onclose = function (e) {

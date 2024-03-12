@@ -1,25 +1,43 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
+import { ScoreBoard } from "../components/Board/index.js";
 
 class GamePage extends Component {
   render() {
     const container = document.createElement("div");
+    container.className =
+      "mx-auto flex flex-col items-center justify-center min-h-screen";
 
-    const flexContainer = document.createElement("div");
-    flexContainer.className = "flex justify-center items-center min-h-screen";
+    // score board
+    const grid = document.createElement("div");
+    grid.className = "grid grid-cols-12 gap-10 min-h-screen";
 
-    const board= document.createElement("canvas");
+    const scoreContainer = document.createElement("div");
+    scoreContainer.className = "col-start-10 mt-80 w-44 h-44 flex-col justify-start items-start gap-8 inline-flex";
+
+    const player1 = createComponent(ScoreBoard, {
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "player1",
+    });
+
+    const player2 = createComponent(ScoreBoard, {
+      imgSrc: "/static/assets/images/profile-taeypark.svg",
+      id: "player2",
+    });
+
+    scoreContainer.appendChild(player1);
+    scoreContainer.appendChild(player2);
+
+    grid.appendChild(scoreContainer);
+
+    // canvas to draw the game
+    const board = document.createElement("canvas");
     board.id = "game";
+    board.className = "absolute";
 
     const script = document.createElement("script");
     script.src = "/static/game/twoPlayerMode.js";
     script.type = "text/javascript";
-
-    // score
-    const scoreContainer = document.createElement("div");
-    scoreContainer.id = "scoreContainer";
-    scoreContainer.className = "absolute top-[5%] left-[5%] text-primary-text dark:text-secondary-text text-[20px] font-semibold font-['Inter'] leading-10";
-    scoreContainer.innerText = "player1: 0, player2: 0";
 
     // button to exit the game
     const exitButtonPos = document.createElement("div");
@@ -33,12 +51,12 @@ class GamePage extends Component {
     exitButtonHref.appendChild(exitButton);
     exitButtonPos.appendChild(exitButtonHref);
 
-    flexContainer.appendChild(board);
-    flexContainer.appendChild(script);
-    flexContainer.appendChild(exitButtonPos);
+    // append all elements to the container
+    container.appendChild(grid);
+    container.appendChild(board);
+    container.appendChild(script);
+    container.appendChild(exitButtonPos);
 
-    container.appendChild(scoreContainer);
-    container.appendChild(flexContainer);
     return container;
   }
 }
