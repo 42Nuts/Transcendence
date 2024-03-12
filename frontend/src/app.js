@@ -1,5 +1,5 @@
 import { Router } from "./utils/index.js";
-import { HomePage, OptionsPage, ProfilePage, GameModePage } from "./pages/index.js";
+import { HomePage, OptionsPage, ProfilePage, GameModePage, LoadingPage } from "./pages/index.js";
 
 class App {
   constructor(props) {
@@ -14,6 +14,7 @@ class App {
       "/options/": OptionsPage,
       "/profile/": ProfilePage,
       "/gameMode/": GameModePage,
+      "/loading/": LoadingPage,
       // "/game/": GamePage,
     });
 
