@@ -50,7 +50,7 @@ class Paddle:
 
 class PongGame:
     def __init__(self):
-        self.canvas = GameCanvas(width=600, height=500, paddle_length=100)
+        self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
 
         self.players.append(Paddle(

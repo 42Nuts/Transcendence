@@ -1,118 +1,62 @@
 import { Component, createComponent } from "../core/index.js";
-import { BackIconButton, BasicButton } from "../components/Button/index.js";
-import { Card, LockCard } from "../components/Card/index.js";
-import Store from "../store/index.js";
+import { BasicButton } from "../components/Button/index.js";
+import { ScoreBoard } from "../components/Board/index.js";
 
 class GamePage extends Component {
   render() {
     const container = document.createElement("div");
     container.className =
-      "container mx-auto flex flex-col items-center justify-center min-h-screen";
+      "mx-auto flex flex-col items-center justify-center min-h-screen";
 
-    // grid 레이아웃을 사용하는 컨테이너 생성
-    this.gridContainer = document.createElement("div");
-    this.gridContainer.className = "grid grid-cols-12 gap-10 min-h-screen";
+    // score board
+    const grid = document.createElement("div");
+    grid.className = "grid grid-cols-12 gap-10 min-h-screen";
 
-    // BackIconButton 추가
-    const backIcon = createComponent(BackIconButton, {});
-    this.gridContainer.appendChild(backIcon);
+    const scoreContainer = document.createElement("div");
+    scoreContainer.className = "col-start-10 mt-80 w-44 h-44 flex-col justify-start items-start gap-8 inline-flex";
 
-    // game board
-    const gameBoard = document.createElement("div");
-    gameBoard.className =
-      "absolute w-[1080px] h-[608px] flex-col justify-start items-start gap-20 inline-flex";
-
-    const gameBoardUp = document.createElement("div");
-    gameBoardUp.className = "justify-start items-start gap-36 inline-flex";
-
-    const card1 = createComponent(Card, {
-      title: "2 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-vs.svg",
-      gameMode: "0",
-      optionName: "updateGameMode",
+    const player1 = createComponent(ScoreBoard, {
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "player1",
     });
 
-    const card2 = createComponent(Card, {
-      title: "3 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-triangle.svg",
-      gameMode: "1",
-      optionName: "updateGameMode",
+    const player2 = createComponent(ScoreBoard, {
+      imgSrc: "/static/assets/images/profile-taeypark.svg",
+      id: "player2",
     });
 
-    const card3 = createComponent(Card, {
-      title: "4 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-sonny.svg",
-      gameMode: "2",
-      optionName: "updateGameMode",
-    });
+    scoreContainer.appendChild(player1);
+    scoreContainer.appendChild(player2);
 
-    gameBoardUp.appendChild(card1);
-    gameBoardUp.appendChild(card2);
-    gameBoardUp.appendChild(card3);
+    grid.appendChild(scoreContainer);
 
-    const gameBoardDown = document.createElement("div");
-    gameBoardDown.className = "justify-start items-start gap-36 inline-flex";
+    // canvas to draw the game
+    const board = document.createElement("canvas");
+    board.id = "game";
+    board.className = "absolute";
 
-    const card4 = createComponent(LockCard, {
-      title: "5 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-pentagon.svg",
-    });
+    const script = document.createElement("script");
+    script.src = "/static/game/twoPlayerMode.js";
+    script.type = "text/javascript";
 
-    const card5 = createComponent(Card, {
-      title: "Tournament",
-      titleLeft: "left-[27px]",
-      image: "/static/assets/images/character-champion.svg",
-      gameMode: "3",
-      optionName: "updateGameMode",
-    });
+    // button to exit the game
+    const exitButtonPos = document.createElement("div");
+    exitButtonPos.className = "absolute top-[85%]";
 
-    const card6 = createComponent(LockCard, {
-      title: "AI",
-      titleLeft: "left-[114px]",
-      image: "/static/assets/images/character-AI.svg",
-    });
+    const exitButtonHref = document.createElement("a");
+    exitButtonHref.setAttribute("href", "/gameMode/");
 
-    gameBoardDown.appendChild(card4);
-    gameBoardDown.appendChild(card5);
-    gameBoardDown.appendChild(card6);
+    const exitButton = createComponent(BasicButton, { text: "Exit" });
 
-    gameBoard.appendChild(gameBoardUp);
-    gameBoard.appendChild(gameBoardDown);
+    exitButtonHref.appendChild(exitButton);
+    exitButtonPos.appendChild(exitButtonHref);
 
-    // play button
-    const playButtonPos = document.createElement("div");
-    playButtonPos.className = "absolute top-[80%]";
-    const playButton = createComponent(BasicButton, {
-      text: "Play",
-      // onClink: () => {
-      //   fetch("/v2/users/1/profile-index/", {
-      //     method: "PUT",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "X-CSRFToken": document.cookie.split("=")[1],
-      //     },
-      //     body: JSON.stringify({
-      //       profile_index: Store.state.nickname,
-      //     }),
-      //   })
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error:", error);
-      //     });
-      // },
-    });
-    playButtonPos.appendChild(playButton);
+    // append all elements to the container
+    container.appendChild(grid);
+    container.appendChild(board);
+    container.appendChild(script);
+    container.appendChild(exitButtonPos);
 
-    container.appendChild(this.gridContainer);
-    container.appendChild(gameBoard);
-    container.appendChild(playButtonPos);
     return container;
   }
 }
