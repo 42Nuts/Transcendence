@@ -16,7 +16,7 @@ class GamePage extends Component {
     script.type = "text/javascript";
 
     const exitButtonPos = document.createElement("div");
-    exitButtonPos.className = "absolute top-[80%]";
+    exitButtonPos.className = "absolute top-[85%]";
 
     const exitButtonHref = document.createElement("a");
     exitButtonHref.setAttribute("href", "/gameMode/");

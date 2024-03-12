@@ -6,7 +6,7 @@ class LoadingPage extends Component {
     setTimeout(() => {
       this.route("/game/");
       // window.location.href = "/gameMode/";
-    }, 3000);
+    }, 1000);
   }
 
   render() {

@@ -1,8 +1,8 @@
 // select canvas element
 const canvas = document.getElementById("game");
-canvas.width = 800;
-canvas.height = 500;
-canvas.game_width = 600;
+canvas.width = 700;
+canvas.height = 700;
+canvas.game_width = 700;
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
