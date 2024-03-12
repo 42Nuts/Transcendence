@@ -13,7 +13,7 @@ class App {
       "/home/": HomePage,
       "/options/": OptionsPage,
       "/profile/": ProfilePage,
-      "/game/": GamePage,
+      "/gameMode/": GamePage,
     });
 
     this.router.init(el);

@@ -95,7 +95,7 @@ class HomePage extends Component {
 
     // Play 버튼 div 생성 및 설정
     const playButtonHref = document.createElement("a");
-    playButtonHref.setAttribute("href", "/game/");
+    playButtonHref.setAttribute("href", "/gameMode/");
     playButtonHref.setAttribute("class", "play-button");
     const playButton = createComponent(BasicButton, { text: "Play" });
     playButtonHref.appendChild(playButton);
