@@ -1,6 +1,13 @@
 import { Component } from "../core/index.js";
 
 class LoadingPage extends Component {
+  componentDidMount() {
+    console.log("LoadingPage mounted");
+    setTimeout(() => {
+      this.route("/gameMode/");
+    }, 3000);
+  }
+
   render() {
     const container = document.createElement("div");
     container.className = "flex justify-center items-center min-h-screen";
