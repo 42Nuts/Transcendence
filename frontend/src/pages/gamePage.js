@@ -33,7 +33,7 @@ class GamePage extends Component {
     // canvas to draw the game
     const board = document.createElement("canvas");
     board.id = "game";
-    board.className = "absolute";
+    board.className = "absolute rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     const script = document.createElement("script");
     script.src = "/static/game/twoPlayerMode.js";

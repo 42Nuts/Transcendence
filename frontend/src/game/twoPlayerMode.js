@@ -26,12 +26,12 @@ gameSocket.onmessage = function (e) {
 };
 
 function updateScore(players) {
-    const player1 = document.getElementById("player1");
-    const player2 = document.getElementById("player2");
-    if (player1 && player2) {
-        player1.innerText = players[0].score;
-        player2.innerText = players[1].score;
-    }
+  const player1 = document.getElementById("player1");
+  const player2 = document.getElementById("player2");
+  if (player1 && player2) {
+    player1.innerText = players[0].score;
+    player2.innerText = players[1].score;
+  }
 }
 
 gameSocket.onclose = function (e) {
@@ -97,10 +97,23 @@ document.addEventListener("keyup", function (event) {
   gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
+const backGround = new Image();
+backGround.src = "/static/assets/images/map-pingpong.svg";
+
+const ballImage = new Image();
+ballImage.src = "/static/assets/images/ball-pingpong.svg";
+
 // render function, the function that does al the drawing
 function render(data) {
   // clear the canvas
-  drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+  // drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+  if (backGround.complete) {
+    ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+  } else {
+    backGround.onload = function () {
+      ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+    };
+  }
 
   // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
 
@@ -115,7 +128,26 @@ function render(data) {
   }
 
   // draw the ball
-  drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+  // drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+  if (ballImage.complete) {
+    ctx.drawImage(
+      ballImage,
+      data.ball.x - data.ball.radius,
+      data.ball.y - data.ball.radius,
+      data.ball.radius * 2,
+      data.ball.radius * 2
+    );
+  } else {
+    ballImage.onload = function () {
+      ctx.drawImage(
+        ballImage,
+        data.ball.x - data.ball.radius,
+        data.ball.y - data.ball.radius,
+        data.ball.radius * 2,
+        data.ball.radius * 2
+      );
+    };
+  }
 
   // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
 
