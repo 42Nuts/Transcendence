@@ -8,7 +8,8 @@ class NickNamePopUp extends Component {
   }
 
   putNickName() {
-    this.name = this.input.value;
+    // this.name = this.input.value;
+    this.name = "test";
     this.overlay.style.display = "none";
     requireNickName = false;
 
@@ -39,7 +40,8 @@ class NickNamePopUp extends Component {
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
     this.overlay.id = "nickname";
     if (requireNickName === "True") {
-      this.overlay.style.display = "flex";
+      // this.overlay.style.display = "flex";
+      this.putNickName();
     } else {
       this.overlay.style.display = "none";
     }
