@@ -25,6 +25,9 @@ class Card extends Component {
     this.cardBoard.className =
       "w-[264px] h-[264px] left-0 top-0 absolute bg-primary-card_background dark:bg-secondary-card_background rounded-[60px]";
     this.cardBoard.classList.add("shadow-md");
+    if (Store.state.gameMode === this.props.gameMode) {
+      this.cardBoard.classList.add("border-8", "border-primary-button");
+    }
 
     const cardImage = document.createElement("img");
     cardImage.className = "w-60 h-60 left-[12px] top-0 absolute";

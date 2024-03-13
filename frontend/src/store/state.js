@@ -10,5 +10,5 @@ export default {
   deleteAccount: false,
 
   //Game Mode
-  gameMode: "2player",
+  gameMode: "2p",
 };
