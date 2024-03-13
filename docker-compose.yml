@@ -56,7 +56,7 @@ services:
     networks:
       - our_net
     healthcheck:
-      test: cat $REDIS_HEALTH
+      test: redis-cli -h redis-cache ping
       interval: 3s
       timeout: 2s
       retries: 30
