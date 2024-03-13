@@ -1,4 +1,5 @@
 import { Component, createComponent } from "../../core/index.js";
+import Store from "../../store/index.js";
 
 class NickNamePopUp extends Component {
   constructor(props) {
@@ -10,7 +11,10 @@ class NickNamePopUp extends Component {
     this.name = this.input.value;
     this.overlay.style.display = "none";
     requireNickName = false;
-    console.log(this.name);
+
+    console.log("this.name: ", this.name);
+    // put nickname to store
+    Store.dispatch("updateNickname", this.name);
     // fetch nickname to server
     fetch("/v2/users/1/nickname/", {
       method: "PUT",

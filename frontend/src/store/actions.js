@@ -1,5 +1,8 @@
 export default {
   // Game Options
+  updateNickname(context, payload) {
+    context.commit("updateNickname", payload);
+  },
   updateProfile(context) {
     context.commit("updateProfile");
   },

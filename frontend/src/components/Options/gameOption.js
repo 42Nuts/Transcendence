@@ -15,7 +15,7 @@ class GameOption extends Component {
 
     // Nickname 옵션
     const nicknameOption = createComponent(SwitchOption, {
-      textContent: "Nickname",
+      textContent: Store.state.nickname,
       imageSrc: profileImages,
       startIndex: Store.state.profile,
       optionName: "updateProfile",
