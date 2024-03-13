@@ -43,7 +43,7 @@ services:
         condition: service_healthy
       redis-cache:
         condition: service_healthy
-   
+
   redis-cache:
     image: redis-cache
     container_name: redis-cache
@@ -68,18 +68,18 @@ services:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
     # volumes:
-    #   - 
+    #   -
     init: true
     env_file:
       - .env
     networks:
-      - our_net 
+      - our_net
     healthcheck:
       test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
       interval: 3s
       timeout: 2s
       retries: 30
-    
+
 networks:
   our_net:
     name: taeypark_hyeoan_network
