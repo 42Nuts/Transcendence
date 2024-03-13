@@ -19,7 +19,5 @@ EOSQL
 
 echo "데이터베이스 생성 완료."
 
-touch "$POSTGRES_HEALTH"
-
 # 공식 이미지의 기능을 활용하여 PostgreSQL 서버를 시작하고, 컨테이너 내에서 지속적으로 실행되도록 한다
 exec docker-entrypoint.sh postgres
