@@ -7,9 +7,14 @@ canvas.game_width = 700;
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext("2d");
 
+// const gameSocket = new WebSocket(
+//   "wss://" + window.location.host + "/ws/game/123/"
+// );
+
 const gameSocket = new WebSocket(
-  "wss://" + window.location.host + "/ws/game/123/"
+    'wss://' + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
 );
+
 
 // gameSocket.onopen = function() {
 //     // WebSocket 연결이 열리면 플레이어 ID 전송
