@@ -11,6 +11,10 @@ logger = logging.getLogger('django')
 group_game_instances = {}
 
 class GameConsumer(AsyncWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user_input_queue = asyncio.Queue()
+
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'game_%s' % self.room_name
