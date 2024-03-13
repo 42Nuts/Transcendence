@@ -34,7 +34,7 @@ services:
     networks:
       - our_net
     healthcheck:
-      test: cat $DJANGO_HEALTH
+      test: curl --fail http://$DJANGO_HOST:$DJANGO_PORT/health/ && curl --fail http://$DJANGO_HOST:$WS_PORT/health/
       interval: 3s
       timeout: 2s
       retries: 30
