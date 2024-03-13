@@ -1,14 +1,14 @@
 #!/bin/sh
 
+mkdir -p logs
+touch logs/log.log
+
 ./manage.py makemigrations \
     users \
     matches \
     relationships \
     login
 ./manage.py migrate
-
-mkdir -p logs
-touch logs/log.log
 
 echo "
 {% if isHomePage %}
