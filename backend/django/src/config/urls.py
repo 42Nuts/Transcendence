@@ -18,6 +18,11 @@ Including another URLconf
 from django.urls import path, include
 from login.views import fourtytwo_oauth, home, loginPage
 from pongGame.views import game
+from django.http import HttpResponse
+
+
+def health_check(request):
+    return HttpResponse("I am Healthy :)")
 
 urlpatterns = [
     path('', loginPage),
@@ -25,6 +30,7 @@ urlpatterns = [
     path('home/', home),
     path('v2/users/', include('users.urls')),
     path('v2/game/', game),
+    path('health/', health_check),
     # path('v2/matches/', include('matches.urls')),
     # path('v2/relationships/', include('relationships.urls')),
 ]

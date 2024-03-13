@@ -1,14 +1,14 @@
 #!/bin/sh
 
+mkdir -p logs
+touch logs/log.log
+
 ./manage.py makemigrations \
     users \
     matches \
     relationships \
     login
 ./manage.py migrate
-
-mkdir -p logs
-touch logs/log.log
 
 echo "
 {% if isHomePage %}
@@ -56,7 +56,5 @@ echo "
 {% endif %}
 " > ./templates/index.html
 
-touch $DJANGO_HEALTH
-
-gunicorn config.wsgi --bind $DJANGO_IP:$DJANGO_PORT & #--workers=1 --threads=2 --worker-class=gthread
-daphne config.asgi:application --bind $DJANGO_IP --port $WS_PORT #--workers=1 --threads=2 --worker-class=gthread
+gunicorn config.wsgi --bind $DJANGO_HOST:$DJANGO_PORT & #--workers=1 --threads=2 --worker-class=gthread
+daphne config.asgi:application --bind $DJANGO_HOST --port $WS_PORT #--workers=1 --threads=2 --worker-class=gthread
