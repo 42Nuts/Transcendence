@@ -28,6 +28,10 @@ def tokenCheck(get_response):
         logger.info("Request GET: %s", str(request.GET))
         logger.info("Request Headers: %s", str(request.headers))
 
+        if request.path == '/health/':
+            response = get_response(request)
+            return response
+
         try:
             # 토큰 검사 (토큰 재발급 로직 필요)
             user = get_user(request)
