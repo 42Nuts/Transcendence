@@ -9,10 +9,12 @@ from asgiref.sync import async_to_sync
 logger = logging.getLogger('django')
 
 group_game_instances = {}
+group_member_count = {} 
 
 class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        #사용자 입력 큐
         self.user_input_queue = asyncio.Queue()
 
     async def connect(self):
@@ -22,8 +24,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
         if self.room_group_name not in group_game_instances:
             group_game_instances[self.room_group_name] = PongGame()
+            group_member_count[self.room_group_name] = 0
  
         # 게임 인스턴스를 현재 소비자 인스턴스에 할당
+        group_member_count[self.room_group_name] += 1
+        # if ()로 인원수 확인이 끝나면 밑에 줄을 실행
         self.game = group_game_instances[self.room_group_name]
 
         await self.channel_layer.group_add(
@@ -42,12 +47,22 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
         if self.update_task:
             self.update_task.cancel()
+        
+        group_member_count[self.room_group_name] -= 1
+        if group_member_count[self.room_group_name] == 0:
+            del group_game_instances[self.room_group_name]  # 게임 인스턴스 삭제
+            del group_member_count[self.room_group_name]  # 참여자 수 추적 삭제
 
     # 게임 상태 업데이트 및 그룹에 전송
     async def game_update_task(self):
         while True:
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
-            game_data = self.game.update()  # 게임 상태 업데이트
+            if not self.user_input_queue.empty():
+                user_input = await self.user_input_queue.get()
+                self.game.update(user_input)  # 여기서 사용자의 입력을 처리
+            else:
+                game_data = self.game.update()  # 게임 상태 업데이트
+
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -58,7 +73,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         user_input = json.loads(text_data)
-        self.game.update(user_input)  # 사용자 입력에 따른 게임 상태 업데이트
+        await self.user_input_queue.put(user_input)  # 사용자 입력에 따른 게임 상태 업데이트
 
     async def game_update(self, event):
         game_data = event['game_data']
