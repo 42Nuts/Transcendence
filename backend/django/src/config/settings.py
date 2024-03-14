@@ -92,6 +92,8 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
             "hosts": [('redis-cache', 6379)],
+            "capacity": 1500,  # default 100
+            "expiry": 10,  # default 60
         },
     },
 }
@@ -253,11 +255,11 @@ SIMPLE_JWT = {
     # 인증 헤더 이름 설정 ('Authorization' 사용)
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 
-    # 사용자 식별에 사용될 필드 ('id' 사용)
-    "USER_ID_FIELD": "id",
+    # 사용자 식별에 사용될 필드 ('email' 사용)
+    "USER_ID_FIELD": "email",
 
     # 토큰에 포함될 사용자 식별 정보 필드 ('user_id' 사용)
-    "USER_ID_CLAIM": "user_id",
+    "USER_ID_CLAIM": "user_email",
 
     # 사용자 인증 규칙 설정
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
