@@ -47,7 +47,8 @@ class Paddle:
             "width": self.width, 
             "height": self.height, 
             "color": self.color,
-            "angle": self.angle
+            "angle": self.angle,
+            "playerId": self.id
         }
 
 class PongGame:

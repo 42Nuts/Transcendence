@@ -27,7 +27,7 @@ class GameBall:
         }
 
 class Paddle:
-    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id):
+    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id, angle):
         self.x = x
         self.y = y
         self.width = width
@@ -37,6 +37,7 @@ class Paddle:
         self.leftArrow = leftArrow  
         self.rightArrow = rightArrow
         self.id = id
+        self.angle = angle
 
     def to_dict(self):
         return {
@@ -45,7 +46,9 @@ class Paddle:
             "score": self.score, 
             "width": self.width, 
             "height": self.height, 
-            "color": self.color
+            "color": self.color,
+            "angle": self.angle,
+            "playerId": self.id
         }
 
 class PongGame:
@@ -62,6 +65,7 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
+            angle = 0,
             id="1"
         ))
 
@@ -74,6 +78,7 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
+            angle = 180,
             id="2"
         ))
 
@@ -108,6 +113,19 @@ class PongGame:
         b.right = b.x + b.radius
 
         return p.left < b.right and p.top < b.bottom and p.right > b.left and p.bottom > b.top
+    def update_player_movement(self, index, player):
+        if player.leftArrow and player.rightArrow:
+            return
+        if index == 0:
+            if player.leftArrow and player.x > 0:
+                player.x -= 8
+            if player.rightArrow and player.x < self.canvas.width - player.width:
+                player.x += 8
+        if index == 1:
+            if player.leftArrow and player.x < self.canvas.width - player.width:
+                player.x += 8
+            if player.rightArrow and player.x > 0:
+                player.x -= 8
 
     def update(self, user_input=None):
         # score
@@ -121,9 +139,6 @@ class PongGame:
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
-
-        # computer ai
-        # self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
 
         # 공의 벽 튕김
         if self.ball.x - self.ball.radius < 0:
@@ -162,14 +177,8 @@ class PongGame:
                 player.rightArrow = user_input.get("rightArrow", False)
 
                 # 두 키가 동시에 눌렸을 경우 움직임 없음
-        for cur in self.players:
-           if cur.leftArrow and cur.rightArrow:
-               continue
-
-           if cur.leftArrow and cur.x > 0:
-               cur.x -= 8
-           if cur.rightArrow and cur.x < self.canvas.width - cur.width:
-               cur.x += 8
+        for index, player in enumerate(self.players):
+            self.update_player_movement(index, player)
 
         # 프론트엔드에 필요한 정보 보내기
         return {

@@ -110,8 +110,7 @@ ballImage.src = "/static/assets/images/ball-pingpong.svg";
 
 // render function, the function that does al the drawing
 function render(data) {
-  // clear the canvas
-  // drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+  // draw backGround
   if (backGround.complete) {
     ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
   } else {
@@ -120,7 +119,14 @@ function render(data) {
     };
   }
 
-  // rotate(0, 0, canvas.width/4 * 3, canvas.height, 180);
+  ctx.save();
+  for (var i = 0; i < data.players.length; i++) {
+    if (userId == data.players[i].playerId) {
+      player = data.players[i];
+    }
+  }
+
+  rotate(0, 0, canvas.game_width, canvas.height, player.angle * -1);
 
   for (var i = 0; i < data.players.length; i++) {
     drawRect(
@@ -133,7 +139,6 @@ function render(data) {
   }
 
   // draw the ball
-  // drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
   if (ballImage.complete) {
     ctx.drawImage(
       ballImage,
@@ -154,12 +159,5 @@ function render(data) {
     };
   }
 
-  // rotate(0, 0, canvas.width/4 * 3, canvas.height, -180);
-
-  // clear the score
-  // drawRect(canvas.game_width, 0, canvas.width - canvas.game_width, canvas.height, "#FFF")
-
-  // for (var i = 0; i < data.players.length; i++) {
-  //     drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
-  // }
+  ctx.restore();
 }
