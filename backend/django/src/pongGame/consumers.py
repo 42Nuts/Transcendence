@@ -11,6 +11,7 @@ from urllib.parse import parse_qs
 
 logger = logging.getLogger('django')
 group_game_instances = {}
+group_member_count = {}
 
 matching_queue = {
     "2p": deque(),
@@ -59,14 +60,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
 
-        logger.info('여긴가 ?')
         logger.info(f'queue : {matching_queue[mode]}')
         # 큐에 넣기
 
         matching_queue[mode].appendleft((userId, self))
         self.userId = userId
         if (len(matching_queue[mode]) >= limit_size[mode]):
-            logger.info('hihi im sun')
             self.room_name = str(room_id[mode]) + '_' + mode
             self.room_group_name = self.room_name + '_group'
             logger.info("room_group_name = %s", self.room_group_name)
@@ -75,7 +74,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
             group_game_instances[self.room_group_name] = PongGame()
 
-            # 게임 인스턴스를 현재 소비자 인스턴스에 할당
             self.game = group_game_instances[self.room_group_name]
 
             for _ in range(limit_size[mode]):
@@ -83,14 +81,26 @@ class GameConsumer(AsyncWebsocketConsumer):
                 logger.info(
                     f'playerId : {playerId}, player : {player}, channel_name : {player.channel_name}')
 
+                group_member_count[self.room_group_name] = limit_size[mode]
                 player.game = self.game
-                player.update_task = asyncio.create_task(player.game_update_task())
                 await player.channel_layer.group_add(
                     self.room_group_name,
                     player.channel_name
                 )
+                player.update_task = asyncio.create_task(player.game_update_task())
 
-            # 게임 업데이트 작업 시작
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+        if self.update_task:
+            self.update_task.cancel()
+        
+        group_member_count[self.room_group_name] -= 1
+        if group_member_count[self.room_group_name] == 0:
+            del group_game_instances[self.room_group_name]  # 게임 인스턴스 삭제
+            del group_member_count[self.room_group_name]  # 참여자 수 추적 삭제
 
     # 게임 상태 업데이트 및 그룹에 전송
     async def game_update_task(self):
