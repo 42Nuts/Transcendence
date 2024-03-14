@@ -1,7 +1,11 @@
 export default {
   // Game Options
-  updateNickName(state) {
-    state.nickname = (state.nickname + 1) % 5;
+  updateNickname(state, payload) {
+    state.nickname = payload;
+    return state;
+  },
+  updateProfile(state) {
+    state.profile = (state.profile + 1) % 5;
     return state;
   },
   updateTheme(state) {

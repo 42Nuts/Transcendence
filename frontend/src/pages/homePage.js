@@ -39,7 +39,7 @@ class HomePage extends Component {
       }).then((response) => response.json()),
     ])
       .then((data) => {
-        Store.state.nickname = data[0].profile_index;
+        Store.state.profile = data[0].profile_index;
         Store.state.theme = data[1].theme_index;
         Store.state.darkMode = data[2].dark_mode;
 
@@ -58,7 +58,7 @@ class HomePage extends Component {
     // UI 업데이트 로직, 예를 들어 프로필 이미지 업데이트
     const profileImage = document.querySelector(".profile-image");
     if (profileImage) {
-      profileImage.src = profileImages[Store.state.nickname];
+      profileImage.src = profileImages[Store.state.profile];
     }
   }
 

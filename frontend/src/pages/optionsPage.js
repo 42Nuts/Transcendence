@@ -72,7 +72,7 @@ class OptionsPage extends Component {
         "X-CSRFToken": document.cookie.split("=")[1],
       },
       body: JSON.stringify({
-        profile_index: Store.state.nickname,
+        profile_index: Store.state.profile,
       }),
     })
       .then((response) => response.json())

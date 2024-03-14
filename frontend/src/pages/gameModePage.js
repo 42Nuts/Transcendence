@@ -29,7 +29,7 @@ class GameModePage extends Component {
       title: "2 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-vs.svg",
-      gameMode: "0",
+      gameMode: "2p",
       optionName: "updateGameMode",
     });
 
@@ -37,7 +37,7 @@ class GameModePage extends Component {
       title: "3 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-triangle.svg",
-      gameMode: "1",
+      gameMode: "3p",
       optionName: "updateGameMode",
     });
 
@@ -45,7 +45,7 @@ class GameModePage extends Component {
       title: "4 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-sonny.svg",
-      gameMode: "2",
+      gameMode: "4p",
       optionName: "updateGameMode",
     });
 
@@ -66,7 +66,7 @@ class GameModePage extends Component {
       title: "Tournament",
       titleLeft: "left-[27px]",
       image: "/static/assets/images/character-champion.svg",
-      gameMode: "3",
+      gameMode: "tournament",
       optionName: "updateGameMode",
     });
 
@@ -99,7 +99,7 @@ class GameModePage extends Component {
       //       "X-CSRFToken": document.cookie.split("=")[1],
       //     },
       //     body: JSON.stringify({
-      //       profile_index: Store.state.nickname,
+      //       profile_index: Store.state.profile,
       //     }),
       //   })
       //     .then((response) => response.json())

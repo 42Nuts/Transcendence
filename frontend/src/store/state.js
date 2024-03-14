@@ -1,6 +1,7 @@
 export default {
   //Game Options
-  nickname: 0,
+  nickname: "",
+  profile: 0,
   theme: 0,
   darkMode: false,
 
@@ -9,5 +10,5 @@ export default {
   deleteAccount: false,
 
   //Game Mode
-  gameMode: "2player",
+  gameMode: "2p",
 };
