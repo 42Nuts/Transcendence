@@ -82,7 +82,7 @@ class PongGame:
         self.ball = GameBall(
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
-            radius=10,
+            radius=15,
             velocity_x=2,
             velocity_y=2,
             speed=2,

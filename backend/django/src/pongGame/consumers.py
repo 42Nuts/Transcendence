@@ -36,6 +36,10 @@ room_id = {
 
 
 class GameConsumer(AsyncWebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.last_input = None 
+
     async def connect(self):
         global matching_queue, limit_size, room_cnt
 
@@ -106,7 +110,13 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def game_update_task(self):
         while True:
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
-            game_data = self.game.update()  # 게임 상태 업데이트
+
+            if self.last_input is not None:
+                user_input = self.last_input
+                self.last_input = None
+                game_data = self.game.update(user_input)
+            else:
+                game_data = self.game.update()  # 게임 상태 업데이트
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -121,7 +131,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'self : {self}')
         logger.info(f'self.game : {self.game}')
         logger.info('---------------')
-        self.game.update(user_input)  # 사용자 입력에 따른 게임 상태 업데이트
+        self.last_input = user_input  # 사용자 입력에 따른 게임 상태 업데이트
 
     async def game_update(self, event):
         game_data = event['game_data']
