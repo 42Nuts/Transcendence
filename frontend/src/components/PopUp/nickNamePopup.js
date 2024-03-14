@@ -1,4 +1,5 @@
 import { Component, createComponent } from "../../core/index.js";
+import Store from "../../store/index.js";
 
 class NickNamePopUp extends Component {
   constructor(props) {
@@ -7,10 +8,14 @@ class NickNamePopUp extends Component {
   }
 
   putNickName() {
-    this.name = this.input.value;
+    // this.name = this.input.value;
+    this.name = "test";
     this.overlay.style.display = "none";
     requireNickName = false;
-    console.log(this.name);
+
+    console.log("this.name: ", this.name);
+    // put nickname to store
+    Store.dispatch("updateNickname", this.name);
     // fetch nickname to server
     fetch("/v2/users/1/nickname/", {
       method: "PUT",
@@ -35,7 +40,8 @@ class NickNamePopUp extends Component {
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
     this.overlay.id = "nickname";
     if (requireNickName === "True") {
-      this.overlay.style.display = "flex";
+      // this.overlay.style.display = "flex";
+      this.putNickName();
     } else {
       this.overlay.style.display = "none";
     }

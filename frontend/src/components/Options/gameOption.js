@@ -1,6 +1,10 @@
 import { Component, createComponent } from "../../core/index.js";
 import { SwitchOption } from "./Game/index.js";
-import { profileImages, themeImages, darkModeImages } from "../../config/index.js";
+import {
+  profileImages,
+  themeImages,
+  darkModeImages,
+} from "../../config/index.js";
 import Store from "../../store/index.js";
 
 class GameOption extends Component {
@@ -11,10 +15,10 @@ class GameOption extends Component {
 
     // Nickname 옵션
     const nicknameOption = createComponent(SwitchOption, {
-      textContent: "Nickname",
+      textContent: Store.state.nickname,
       imageSrc: profileImages,
-      startIndex: Store.state.nickname,
-      optionName: "updateNickName",
+      startIndex: Store.state.profile,
+      optionName: "updateProfile",
     });
 
     // Theme 옵션

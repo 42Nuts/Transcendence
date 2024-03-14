@@ -11,8 +11,8 @@ class ModeButton extends Component {
     const newState = Store.state;
     var newImageSrc;
 
-    if (this.props.optionName === "updateNickName") {
-      newImageSrc = this.props.imageSrc[newState.nickname];
+    if (this.props.optionName === "updateProfile") {
+      newImageSrc = this.props.imageSrc[newState.profile];
     } else if (this.props.optionName === "updateTheme") {
       newImageSrc = this.props.imageSrc[newState.theme];
     } else if (this.props.optionName === "toggleDarkMode") {
