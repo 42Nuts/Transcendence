@@ -98,10 +98,10 @@ document.addEventListener("keyup", function (event) {
 });
 
 const backGround = new Image();
-backGround.src = "/static/assets/images/map-soccer.svg";
+backGround.src = "/static/assets/images/map-pocket.svg";
 
 const ballImage = new Image();
-ballImage.src = "/static/assets/images/ball-soccer.svg";
+ballImage.src = "/static/assets/images/ball-pocket.svg";
 
 // render function, the function that does al the drawing
 function render(data) {

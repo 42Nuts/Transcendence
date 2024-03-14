@@ -1,0 +1,19 @@
+<svg width="700" height="700" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="700" height="700" transform="matrix(0 -1 1 0 0 700)" fill="#0DBF93"/>
+<rect y="700" width="700" height="700" transform="rotate(-90 0 700)" fill="#038063"/>
+<rect x="47" y="700" width="653" height="653" rx="33" transform="rotate(-90 47 700)" fill="#0DC192"/>
+<circle cx="663" cy="37" r="25" fill="#3E4244"/>
+<circle cx="669" cy="350" r="25" fill="#3E4244"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M663 375C676.807 375 688 363.807 688 350C688 336.193 676.807 325 663 325C662.665 325 662.332 325.007 662 325.02L662 62H700L700 638H662V374.98C662.332 374.993 662.665 375 663 375Z" fill="#BC6D3A"/>
+<circle cx="663" cy="663" r="25" fill="#3E4244"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M638 662.362V700H700V638H661.838L676.023 653.99C682.253 661.013 681.611 671.758 674.587 677.989C667.563 684.219 656.819 683.576 650.588 676.553L638 662.362Z" fill="#FEEBC4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M662.362 62L700 62V0L638 0V38.1618L653.99 23.9773C661.013 17.7467 671.758 18.3895 677.989 25.413C684.219 32.4365 683.576 43.1811 676.553 49.4117L662.362 62Z" fill="#FEEBC4"/>
+<circle cx="25" cy="25" r="25" transform="matrix(-1 0 0 1 62 12)" fill="#3E4244"/>
+<circle cx="25" cy="25" r="25" transform="matrix(-1 0 0 1 56 325)" fill="#3E4244"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M37 375C23.1929 375 12 363.807 12 350C12 336.193 23.1929 325 37 325C37.3349 325 37.6683 325.007 38 325.02L38 62H0L0 638H38L38 374.98C37.6683 374.993 37.3349 375 37 375Z" fill="#BC6D3A"/>
+<circle cx="25" cy="25" r="25" transform="matrix(-1 0 0 1 62 638)" fill="#3E4244"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M62 662.362V700H0L0 638H38.1618L23.9773 653.99C17.7467 661.013 18.3895 671.758 25.413 677.989C32.4365 684.219 43.1811 683.576 49.4117 676.553L62 662.362Z" fill="#FEEBC4"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M37.6376 62L0 62L0 0L62 0L62 38.1618L46.0102 23.9773C38.9867 17.7467 28.2421 18.3895 22.0115 25.413C15.7809 32.4365 16.4237 43.1811 23.4472 49.4117L37.6376 62Z" fill="#FEEBC4"/>
+<rect x="62" y="662" width="576" height="38" fill="#BC6D3A"/>
+<rect x="62" width="576" height="38" fill="#BC6D3A"/>
+</svg>
