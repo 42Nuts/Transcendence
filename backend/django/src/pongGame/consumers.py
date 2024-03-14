@@ -53,6 +53,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         userId = parsed_query.get('userId', [None])[0]
 
         if None in (userId, mode):
+            await self.close()
             return
 
         logger.info('mode = %s', str(mode))
@@ -76,7 +77,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             room_id[mode] += 1
 
             # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
-            group_game_instances[self.room_group_name] = PongGame()
+            if self.room_group_name not in group_game_instances:
+                group_game_instances[self.room_group_name] = PongGame()
 
             self.game = group_game_instances[self.room_group_name]
 
