@@ -1467,9 +1467,19 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
+.text-primary-color5 {
+  --tw-text-opacity: 1;
+  color: rgb(250 188 4 / var(--tw-text-opacity));
+}
+
 .text-primary-text {
   --tw-text-opacity: 1;
   color: rgb(62 66 68 / var(--tw-text-opacity));
+}
+
+.text-secondary-text {
+  --tw-text-opacity: 1;
+  color: rgb(238 235 222 / var(--tw-text-opacity));
 }
 
 .text-yellow-500 {
