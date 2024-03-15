@@ -7,3 +7,7 @@ db.sqlite3
 .vscode/
 *.log
 index.html
+
+#port change files
+.env
+settings.py
