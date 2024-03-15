@@ -55,6 +55,27 @@ class TournamentResultPage extends Component {
 
     container.appendChild(resultContainer);
     container.appendChild(exitButtonPos);
+
+    const canvas = document.createElement("canvas");
+    canvas.id = "canvas";
+    container.appendChild(canvas);
+
+    const style = document.createElement("style");
+    style.innerHTML = `canvas{z-index:10;pointer-events: none;position: fixed;top: 0;transform: scale(1.1);}`;
+    container.appendChild(style);
+
+    const script = document.createElement("script");
+    script.src = "/static/assets/effects/confetti_v2.js";
+    script.onload = function () {
+      SetGlobals();
+      InitializeConfetti();
+
+      setTimeout(() => {
+        DeactivateConfetti();
+      }, 5000);
+    };
+    container.appendChild(script);
+
     return container;
   }
 }
