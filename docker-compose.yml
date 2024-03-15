@@ -82,6 +82,23 @@ services:
       timeout: 2s
       retries: 30
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
+    ports:
+      - "$PROMETHEUS_PORT:$PROMETHEUS_PORT"
+    env_file:
+      - .env
+    networks:
+      - our_net
+
 networks:
   our_net:
     name: taeypark_hyeoan_network
