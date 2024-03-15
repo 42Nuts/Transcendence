@@ -29,6 +29,8 @@ services:
     volumes:
       - ./backend/django/src:/django
     init: true
+    ports:
+      - "$DJANGO_PORT:$DJANGO_PORT"
     env_file:
       - .env
     networks:
