@@ -99,6 +99,24 @@ services:
     networks:
       - our_net
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "$GRAFANA_PORT:$GRAFANA_PORT"
+    env_file:
+      - .env
+    networks:
+      - our_net
+    depends_on:
+      - prometheus
+
+volumes:
+  prometheus_data:
+  grafana_data:
+
 networks:
   our_net:
     name: taeypark_hyeoan_network
