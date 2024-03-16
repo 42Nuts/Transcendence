@@ -85,8 +85,11 @@ services:
   prometheus:
     image: prom/prometheus
     container_name: prometheus
+    build:
+      context: ./backend/prometheus
+      dockerfile: Dockerfile
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./backend/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
@@ -102,6 +105,9 @@ services:
   grafana:
     image: grafana/grafana
     container_name: grafana
+    build: 
+      context: ./backend/grafana
+      dockerfile: Dockerfile
     volumes:
       - grafana_data:/var/lib/grafana
     ports:
