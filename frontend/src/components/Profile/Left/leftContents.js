@@ -1,5 +1,6 @@
 import { Component, createComponent } from "../../../core/index.js";
 import { IconButton, FriendsButton } from "../../Button/index.js";
+import Store from "../../../store/index.js";
 
 class LeftContents extends Component {
   render() {
@@ -12,7 +13,7 @@ class LeftContents extends Component {
 
     const name = document.createElement("div");
     name.className = "text-primary-text text-2xl font-semibold font-['Inter']";
-    name.innerText = "taeypark";
+    name.innerText = Store.state.nickname;
 
     const friendsContainer = document.createElement("div");
     friendsContainer.className = "flex-col justify-start items-start gap-2 flex";
