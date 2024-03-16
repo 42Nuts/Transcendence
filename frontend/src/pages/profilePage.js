@@ -1,4 +1,5 @@
-import { Component } from "../core/index.js";
+import { Component, createComponent } from "../core/index.js";
+import { BackIconButton } from "../components/Button/index.js";
 import Store from "../store/index.js";
 
 class ProfilePage extends Component {
@@ -10,8 +11,18 @@ class ProfilePage extends Component {
     } else {
       this.container.style.backgroundImage = 'url("/static/assets/images/net.svg")';
     }
-    this.container.style.backgroundPosition = "calc(100% + 390px) center";
+    this.container.style.backgroundPosition = "calc(100% - 680px) center";
 
+    // grid 레이아웃을 사용하는 컨테이너 생성
+    const gridContainer = document.createElement("div");
+    gridContainer.className = "grid grid-cols-12 gap-10 min-h-screen";
+
+    // BackIconButton 추가
+    const backIcon = createComponent(BackIconButton, {});
+    gridContainer.appendChild(backIcon);
+
+
+    this.container.appendChild(gridContainer);
     return this.container;
   }
 }
