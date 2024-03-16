@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseForbidden, HttpRespon
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
+from django.http import JsonResponse
 # authenitcate() verifies and decode the token
 # if token is invalid, it raises an exception and returns 401
 logger = logging.getLogger('django')
@@ -31,6 +32,10 @@ def tokenCheck(get_response):
         if request.path == '/health/':
             response = get_response(request)
             return response
+        
+        if request.path == '/metrics/':
+            data = {'message': 'metrics hihi'}
+            return JsonResponse(data)
 
         try:
             # 토큰 검사 (토큰 재발급 로직 필요)
