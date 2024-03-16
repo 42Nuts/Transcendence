@@ -1,6 +1,6 @@
 import { Component, createComponent } from "../core/index.js";
 import { BackIconButton } from "../components/Button/index.js";
-import { MyProfileCard } from "../components/Profile/left/index.js";
+import { MyProfileCard, MyProfileEdit } from "../components/Profile/left/index.js";
 import { MatchHistory } from "../components/Profile/right/index.js";
 import Store from "../store/index.js";
 
@@ -29,7 +29,7 @@ class ProfilePage extends Component {
     gridContainer.appendChild(backIcon);
 
     // leftProfileCard 추가
-    const leftProfileCard = createComponent(MyProfileCard, {});
+    const leftProfileCard = createComponent(MyProfileEdit, {});
 
     // rightProfileCard 추가
     const rightProfileCard = createComponent(MatchHistory, {});

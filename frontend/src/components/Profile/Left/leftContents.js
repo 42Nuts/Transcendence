@@ -58,6 +58,10 @@ class LeftContents extends Component {
     const editButton = createComponent(IconButton, {
       iconSrc: "/static/assets/images/icon-stylus.svg",
       bgColorClass: "bg-primary-text",
+      containerWidth: "w-[72px]",
+      containerHeight: "h-[72px]",
+      iconWidth: "w-[48px]",
+      iconHeight: "h-[48px]",
     });
 
     container.appendChild(box);

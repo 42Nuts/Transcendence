@@ -626,6 +626,14 @@ video {
   left: 16px;
 }
 
+.left-\[176px\] {
+  left: 176px;
+}
+
+.left-\[244px\] {
+  left: 244px;
+}
+
 .left-\[24px\] {
   left: 24px;
 }
@@ -666,6 +674,10 @@ video {
   left: 76px;
 }
 
+.left-\[81px\] {
+  left: 81px;
+}
+
 .left-\[84px\] {
   left: 84px;
 }
@@ -684,6 +696,10 @@ video {
 
 .top-\[11px\] {
   top: 11px;
+}
+
+.top-\[168px\] {
+  top: 168px;
 }
 
 .top-\[16px\] {
@@ -708,6 +724,10 @@ video {
 
 .top-\[31px\] {
   top: 31px;
+}
+
+.top-\[351px\] {
+  top: 351px;
 }
 
 .top-\[35px\] {
@@ -819,6 +839,10 @@ video {
   height: 2.5rem;
 }
 
+.h-2 {
+  height: 0.5rem;
+}
+
 .h-24 {
   height: 6rem;
 }
@@ -865,6 +889,10 @@ video {
 
 .h-\[17px\] {
   height: 17px;
+}
+
+.h-\[18px\] {
+  height: 18px;
 }
 
 .h-\[20px\] {
@@ -967,6 +995,10 @@ video {
   height: 93px;
 }
 
+.h-\[9px\] {
+  height: 9px;
+}
+
 .h-screen {
   height: 100vh;
 }
@@ -985,6 +1017,10 @@ video {
 
 .w-10 {
   width: 2.5rem;
+}
+
+.w-2 {
+  width: 0.5rem;
 }
 
 .w-20 {
@@ -1045,6 +1081,10 @@ video {
 
 .w-\[1337\.60px\] {
   width: 1337.60px;
+}
+
+.w-\[18px\] {
+  width: 18px;
 }
 
 .w-\[20px\] {
@@ -1141,6 +1181,10 @@ video {
 
 .w-\[92px\] {
   width: 92px;
+}
+
+.w-\[9px\] {
+  width: 9px;
 }
 
 .w-full {
@@ -1251,6 +1295,10 @@ video {
   gap: 0.25rem;
 }
 
+.gap-1\.5 {
+  gap: 0.375rem;
+}
+
 .gap-10 {
   gap: 2.5rem;
 }
@@ -1265,6 +1313,10 @@ video {
 
 .gap-2 {
   gap: 0.5rem;
+}
+
+.gap-2\.5 {
+  gap: 0.625rem;
 }
 
 .gap-20 {
@@ -1469,6 +1521,16 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-zinc-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 212 216 / var(--tw-bg-opacity));
+}
+
+.bg-zinc-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(63 63 70 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1493,6 +1555,14 @@ video {
 
 .bg-no-repeat {
   background-repeat: no-repeat;
+}
+
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
 }
 
 .px-16 {
@@ -1619,6 +1689,11 @@ video {
   line-height: 1.5rem;
 }
 
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -1701,6 +1776,11 @@ video {
 .text-secondary-text {
   --tw-text-opacity: 1;
   color: rgb(238 235 222 / var(--tw-text-opacity));
+}
+
+.text-zinc-700 {
+  --tw-text-opacity: 1;
+  color: rgb(63 63 70 / var(--tw-text-opacity));
 }
 
 .opacity-10 {

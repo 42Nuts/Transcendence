@@ -8,14 +8,14 @@ class IconButton extends Component {
 
   render() {
     const iconContainer = document.createElement("button");
-    iconContainer.className = "w-[72px] h-[72px] relative";
+    iconContainer.className = `${this.props.containerWidth} ${this.props.containerHeight} relative`;
 
     const iconBg = document.createElement("div");
     iconBg.className = `absolute inset-0 m-auto flex items-center justify-center ${this.props.bgColorClass} rounded-full`;
 
     const iconImage = document.createElement("img");
     iconImage.src = this.props.iconSrc;
-    iconImage.className = "w-[48px] h-[48px]";
+    iconImage.className = `${this.props.iconWidth} ${this.props.iconHeight}`;
 
     iconBg.appendChild(iconImage);
     iconContainer.appendChild(iconBg);
