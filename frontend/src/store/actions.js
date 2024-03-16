@@ -3,8 +3,8 @@ export default {
   updateNickname(context, payload) {
     context.commit("updateNickname", payload);
   },
-  updateProfile(context) {
-    context.commit("updateProfile");
+  updateProfile(context, payload) {
+    context.commit("updateProfile", payload);
   },
   updateTheme(context) {
     context.commit("updateTheme");

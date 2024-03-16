@@ -5,6 +5,19 @@ import { profileImages } from "../../../config/index.js";
 import Store from "../../../store/index.js";
 
 class MyProfileEdit extends Component {
+  constructor(props) {
+    super(props);
+
+    Store.events.subscribe("profileChange", this.updateProfile.bind(this));
+  }
+
+  updateProfile() {
+    const profileImage = document.getElementById("profileImage");
+    if (profileImage) {
+      profileImage.src = profileImages[Store.state.profile];
+    }
+  }
+
   render() {
     const container = document.createElement("div");
     container.className = "col-start-6 col-span-3 relative w-[296px] h-[632px]";
@@ -21,10 +34,15 @@ class MyProfileEdit extends Component {
     profileEdit.className = "flex-col justify-center items-center gap-2.5 flex";
 
     const profileEditTitle = document.createElement("div");
-    profileEditTitle.className = "text-primary-text text-sm font-semibold font-['Inter']";
+    profileEditTitle.className =
+      "text-primary-text text-sm font-semibold font-['Inter']";
     profileEditTitle.innerText = "Profile Icon";
 
-    const profileMove = createComponent(moveButton, {});
+    console.log(Store.state.profile);
+    const profileMove = createComponent(moveButton, {
+      activeIndex: Store.state.profile,
+      dispatch: "updateProfile",
+    });
 
     profileEdit.appendChild(profileEditTitle);
     profileEdit.appendChild(profileMove);
@@ -33,10 +51,12 @@ class MyProfileEdit extends Component {
     line.src = "/static/assets/images/line-profile.svg";
 
     const backgroundEdit = document.createElement("div");
-    backgroundEdit.className = "flex-col justify-center items-center gap-2.5 flex";
+    backgroundEdit.className =
+      "flex-col justify-center items-center gap-2.5 flex";
 
     const backgroundEditTitle = document.createElement("div");
-    backgroundEditTitle.className = "text-primary-text text-sm font-semibold font-['Inter']";
+    backgroundEditTitle.className =
+      "text-primary-text text-sm font-semibold font-['Inter']";
     backgroundEditTitle.innerText = "Background Color";
 
     const backgroundMove = createComponent(moveButton, {});
@@ -53,6 +73,7 @@ class MyProfileEdit extends Component {
       "w-36 h-36 left-[76px] top-[68px] absolute justify-center items-center inline-flex";
 
     const profileImage = document.createElement("img");
+    profileImage.id = "profileImage";
     profileImage.src = profileImages[Store.state.profile];
     profileImage.className = "w-36 h-36 relative";
 

@@ -4,8 +4,8 @@ export default {
     state.nickname = payload;
     return state;
   },
-  updateProfile(state) {
-    state.profile = (state.profile + 1) % 5;
+  updateProfile(state, payload) {
+    state.profile = payload;
     return state;
   },
   updateTheme(state) {

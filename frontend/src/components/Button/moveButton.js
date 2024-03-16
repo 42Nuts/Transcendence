@@ -1,4 +1,5 @@
 import { Component } from "../../core/index.js";
+import Store from "../../store/index.js";
 
 class MoveButton extends Component {
   constructor(props) {
@@ -8,25 +9,27 @@ class MoveButton extends Component {
   }
 
   movePointRight() {
-    const firstPoint = this.points.shift();
-    this.points.push(firstPoint);
+    this.props.activeIndex = (this.props.activeIndex + 1) % this.points.length;
+    Store.dispatch(this.props.dispatch, this.props.activeIndex);
 
     this.updatePointsClasses();
   }
 
   movePointLeft() {
-    const lastPoint = this.points.pop();
-    this.points.unshift(lastPoint);
+    this.props.activeIndex =
+      (this.props.activeIndex - 1 + this.points.length) % this.points.length;
+    Store.dispatch(this.props.dispatch, this.props.activeIndex);
 
     this.updatePointsClasses();
   }
 
   updatePointsClasses() {
-    this.points.forEach((point) => {
-      point.className = "w-2 h-2 bg-primary-inner_card_top rounded-full";
+    this.points.forEach((point, index) => {
+      point.className =
+        index === this.props.activeIndex
+          ? "w-[9px] h-[9px] bg-primary-text rounded-full"
+          : "w-2 h-2 bg-primary-inner_card_top rounded-full";
     });
-
-    this.points[0].className = "w-[9px] h-[9px] bg-primary-text rounded-full";
   }
 
   render() {
@@ -36,13 +39,13 @@ class MoveButton extends Component {
     // point
     const buttonsContainer = document.createElement("div");
     buttonsContainer.className = "justify-center items-center gap-1.5 flex";
-    
+
     for (let i = 0; i < 5; i++) {
       const point = document.createElement("div");
       point.className =
-      i === 0
-      ? "w-[9px] h-[9px] bg-primary-text rounded-full"
-      : "w-2 h-2 bg-primary-inner_card_top rounded-full";
+        i === this.props.activeIndex
+          ? "w-[9px] h-[9px] bg-primary-text rounded-full"
+          : "w-2 h-2 bg-primary-inner_card_top rounded-full";
       this.points.push(point);
       buttonsContainer.appendChild(point);
     }
