@@ -1,5 +1,5 @@
 import { Component, createComponent } from "../../../core/index.js";
-import { IconButton } from "../../../components/Button/index.js";
+import { IconButton, moveButton } from "../../../components/Button/index.js";
 import { LeftBoard } from "../board/index.js";
 import { profileImages } from "../../../config/index.js";
 import Store from "../../../store/index.js";
@@ -17,6 +17,36 @@ class MyProfileEdit extends Component {
     optionContainer.className =
       "left-[81px] top-[351px] absolute flex-col justify-start items-start gap-8 inline-flex";
 
+    const profileEdit = document.createElement("div");
+    profileEdit.className = "flex-col justify-center items-center gap-2.5 flex";
+
+    const profileEditTitle = document.createElement("div");
+    profileEditTitle.className = "text-primary-text text-sm font-semibold font-['Inter']";
+    profileEditTitle.innerText = "Profile Icon";
+
+    const profileMove = createComponent(moveButton, {});
+
+    profileEdit.appendChild(profileEditTitle);
+    profileEdit.appendChild(profileMove);
+
+    const line = document.createElement("img");
+    line.src = "/static/assets/images/line-profile.svg";
+
+    const backgroundEdit = document.createElement("div");
+    backgroundEdit.className = "flex-col justify-center items-center gap-2.5 flex";
+
+    const backgroundEditTitle = document.createElement("div");
+    backgroundEditTitle.className = "text-primary-text text-sm font-semibold font-['Inter']";
+    backgroundEditTitle.innerText = "Background Color";
+
+    const backgroundMove = createComponent(moveButton, {});
+
+    backgroundEdit.appendChild(backgroundEditTitle);
+    backgroundEdit.appendChild(backgroundMove);
+
+    optionContainer.appendChild(profileEdit);
+    optionContainer.appendChild(line);
+    optionContainer.appendChild(backgroundEdit);
     // profile image
     const profileContainer = document.createElement("div");
     profileContainer.className =
