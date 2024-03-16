@@ -819,6 +819,10 @@ video {
   display: grid;
 }
 
+.contents {
+  display: contents;
+}
+
 .h-1 {
   height: 0.25rem;
 }
@@ -1494,10 +1498,20 @@ video {
   background-image: linear-gradient(to right, var(--tw-gradient-stops));
 }
 
+.from-primary-bronze_from {
+  --tw-gradient-from: #C9A67F var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(201 166 127 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .from-primary-gold_from {
   --tw-gradient-from: #EFC146 var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(239 193 70 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.to-primary-bronze_to {
+  --tw-gradient-to: #E0BB92 var(--tw-gradient-to-position);
 }
 
 .to-primary-gold_to {
