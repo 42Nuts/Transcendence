@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'django'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['django:8000'] 
+    metrics_path: /metrics/
+    scheme: http
+    basic_auth:
+      username: hyeoan
+      password: pwd
