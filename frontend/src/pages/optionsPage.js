@@ -65,23 +65,6 @@ class OptionsPage extends Component {
   }
 
   sendOptionSetting() {
-    fetch("/v2/users/1/profile-index/", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": document.cookie.split("=")[1],
-      },
-      body: JSON.stringify({
-        profile_index: Store.state.profile,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
     fetch("/v2/users/1/theme-index/", {
       method: "PUT",
       headers: {

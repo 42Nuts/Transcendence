@@ -40,6 +40,26 @@ class ProfilePage extends Component {
     this.leftProfileCard.appendChild(myProfileEdit);
   }
 
+  sendSetting() {
+    fetch("/v2/users/1/profile-index/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": document.cookie.split("=")[1],
+      },
+      body: JSON.stringify({
+        profile_index: Store.state.profile,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
   render() {
     this.container = document.createElement("div");
     this.container.className =
@@ -63,9 +83,14 @@ class ProfilePage extends Component {
     backIcon.classList.add("absolute", "top-0");
     gridContainer.appendChild(backIcon);
 
+    backIcon.addEventListener("click", () => {
+      this.sendSetting();
+    });
+
     // leftProfileCard 추가
     this.leftProfileCard = document.createElement("div");
-    this.leftProfileCard.className = "col-start-6 col-span-3 relative w-[296px] h-[632px]";
+    this.leftProfileCard.className =
+      "col-start-6 col-span-3 relative w-[296px] h-[632px]";
     gridContainer.appendChild(this.leftProfileCard);
 
     this.showMyProfileCard();
