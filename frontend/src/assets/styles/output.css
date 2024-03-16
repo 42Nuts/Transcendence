@@ -618,10 +618,6 @@ video {
   left: 114px;
 }
 
-.left-\[1204px\] {
-  left: 1204px;
-}
-
 .left-\[12px\] {
   left: 12px;
 }
@@ -674,10 +670,6 @@ video {
   left: 84px;
 }
 
-.left-\[868px\] {
-  left: 868px;
-}
-
 .top-0 {
   top: 0px;
 }
@@ -694,10 +686,6 @@ video {
   top: 11px;
 }
 
-.top-\[12px\] {
-  top: 12px;
-}
-
 .top-\[16px\] {
   top: 16px;
 }
@@ -708,10 +696,6 @@ video {
 
 .top-\[244px\] {
   top: 244px;
-}
-
-.top-\[258px\] {
-  top: 258px;
 }
 
 .top-\[272px\] {
@@ -835,10 +819,6 @@ video {
   height: 2.5rem;
 }
 
-.h-12 {
-  height: 3rem;
-}
-
 .h-24 {
   height: 6rem;
 }
@@ -905,6 +885,10 @@ video {
 
 .h-\[268px\] {
   height: 268px;
+}
+
+.h-\[278px\] {
+  height: 278px;
 }
 
 .h-\[280px\] {
@@ -1003,10 +987,6 @@ video {
   width: 2.5rem;
 }
 
-.w-12 {
-  width: 3rem;
-}
-
 .w-20 {
   width: 5rem;
 }
@@ -1085,6 +1065,10 @@ video {
 
 .w-\[264px\] {
   width: 264px;
+}
+
+.w-\[270px\] {
+  width: 270px;
 }
 
 .w-\[280px\] {
@@ -1485,11 +1469,6 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-zinc-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(63 63 70 / var(--tw-bg-opacity));
-}
-
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1504,18 +1483,8 @@ video {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
-.from-primary-gold_from {
-  --tw-gradient-from: #EFC146 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(239 193 70 / 0) var(--tw-gradient-to-position);
-  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-}
-
 .to-primary-bronze_to {
   --tw-gradient-to: #E0BB92 var(--tw-gradient-to-position);
-}
-
-.to-primary-gold_to {
-  --tw-gradient-to: #FBEC7C var(--tw-gradient-to-position);
 }
 
 .bg-cover {
@@ -1645,6 +1614,11 @@ video {
   font-size: 80px;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
@@ -1709,11 +1683,6 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.text-primary-color3 {
-  --tw-text-opacity: 1;
-  color: rgb(254 74 101 / var(--tw-text-opacity));
-}
-
 .text-primary-color4 {
   --tw-text-opacity: 1;
   color: rgb(31 207 127 / var(--tw-text-opacity));
@@ -1732,16 +1701,6 @@ video {
 .text-secondary-text {
   --tw-text-opacity: 1;
   color: rgb(238 235 222 / var(--tw-text-opacity));
-}
-
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-
-.text-zinc-700 {
-  --tw-text-opacity: 1;
-  color: rgb(63 63 70 / var(--tw-text-opacity));
 }
 
 .opacity-10 {

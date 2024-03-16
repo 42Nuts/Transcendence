@@ -1,5 +1,6 @@
 import { Component, createComponent } from "../../../core/index.js";
 import { RightBoard, MatchBoard } from "../board/index.js";
+import { CannotFind } from "../search/index.js";
 
 class MatchHistory extends Component {
   render() {
@@ -11,7 +12,8 @@ class MatchHistory extends Component {
 
     // match history
     const matchHistory = document.createElement("div");
-    matchHistory.className = "h-[287px] left-[24px] top-[31px] absolute flex-col justify-start items-center gap-6 inline-flex";
+    matchHistory.className =
+      "h-[287px] left-[24px] top-[31px] absolute flex-col justify-start items-center gap-6 inline-flex";
 
     const title = document.createElement("div");
     title.className = "text-primary-text text-2xl font-bold font-['Inter']";
@@ -23,12 +25,23 @@ class MatchHistory extends Component {
     const histories = document.createElement("div");
     histories.className = "flex-col justify-start items-start gap-6 flex";
 
-    const match = createComponent(MatchBoard, {
-      gameMode: "2 Players",
-      gameResult: "VICTORY",
+    // const match = createComponent(MatchBoard, {
+    //   gameMode: "2 Players",
+    //   gameResult: "VICTORY",
+    // });
+
+    // histories.appendChild(match);
+
+    const messageContainer = document.createElement("div");
+    messageContainer.className = "w-[359px] flex-col justify-start items-center flex";
+
+    const message = createComponent(CannotFind, {
+      text: "Sorry, there is no match history.",
     });
 
-    histories.appendChild(match);
+    messageContainer.appendChild(message);
+
+    histories.appendChild(messageContainer);
 
     matchHistory.appendChild(title);
     matchHistory.appendChild(line);
