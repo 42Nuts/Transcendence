@@ -9,7 +9,7 @@ class MMRBoard extends Component {
     board.className = "w-[296px] h-4 relative";
 
     const backBoard = document.createElement("div");
-    backBoard.className = "w-[296px] h-4 left-0 top-0 absolute bg-primary-text";
+    backBoard.className = "w-[296px] h-4 left-0 top-0 absolute bg-primary-text dark:bg-secondary-text";
 
     const gaugeBoard = document.createElement("div");
     gaugeBoard.className = "w-20 h-4 left-0 top-0 absolute bg-gradient-to-r from-primary-bronze_from to-primary-bronze_to rounded-tr rounded-br";

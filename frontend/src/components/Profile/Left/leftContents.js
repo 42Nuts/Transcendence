@@ -3,6 +3,23 @@ import { IconButton, FriendsButton } from "../../Button/index.js";
 import Store from "../../../store/index.js";
 
 class LeftContents extends Component {
+  constructor(props) {
+    super(props);
+    Store.events.subscribe("darkMode", this.updater.bind(this));
+  }
+
+  updater() {
+    if (Store.state.darkMode) {
+      this.line.src = "/static/assets/images/line-profile-dark.svg";
+      this.editButton.querySelector("img").src =
+        "/static/assets/images/icon-stylus-dark.svg";
+    } else {
+      this.line.src = "/static/assets/images/line-profile.svg";
+      this.editButton.querySelector("img").src =
+        "/static/assets/images/icon-stylus.svg";
+    }
+  }
+
   render() {
     const container = document.createElement("div");
     container.className = "flex-col justify-center items-center gap-8 flex";
@@ -12,21 +29,25 @@ class LeftContents extends Component {
     box.className = "flex-col justify-center items-center gap-4 flex";
 
     const name = document.createElement("div");
-    name.className = "text-primary-text text-2xl font-semibold font-['Inter']";
+    name.className =
+      "text-primary-text dark:text-secondary-text text-2xl font-semibold font-['Inter']";
     name.innerText = Store.state.nickname;
 
     const friendsContainer = document.createElement("div");
-    friendsContainer.className = "flex-col justify-start items-start gap-2 flex";
+    friendsContainer.className =
+      "flex-col justify-start items-start gap-2 flex";
 
     const friendsList = document.createElement("div");
     friendsList.className = "justify-start items-start gap-4 inline-flex";
 
     const followers = document.createElement("div");
-    followers.className = "text-primary-button text-xs font-medium font-['Inter']";
+    followers.className =
+      "text-primary-button dark:secondary-button text-xs font-medium font-['Inter']";
     followers.innerText = "0 Followers";
 
     const followings = document.createElement("div");
-    followings.className = "text-primary-button text-xs font-medium font-['Inter']";
+    followings.className =
+      "text-primary-button dark:secondary-button text-xs font-medium font-['Inter']";
     followings.innerText = "0 Following";
 
     friendsList.appendChild(followers);
@@ -34,7 +55,7 @@ class LeftContents extends Component {
 
     const friendsButton = createComponent(FriendsButton, {
       iconSrc: "/static/assets/images/icon-person-add.svg",
-      bgColor: "bg-primary-button",
+      bgColor: "bg-primary-button dark:bg-secondary-button",
       textColor: "text-primary-button_text",
       text: "ADD FRIENDS",
     });
@@ -46,18 +67,25 @@ class LeftContents extends Component {
     box.appendChild(friendsContainer);
 
     // line
-    const line = document.createElement("img");
-    line.src = "/static/assets/images/line-profile.svg";
+    this.line = document.createElement("img");
+    if (Store.state.darkMode) {
+      this.line.src = "/static/assets/images/line-profile-dark.svg";
+    } else {
+      this.line.src = "/static/assets/images/line-profile.svg";
+    }
 
     // win lose rate
     const winLoseRate = document.createElement("div");
-    winLoseRate.className = "text-primary-text text-xs font-medium font-['Inter']";
+    winLoseRate.className =
+      "text-primary-text dark:text-secondary-text text-xs font-medium font-['Inter']";
     winLoseRate.innerText = "0 WIN / 0 LOSE";
 
     // icon button
-    const editButton = createComponent(IconButton, {
-      iconSrc: "/static/assets/images/icon-stylus.svg",
-      bgColorClass: "bg-primary-text",
+    this.editButton = createComponent(IconButton, {
+      iconSrc: Store.state.darkMode
+        ? "/static/assets/images/icon-stylus-dark.svg"
+        : "/static/assets/images/icon-stylus.svg",
+      bgColorClass: "bg-primary-text dark:bg-secondary-text",
       containerWidth: "w-[72px]",
       containerHeight: "h-[72px]",
       iconWidth: "w-[48px]",
@@ -66,9 +94,9 @@ class LeftContents extends Component {
     });
 
     container.appendChild(box);
-    container.appendChild(line);
+    container.appendChild(this.line);
     container.appendChild(winLoseRate);
-    container.appendChild(editButton);
+    container.appendChild(this.editButton);
 
     return container;
   }

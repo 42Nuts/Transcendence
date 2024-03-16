@@ -10,7 +10,7 @@ class CannotFind extends Component {
     image.className = "w-60 h-60";
 
     const text = document.createElement("div");
-    text.className = "text-center text-primary-text text-base font-normal font-['Inter']";
+    text.className = "text-center text-primary-text dark:text-secondary-text text-base font-normal font-['Inter']";
     text.innerHTML = this.props.text;
 
     container.appendChild(image);

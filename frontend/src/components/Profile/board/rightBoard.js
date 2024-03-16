@@ -11,13 +11,13 @@ class RightBoard extends Component {
 
   updateBackground() {
     const board = document.getElementById("rightBoard");
-    board.className = `w-[408px] h-[632px] left-0 top-0 absolute bg-primary-card_background rounded-2xl border-8 border-${backgroundColors[Store.state.background]}`;
+    board.className = `w-[408px] h-[632px] left-0 top-0 absolute bg-primary-card_background dark:bg-secondary-card_background rounded-2xl border-8 border-${backgroundColors[Store.state.background]}`;
   }
 
   render() {
     const board = document.createElement("div");
     board.id = "rightBoard";
-    board.className = `w-[408px] h-[632px] left-0 top-0 absolute bg-primary-card_background rounded-2xl border-8 border-${backgroundColors[Store.state.background]}`;
+    board.className = `w-[408px] h-[632px] left-0 top-0 absolute bg-primary-card_background dark:bg-secondary-card_background rounded-2xl border-8 border-${backgroundColors[Store.state.background]}`;
 
     return board;
   }

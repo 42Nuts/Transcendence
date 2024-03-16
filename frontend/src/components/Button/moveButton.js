@@ -6,6 +6,17 @@ class MoveButton extends Component {
     super(props);
 
     this.points = [];
+    Store.events.subscribe("darkModeChange", this.updateImages.bind(this));
+  }
+
+  updateImages() {
+    if (Store.state.darkMode) {
+      this.leftImage.src = "/static/assets/images/icon-arrow-left-dark.svg";
+      this.rightImage.src = "/static/assets/images/icon-arrow-right-dark.svg";
+    } else {
+      this.leftImage.src = "/static/assets/images/icon-arrow-left.svg";
+      this.rightImage.src = "/static/assets/images/icon-arrow-right.svg";
+    }
   }
 
   movePointRight() {
@@ -27,7 +38,7 @@ class MoveButton extends Component {
     this.points.forEach((point, index) => {
       point.className =
         index === this.props.activeIndex
-          ? "w-[9px] h-[9px] bg-primary-text rounded-full"
+          ? "w-[9px] h-[9px] bg-primary-text dark:bg-secondary-text rounded-full"
           : "w-2 h-2 bg-primary-inner_card_top rounded-full";
     });
   }
@@ -44,7 +55,7 @@ class MoveButton extends Component {
       const point = document.createElement("div");
       point.className =
         i === this.props.activeIndex
-          ? "w-[9px] h-[9px] bg-primary-text rounded-full"
+          ? "w-[9px] h-[9px] bg-primary-text dark:bg-secondary-text rounded-full"
           : "w-2 h-2 bg-primary-inner_card_top rounded-full";
       this.points.push(point);
       buttonsContainer.appendChild(point);
@@ -54,11 +65,15 @@ class MoveButton extends Component {
     const leftButton = document.createElement("button");
     leftButton.className = "w-[18px] h-[18px] relative";
 
-    const leftImage = document.createElement("img");
-    leftImage.src = "/static/assets/images/icon-arrow-left.svg";
-    leftImage.className = "w-[18px] h-[18px] relative";
+    this.leftImage = document.createElement("img");
+    if (Store.state.darkMode) {
+      this.leftImage.src = "/static/assets/images/icon-arrow-left-dark.svg";
+    } else {
+      this.leftImage.src = "/static/assets/images/icon-arrow-left.svg";
+    }
+    this.leftImage.className = "w-[18px] h-[18px] relative";
 
-    leftButton.appendChild(leftImage);
+    leftButton.appendChild(this.leftImage);
 
     leftButton.addEventListener("click", () => this.movePointLeft());
 
@@ -66,11 +81,15 @@ class MoveButton extends Component {
     const rightButton = document.createElement("button");
     rightButton.className = "w-[18px] h-[18px] relative";
 
-    const rightImage = document.createElement("img");
-    rightImage.src = "/static/assets/images/icon-arrow-right.svg";
+    this.rightImage = document.createElement("img");
+    if (Store.state.darkMode) {
+      this.rightImage.src = "/static/assets/images/icon-arrow-right-dark.svg";
+    } else {
+      this.rightImage.src = "/static/assets/images/icon-arrow-right.svg";
+    }
     rightButton.className = "w-[18px] h-[18px] relative";
 
-    rightButton.appendChild(rightImage);
+    rightButton.appendChild(this.rightImage);
 
     rightButton.addEventListener("click", () => this.movePointRight());
 

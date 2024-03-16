@@ -9,6 +9,15 @@ class MyProfileEdit extends Component {
     super(props);
 
     Store.events.subscribe("profileChange", this.updateProfile.bind(this));
+    Store.events.subscribe("darkModeChange", this.updater.bind(this));
+  }
+
+  updater() {
+    if (Store.state.darkMode) {
+      this.line.src = "/static/assets/images/line-profile-dark.svg";
+    } else {
+      this.line.src = "/static/assets/images/line-profile.svg";
+    }
   }
 
   updateProfile() {
@@ -35,7 +44,7 @@ class MyProfileEdit extends Component {
 
     const profileEditTitle = document.createElement("div");
     profileEditTitle.className =
-      "text-primary-text text-sm font-semibold font-['Inter']";
+      "text-primary-text dark:text-secondary-text text-sm font-semibold font-['Inter']";
     profileEditTitle.innerText = "Profile Icon";
 
     const profileMove = createComponent(moveButton, {
@@ -46,8 +55,12 @@ class MyProfileEdit extends Component {
     profileEdit.appendChild(profileEditTitle);
     profileEdit.appendChild(profileMove);
 
-    const line = document.createElement("img");
-    line.src = "/static/assets/images/line-profile.svg";
+    this.line = document.createElement("img");
+    if (Store.state.darkMode) {
+      this.line.src = "/static/assets/images/line-profile-dark.svg";
+    } else {
+      this.line.src = "/static/assets/images/line-profile.svg";
+    }
 
     const backgroundEdit = document.createElement("div");
     backgroundEdit.className =
@@ -55,7 +68,7 @@ class MyProfileEdit extends Component {
 
     const backgroundEditTitle = document.createElement("div");
     backgroundEditTitle.className =
-      "text-primary-text text-sm font-semibold font-['Inter']";
+      "text-primary-text dark:text-secondary-text text-sm font-semibold font-['Inter']";
     backgroundEditTitle.innerText = "Background Color";
 
     const backgroundMove = createComponent(moveButton, {
@@ -67,7 +80,7 @@ class MyProfileEdit extends Component {
     backgroundEdit.appendChild(backgroundMove);
 
     optionContainer.appendChild(profileEdit);
-    optionContainer.appendChild(line);
+    optionContainer.appendChild(this.line);
     optionContainer.appendChild(backgroundEdit);
 
     // profile image

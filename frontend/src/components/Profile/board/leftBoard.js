@@ -21,7 +21,7 @@ class LeftBoard extends Component {
     board.className = "w-[296px] h-[632px] relative";
 
     const lowerBoard = document.createElement("div");
-    lowerBoard.className = "w-[296px] h-[632px] left-0 top-0 absolute bg-primary-card_background rounded-2xl";
+    lowerBoard.className = "w-[296px] h-[632px] left-0 top-0 absolute bg-primary-card_background dark:bg-secondary-card_background rounded-2xl";
 
     const upperBoard = document.createElement("div");
     upperBoard.id = "upperBoard";
