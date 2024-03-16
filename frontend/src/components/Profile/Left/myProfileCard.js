@@ -8,7 +8,6 @@ import { profileImages } from "../../../config/index.js";
 class MyProfileCard extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = "col-start-6 col-span-3 relative w-[296px] h-[632px]";
 
     // card board
     const board = createComponent(LeftBoard, {});
@@ -27,7 +26,9 @@ class MyProfileCard extends Component {
     });
 
     // contents
-    const contents = createComponent(LeftContents, {});
+    const contents = createComponent(LeftContents, {
+      onEdit: this.props.onEdit,
+    });
 
     contentContainer.appendChild(tier);
     contentContainer.appendChild(contents);

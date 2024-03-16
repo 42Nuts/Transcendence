@@ -62,6 +62,7 @@ class LeftContents extends Component {
       containerHeight: "h-[72px]",
       iconWidth: "w-[48px]",
       iconHeight: "h-[48px]",
+      onClick: this.props.onEdit,
     });
 
     container.appendChild(box);

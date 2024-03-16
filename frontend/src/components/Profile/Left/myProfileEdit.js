@@ -38,7 +38,6 @@ class MyProfileEdit extends Component {
       "text-primary-text text-sm font-semibold font-['Inter']";
     profileEditTitle.innerText = "Profile Icon";
 
-    console.log(Store.state.profile);
     const profileMove = createComponent(moveButton, {
       activeIndex: Store.state.profile,
       dispatch: "updateProfile",
@@ -70,6 +69,7 @@ class MyProfileEdit extends Component {
     optionContainer.appendChild(profileEdit);
     optionContainer.appendChild(line);
     optionContainer.appendChild(backgroundEdit);
+
     // profile image
     const profileContainer = document.createElement("div");
     profileContainer.className =
@@ -110,6 +110,7 @@ class MyProfileEdit extends Component {
       containerHeight: "h-9",
       iconWidth: "w-6",
       iconHeight: "h-6",
+      onClick: this.props.onCancel,
     });
 
     closeContainer.appendChild(closeButton);

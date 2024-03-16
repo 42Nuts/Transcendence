@@ -3,7 +3,12 @@ import Store from "../../store/index.js";
 
 class IconButton extends Component {
   handleClick() {
-    Store.dispatch(this.props.optionName);
+    if (this.props.optionName) {
+      Store.dispatch(this.props.optionName);
+    }
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
   }
 
   render() {
