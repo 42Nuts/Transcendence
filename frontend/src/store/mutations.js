@@ -1,19 +1,24 @@
 export default {
-  // Game Options
   updateNickname(state, payload) {
     state.nickname = payload;
     return state;
   },
-  updateProfile(state, payload) {
-    state.profile = payload;
-    return state;
-  },
+  // Game Options
   updateTheme(state) {
     state.theme = (state.theme + 1) % 6;
     return state;
   },
   toggleDarkMode(state) {
     state.darkMode = !state.darkMode;
+    return state;
+  },
+  // Profile
+  updateProfile(state, payload) {
+    state.profile = payload;
+    return state;
+  },
+  updateBackgroundColor(state, payload) {
+    state.background = payload;
     return state;
   },
   // Account Options

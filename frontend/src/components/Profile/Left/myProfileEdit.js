@@ -59,7 +59,10 @@ class MyProfileEdit extends Component {
       "text-primary-text text-sm font-semibold font-['Inter']";
     backgroundEditTitle.innerText = "Background Color";
 
-    const backgroundMove = createComponent(moveButton, {});
+    const backgroundMove = createComponent(moveButton, {
+      activeIndex: Store.state.background,
+      dispatch: "updateBackgroundColor",
+    });
 
     backgroundEdit.appendChild(backgroundEditTitle);
     backgroundEdit.appendChild(backgroundMove);
