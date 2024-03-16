@@ -1,5 +1,5 @@
 import { Component, createComponent } from "../../../core/index.js";
-import { MMRBoard } from "../mmr/index.js";
+import { MMRBoard, Tier } from "../mmr/index.js";
 import { LeftBoard } from "../board/index.js";
 import { LeftContents } from "./index.js";
 import Store from "../../../store/index.js";
@@ -22,23 +22,14 @@ class MyProfileCard extends Component {
       "left-[76px] top-[244px] absolute flex-col justify-start items-center gap-2 inline-flex";
 
     // tier
-    const tierContainer = document.createElement("div");
-    tierContainer.className = "w-[72px] h-[72px] relative";
-
-    const tierBox = document.createElement("div");
-    tierBox.className = "w-[72px] h-[72px] left-0 top-0 absolute";
-
-    const tierImage = document.createElement("img");
-    tierImage.src = "/static/assets/images/tier-bronze.svg";
-    tierImage.className = "w-[64.68px] h-[72px] left-[4px] top-0 absolute";
-
-    tierBox.appendChild(tierImage);
-    tierContainer.appendChild(tierBox);
+    const tier = createComponent(Tier, {
+      src: "/static/assets/images/tier-bronze.svg",
+    });
 
     // contents
     const contents = createComponent(LeftContents, {});
 
-    contentContainer.appendChild(tierContainer);
+    contentContainer.appendChild(tier);
     contentContainer.appendChild(contents);
 
     // profile image
