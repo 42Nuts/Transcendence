@@ -1,0 +1,1 @@
+export {default as LeftBoard} from "./leftBoard.js";
