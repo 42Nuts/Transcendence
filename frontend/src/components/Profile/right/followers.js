@@ -1,6 +1,7 @@
 import { Component, createComponent } from "../../../core/index.js";
 import { IconButton } from "../../Button/index.js";
 import { RightBoard } from "../board/index.js";
+import { SearchList } from "../search/index.js";
 
 class Followers extends Component {
   render() {
@@ -11,10 +12,29 @@ class Followers extends Component {
     const board = createComponent(RightBoard, {});
 
     //contents
+    const contents = document.createElement("div");
+    contents.className =
+      "w-[359px] h-[92px] left-[25px] top-[32px] absolute flex-col justify-start items-center gap-6 inline-flex";
+
+    const title = document.createElement("div");
+    title.className = "text-primary-text text-2xl font-bold font-['Inter']";
+    title.innerText = "Followers";
+
+    const line = document.createElement("img");
+    line.src = "/static/assets/images/line-match.svg";
+
+    const list = createComponent(SearchList, {
+      result: "2 Followers",
+    });
+
+    contents.appendChild(title);
+    contents.appendChild(line);
+    contents.appendChild(list);
 
     // close button
     const closeContainer = document.createElement("div");
-    closeContainer.className = "p-2 left-[356px] top-0 absolute justify-start items-start gap-2.5 inline-flex";
+    closeContainer.className =
+      "p-2 left-[356px] top-0 absolute justify-start items-start gap-2.5 inline-flex";
 
     const closeButton = createComponent(IconButton, {
       iconSrc: "/static/assets/images/icon-close.svg",
@@ -29,6 +49,7 @@ class Followers extends Component {
 
     // append
     container.appendChild(board);
+    container.appendChild(contents);
     container.appendChild(closeContainer);
 
     return container;
