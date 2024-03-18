@@ -2,8 +2,9 @@ import { Component, createComponent } from "../../../core/index.js";
 import { IconButton } from "../../Button/index.js";
 import { RightBoard } from "../board/index.js";
 import { SearchList } from "../search/index.js";
+import { CannotFind } from "../search/index.js";
 
-class Followers extends Component {
+class Followings extends Component {
   render() {
     const container = document.createElement("div");
     container.className = "col-start-9 col-span-4 relative w-[408px] h-[632px]";
@@ -18,32 +19,23 @@ class Followers extends Component {
 
     const title = document.createElement("div");
     title.className = "text-primary-text text-2xl font-bold font-['Inter']";
-    title.innerText = "Followers";
+    title.innerText = "Followings";
 
     const line = document.createElement("img");
     line.src = "/static/assets/images/line-match.svg";
 
     const list = createComponent(SearchList, {
-      result: "2 Followers",
-      friends: [
-        {
-          name: "euiclee",
-          friend: true,
-          profileSrc: "/static/assets/images/profile-taeypark.svg",
-          tierSrc: "/static/assets/images/tier-diamond.svg",
-        },
-        {
-          name: "yim",
-          friend: false,
-          profileSrc: "/static/assets/images/profile-yim.svg",
-          tierSrc: "/static/assets/images/tier-gold.svg",
-        },
-      ],
+      result: "0 Following",
+    });
+
+    const cannotFind = createComponent(CannotFind, {
+      text: "Sorry, you have no following.",
     });
 
     contents.appendChild(title);
     contents.appendChild(line);
     contents.appendChild(list);
+    contents.appendChild(cannotFind);
 
     // close button
     const closeContainer = document.createElement("div");
@@ -71,4 +63,4 @@ class Followers extends Component {
   }
 }
 
-export default Followers;
+export default Followings;

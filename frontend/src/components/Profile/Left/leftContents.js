@@ -51,6 +51,8 @@ class LeftContents extends Component {
     followings.className =
       "text-primary-button dark:secondary-button text-xs font-medium font-['Inter']";
     followings.innerText = `${this.props.following} Following`;
+    
+    followings.addEventListener("click", () => this.props.onFollowings());
 
     friendsList.appendChild(followers);
     friendsList.appendChild(followings);

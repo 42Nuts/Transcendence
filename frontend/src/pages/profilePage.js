@@ -4,7 +4,11 @@ import {
   MyProfileCard,
   MyProfileEdit,
 } from "../components/Profile/left/index.js";
-import { MatchHistory, Followers } from "../components/Profile/right/index.js";
+import {
+  MatchHistory,
+  Followers,
+  Followings,
+} from "../components/Profile/right/index.js";
 import Store from "../store/index.js";
 
 class ProfilePage extends Component {
@@ -29,6 +33,7 @@ class ProfilePage extends Component {
     const myProfileCard = createComponent(MyProfileCard, {
       onEdit: this.showMyProfileEdit.bind(this),
       onFollowers: this.showFollowers.bind(this),
+      onFollowings: this.showFollowings.bind(this),
     });
     this.leftProfileCard.appendChild(myProfileCard);
   }
@@ -53,6 +58,14 @@ class ProfilePage extends Component {
       onCancel: this.showMatchHistory.bind(this),
     });
     this.rightProfileCard.appendChild(followers);
+  }
+
+  showFollowings() {
+    this.rightProfileCard.innerHTML = "";
+    const followings = createComponent(Followings, {
+      onCancel: this.showMatchHistory.bind(this),
+    });
+    this.rightProfileCard.appendChild(followings);
   }
 
   sendSetting() {

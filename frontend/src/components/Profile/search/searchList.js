@@ -19,22 +19,18 @@ class SearchList extends Component {
     const list = document.createElement("div");
     list.className = "flex-col justify-start items-center flex";
 
-    const friend1 = createComponent(FriendBoard, {
-      profileSrc: "/static/assets/images/profile-taeypark.svg",
-      tierSrc: "/static/assets/images/tier-diamond.svg",
-      name: "euiclee",
-      friend: true,
-    });
+    if (this.props.friends) {
+      this.props.friends.forEach((friend) => {
+        const friendBoard = createComponent(FriendBoard, {
+          name: friend.name,
+          friend: friend.friend,
+          profileSrc: friend.profileSrc,
+          tierSrc: friend.tierSrc,
+        });
 
-    const friend2 = createComponent(FriendBoard, {
-      profileSrc: "/static/assets/images/profile-yim.svg",
-      tierSrc: "/static/assets/images/tier-gold.svg",
-      name: "yim",
-      friend: false,
-    });
-
-    list.appendChild(friend1);
-    list.appendChild(friend2);
+        list.appendChild(friendBoard);
+      });
+    }
 
     container.appendChild(result);
     container.appendChild(list);
