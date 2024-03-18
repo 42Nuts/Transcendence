@@ -4,7 +4,7 @@ import {
   MyProfileCard,
   MyProfileEdit,
 } from "../components/Profile/left/index.js";
-import { MatchHistory } from "../components/Profile/right/index.js";
+import { MatchHistory, Followers } from "../components/Profile/right/index.js";
 import Store from "../store/index.js";
 
 class ProfilePage extends Component {
@@ -96,7 +96,7 @@ class ProfilePage extends Component {
     this.showMyProfileCard();
 
     // rightProfileCard 추가
-    const rightProfileCard = createComponent(MatchHistory, {});
+    const rightProfileCard = createComponent(Followers, {});
 
     gridContainer.appendChild(rightProfileCard);
 
