@@ -96,6 +96,25 @@ class MyProfileEdit extends Component {
     profileContainer.appendChild(profileImage);
 
     // upload button
+    const fileInput = document.createElement("input"); 
+    fileInput.type = "file";
+    fileInput.accept = "image/*";
+    fileInput.style.display = "none";
+
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const profileImage = document.getElementById("profileImage");
+          profileImage.src = e.target.result;
+          console.log(profileImage);
+          profileImage.className = "w-36 h-36 relative rounded-full";
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
     const uploadContainer = document.createElement("div");
     uploadContainer.className =
       "p-1 left-[176px] top-[168px] absolute justify-start items-start gap-2.5 inline-flex";
@@ -107,6 +126,7 @@ class MyProfileEdit extends Component {
       containerHeight: "h-9",
       iconWidth: "w-6",
       iconHeight: "h-6",
+      onClick: () => fileInput.click(),
     });
 
     uploadContainer.appendChild(uploadButton);
