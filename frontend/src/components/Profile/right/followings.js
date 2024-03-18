@@ -42,9 +42,9 @@ class Followings extends Component {
       this.line.src = "/static/assets/images/line-match.svg";
     }
 
-    const list = createComponent(SearchList, {
-      result: "0 Following",
-    });
+    // const list = createComponent(SearchList, {
+    //   result: "0 Following",
+    // });
 
     const cannotFind = createComponent(CannotFind, {
       text: "Sorry, you have no following.",
@@ -52,7 +52,7 @@ class Followings extends Component {
 
     contents.appendChild(title);
     contents.appendChild(this.line);
-    contents.appendChild(list);
+    // contents.appendChild(list);
     contents.appendChild(cannotFind);
 
     // close button
