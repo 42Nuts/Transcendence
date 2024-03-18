@@ -26,7 +26,7 @@ class FriendBoard extends Component {
     tier.src = this.props.tierSrc;
 
     const name = document.createElement("div");
-    name.className = "text-primary-text text-[15px] font-semibold font-['Inter']";
+    name.className = "text-primary-text dark:text-secondary-text text-[15px] font-semibold font-['Inter']";
     name.innerText = this.props.name;
 
     nameBox.appendChild(tier);

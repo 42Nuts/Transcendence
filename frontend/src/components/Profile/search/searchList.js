@@ -11,7 +11,7 @@ class SearchList extends Component {
 
     const title = document.createElement("div");
     title.className =
-      "text-primary-text text-base font-semibold font-['Inter']";
+      "text-primary-text dark:text-secondary-text text-base font-semibold font-['Inter']";
     title.innerText = this.props.result;
 
     result.appendChild(title);
