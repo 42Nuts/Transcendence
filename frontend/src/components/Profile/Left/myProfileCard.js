@@ -29,6 +29,8 @@ class MyProfileCard extends Component {
     const contents = createComponent(LeftContents, {
       onEdit: this.props.onEdit,
       onFollowers: this.props.onFollowers,
+      followers: "2",
+      following: "0",
     });
 
     contentContainer.appendChild(tier);

@@ -118,9 +118,6 @@ class ProfilePage extends Component {
 
     this.showMatchHistory();
 
-    const rightProfileCard = createComponent(MatchHistory, {});
-
-
     this.container.appendChild(gridContainer);
     return this.container;
   }
