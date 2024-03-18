@@ -64,6 +64,8 @@ class LeftContents extends Component {
       text: "ADD FRIENDS",
     });
 
+    friendsButton.addEventListener("click", () => this.props.onFriends());
+
     friendsContainer.appendChild(friendsList);
     friendsContainer.appendChild(friendsButton);
 

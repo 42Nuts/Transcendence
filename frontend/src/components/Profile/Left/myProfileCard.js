@@ -30,6 +30,7 @@ class MyProfileCard extends Component {
       onEdit: this.props.onEdit,
       onFollowers: this.props.onFollowers,
       onFollowings: this.props.onFollowings,
+      onFriends: this.props.onFriends,
       followers: "2",
       following: "0",
     });

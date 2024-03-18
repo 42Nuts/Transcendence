@@ -8,6 +8,7 @@ import {
   MatchHistory,
   Followers,
   Followings,
+  SearchFriends,
 } from "../components/Profile/right/index.js";
 import Store from "../store/index.js";
 
@@ -34,6 +35,7 @@ class ProfilePage extends Component {
       onEdit: this.showMyProfileEdit.bind(this),
       onFollowers: this.showFollowers.bind(this),
       onFollowings: this.showFollowings.bind(this),
+      onFriends: this.showSearchFriends.bind(this),
     });
     this.leftProfileCard.appendChild(myProfileCard);
   }
@@ -66,6 +68,14 @@ class ProfilePage extends Component {
       onCancel: this.showMatchHistory.bind(this),
     });
     this.rightProfileCard.appendChild(followings);
+  }
+
+  showSearchFriends() {
+    this.rightProfileCard.innerHTML = "";
+    const searchFriends = createComponent(SearchFriends, {
+      onCancel: this.showMatchHistory.bind(this),
+    });
+    this.rightProfileCard.appendChild(searchFriends);
   }
 
   sendSetting() {
