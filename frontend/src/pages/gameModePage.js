@@ -88,7 +88,7 @@ class GameModePage extends Component {
     playButtonPos.className = "absolute top-[80%]";
 
     const playButtonHref = document.createElement("a");
-    playButtonHref.setAttribute("href", "/tournamentResult/");
+    playButtonHref.setAttribute("href", "/game/");
     const playButton = createComponent(BasicButton, {
       text: "Play",
       // onClink: () => {
@@ -113,7 +113,6 @@ class GameModePage extends Component {
     });
     playButtonHref.appendChild(playButton);
     playButtonPos.appendChild(playButtonHref);
-
 
     container.appendChild(this.gridContainer);
     container.appendChild(gameBoard);
