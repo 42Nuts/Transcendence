@@ -43,6 +43,7 @@ class Followers extends Component {
       containerHeight: "h-9",
       iconWidth: "w-6",
       iconHeight: "h-6",
+      onClick: this.props.onCancel,
     });
 
     closeContainer.appendChild(closeButton);

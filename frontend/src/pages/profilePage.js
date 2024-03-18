@@ -28,6 +28,7 @@ class ProfilePage extends Component {
     this.leftProfileCard.innerHTML = "";
     const myProfileCard = createComponent(MyProfileCard, {
       onEdit: this.showMyProfileEdit.bind(this),
+      onFollowers: this.showFollowers.bind(this),
     });
     this.leftProfileCard.appendChild(myProfileCard);
   }
@@ -38,6 +39,20 @@ class ProfilePage extends Component {
       onCancel: this.showMyProfileCard.bind(this),
     });
     this.leftProfileCard.appendChild(myProfileEdit);
+  }
+
+  showMatchHistory() {
+    this.rightProfileCard.innerHTML = "";
+    const matchHistory = createComponent(MatchHistory, {});
+    this.rightProfileCard.appendChild(matchHistory);
+  }
+
+  showFollowers() {
+    this.rightProfileCard.innerHTML = "";
+    const followers = createComponent(Followers, {
+      onCancel: this.showMatchHistory.bind(this),
+    });
+    this.rightProfileCard.appendChild(followers);
   }
 
   sendSetting() {
@@ -96,9 +111,15 @@ class ProfilePage extends Component {
     this.showMyProfileCard();
 
     // rightProfileCard 추가
-    const rightProfileCard = createComponent(Followers, {});
+    this.rightProfileCard = document.createElement("div");
+    this.rightProfileCard.className =
+      "col-start-9 col-span-4 relative w-[408px] h-[632px]";
+    gridContainer.appendChild(this.rightProfileCard);
 
-    gridContainer.appendChild(rightProfileCard);
+    this.showMatchHistory();
+
+    const rightProfileCard = createComponent(MatchHistory, {});
+
 
     this.container.appendChild(gridContainer);
     return this.container;

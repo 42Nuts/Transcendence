@@ -40,12 +40,14 @@ class LeftContents extends Component {
     const friendsList = document.createElement("div");
     friendsList.className = "justify-start items-start gap-4 inline-flex";
 
-    const followers = document.createElement("div");
+    const followers = document.createElement("button");
     followers.className =
       "text-primary-button dark:secondary-button text-xs font-medium font-['Inter']";
     followers.innerText = "0 Followers";
 
-    const followings = document.createElement("div");
+    followers.addEventListener("click", () => this.props.onFollowers());
+
+    const followings = document.createElement("button");
     followings.className =
       "text-primary-button dark:secondary-button text-xs font-medium font-['Inter']";
     followings.innerText = "0 Following";
