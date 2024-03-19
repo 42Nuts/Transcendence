@@ -51,7 +51,7 @@ class Paddle:
             "playerId": self.id
         }
 
-class PongGame:
+class twoPlayer:
     def __init__(self, player_ids):
         self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []

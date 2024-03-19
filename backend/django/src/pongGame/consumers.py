@@ -1,7 +1,9 @@
 # consumers.py
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .twoPlayerMode import PongGame
+from .twoPlayerMode import twoPlayer
+from .threePlayerMode import threePlayer
+from .fourPlayerMode import fourPlayer
 from collections import deque
 import json
 import logging
@@ -89,7 +91,16 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
             if self.room_group_name not in group_game_instances:
-                group_game_instances[self.room_group_name] = PongGame(player_ids)
+                if mode == "2p":
+                    group_game_instances[self.room_group_name] = twoPlayer(player_ids)
+                elif mode == "3p":
+                    group_game_instances[self.room_group_name] = threePlayer(player_ids)
+                elif mode == "4p":
+                    group_game_instances[self.room_group_name] = fourPlayer(player_ids)
+                # elif mode == "tournament":
+                #     group_game_instances[self.room_group_name] = tournament(player_ids)
+                else:
+                    return
 
             self.game = group_game_instances[self.room_group_name]
             group_member_count[self.room_group_name] = limit_size[mode]

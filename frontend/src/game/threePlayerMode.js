@@ -1,30 +1,34 @@
 // select canvas element
 const canvas = document.getElementById("game");
-canvas.width = 800;
-canvas.game_width = 600;
-canvas.height = (3 ** 0.5) / 2 * canvas.game_width;
+canvas.width = 700;
+canvas.height = (3 ** 0.5) / 2 * canvas.width;
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'wss://' + window.location.host + '/ws/game/'
+    'wss://' + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
 );
-
-// gameSocket.onopen = function() {
-//     // WebSocket 연결이 열리면 플레이어 ID 전송
-//     const playerId = 'player1'; // 예시 ID
-//     gameSocket.send(JSON.stringify({ type: 'register', playerId: playerId }));
-// };
-
 
 gameSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
     render(data);
+    updateScore(data.players);
 };
 
+function updateScore(players) {
+    const player1 = document.getElementById("player1");
+    const player2 = document.getElementById("player2");
+    const player3 = document.getElementById("player3");
+    if (player1 && player2) {
+      player1.innerText = players[0].score;
+      player2.innerText = players[1].score;
+      player2.innerText = players[2].score;
+    }
+}
+
 gameSocket.onclose = function(e) {
-    console.error('Game socket closed unexpectedly');
+    console.error('Game socket closed');
 };
 
 // draw a rectangle, will be used to draw paddles
@@ -94,14 +98,33 @@ document.addEventListener("keyup", function(event) {
     gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
 });
 
+
+const backGround = new Image();
+backGround.src = "/static/assets/images/map-pingpong.svg";
+
+const ballImage = new Image();
+ballImage.src = "/static/assets/images/ball-pingpong.svg";
+
 // render function, the function that does al the drawing
 function render(data){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // draw backGround
+    if (backGround.complete) {
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+    } else {
+        backGround.onload = function () {
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+        };
+    }
     
-    drawTriangle(canvas.game_width / 2, 0, 0, canvas.height, canvas.game_width, canvas.height, "#000");
+    drawTriangle(canvas.width / 2, 0, 0, canvas.height, canvas.width, canvas.height, "#000");
     
     ctx.save();
-    // rotate(0, 0, canvas.game_width, 2 *canvas.height - canvas.game_width / (3 ** 0.5), 240);
+    for (var i = 0; i < data.players.length; i++) {
+        if (userId == data.players[i].playerId) {
+          player = data.players[i];
+        }
+    }
+    rotate(0, 0, canvas.width, 2 *canvas.height - canvas.width / (3 ** 0.5), player.angle * -1);
 
     for (var i = 0; i < data.players.length; i++) {
         ctx.save();
@@ -111,10 +134,35 @@ function render(data){
     }
     
     // draw the ball
-    drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+    if (ballImage.complete) {
+        ctx.drawImage(
+        ballImage,
+        data.ball.x - data.ball.radius,
+        data.ball.y - data.ball.radius,
+        data.ball.radius * 2,
+        data.ball.radius * 2
+        );
+    } else {
+        ballImage.onload = function () {
+        ctx.drawImage(
+            ballImage,
+            data.ball.x - data.ball.radius,
+            data.ball.y - data.ball.radius,
+            data.ball.radius * 2,
+            data.ball.radius * 2
+        );
+        };
+    }
+
     ctx.restore();
     
-    for (var i = 0; i < data.players.length; i++) {
-        drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
+    
+    if (data.winner) {
+        if (data.winner == userId) {
+        drawText("You Win!", 250, 250);
+        }
+        else {
+        drawText("You Lose!", 250, 250);
+        }
     }
 }

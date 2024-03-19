@@ -2,38 +2,26 @@
 const canvas = document.getElementById("game");
 canvas.width = 700;
 canvas.height = 700;
-canvas.game_width = 700;
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext("2d");
-
-// const gameSocket = new WebSocket(
-//   "wss://" + window.location.host + "/ws/game/123/"
-// );
 
 const gameSocket = new WebSocket(
     'wss://' + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
 );
 
-
-// gameSocket.onopen = function() {
-//     // WebSocket 연결이 열리면 플레이어 ID 전송
-//     const playerId = 'player1'; // 예시 ID
-//     gameSocket.send(JSON.stringify({ type: 'register', playerId: playerId }));
-// };
-
 gameSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  if (data.type == "game_start") {
-    const event = new CustomEvent('game_start', { detail: data });
-    document.dispatchEvent(event);
-  }
-  else {
+  // if (data.type == "game_start") {
+  //   const event = new CustomEvent('game_start', { detail: data });
+  //   document.dispatchEvent(event);
+  // }
+  // else {
     render(data);
   
     // score update
     updateScore(data.players);
-  }
+  // }
 };
 
 function updateScore(players) {
@@ -46,7 +34,7 @@ function updateScore(players) {
 }
 
 gameSocket.onclose = function (e) {
-  console.error("Game socket closed unexpectedly");
+  console.error("Game socket closed");
 };
 
 // draw a rectangle, will be used to draw paddles
@@ -132,7 +120,7 @@ function render(data) {
     }
   }
 
-  rotate(0, 0, canvas.game_width, canvas.height, player.angle * -1);
+  rotate(0, 0, canvas.width, canvas.height, player.angle * -1);
 
   for (var i = 0; i < data.players.length; i++) {
     drawRect(
