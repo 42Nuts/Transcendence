@@ -24,10 +24,16 @@ const gameSocket = new WebSocket(
 
 gameSocket.onmessage = function (e) {
   const data = JSON.parse(e.data);
-  render(data);
-
-  // score update
-  updateScore(data.players);
+  if (data.type == "game_start") {
+    const event = new CustomEvent('game_start', { detail: data });
+    document.dispatchEvent(event);
+  }
+  else {
+    render(data);
+  
+    // score update
+    updateScore(data.players);
+  }
 };
 
 function updateScore(players) {

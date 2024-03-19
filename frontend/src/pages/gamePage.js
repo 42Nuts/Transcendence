@@ -30,6 +30,13 @@ class GamePage extends Component {
     scoreContainer.appendChild(player1);
     scoreContainer.appendChild(player2);
 
+    // // 커스텀 이벤트 수신
+    // document.addEventListener('gameDataReceived', function(e) {
+    //   const gameData = e.detail;
+    //   // 게임 데이터 처리...
+    //   console.log(gameData);
+    // });
+
     // canvas to draw the game
     const board = document.createElement("canvas");
     board.id = "game";
