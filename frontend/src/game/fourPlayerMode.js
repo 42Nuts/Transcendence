@@ -1,8 +1,7 @@
 // select canvas element
 const canvas = document.getElementById("game");
-canvas.width = 800;
-canvas.game_width = 600;
-canvas.height =  600;
+canvas.width = 700;
+canvas.height = 700;
 
 
 
@@ -10,15 +9,8 @@ canvas.height =  600;
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'wss://' + window.location.host + '/ws/game/'
+    'wss://' + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
 );
-
-// gameSocket.onopen = function() {
-//     // WebSocket 연결이 열리면 플레이어 ID 전송
-//     const playerId = 'player1'; // 예시 ID
-//     gameSocket.send(JSON.stringify({ type: 'register', playerId: playerId }));
-// };
-
 
 gameSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
@@ -28,6 +20,20 @@ gameSocket.onmessage = function(e) {
 gameSocket.onclose = function(e) {
     console.error('Game socket closed unexpectedly');
 };
+
+function updateScore(players) {
+    const player1 = document.getElementById("player1");
+    const player2 = document.getElementById("player2");
+    const player3 = document.getElementById("player3");
+    const player4 = document.getElementById("player4");
+    if (player1 && player2 && player3 && player4) {
+      player1.innerText = players[0].score;
+      player2.innerText = players[1].score;
+      player3.innerText = players[2].score;
+      player4.innerText = players[3].score;
+    }
+  }
+
 
 // draw a rectangle, will be used to draw paddles
 function drawRect(x, y, w, h, color){
@@ -72,7 +78,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -82,29 +88,62 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player2', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 // render function, the function that does al the drawing
 function render(data){
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-	drawRect(0, 0, canvas.game_width, canvas.height, "#000");
+    // draw backGround
+    if (backGround.complete) {
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+    } else {
+        backGround.onload = function () {
+        ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
+        };
+    }
     
     ctx.save();
-    // rotate(0, 0, canvas.game_width, canvas.height, -270);
+    for (var i = 0; i < data.players.length; i++) {
+        if (userId == data.players[i].playerId) {
+          player = data.players[i];
+        }
+    }
+
+    rotate(0, 0, canvas.width, canvas.height, player.angle * -1);
 
     for (var i = 0; i < data.players.length; i++) {
-        ctx.save();
         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
-        ctx.restore();
     }
     
     // draw the ball
-    drawArc(data.ball.x, data.ball.y, data.ball.radius, data.ball.color);
+    if (ballImage.complete) {
+        ctx.drawImage(
+          ballImage,
+          data.ball.x - data.ball.radius,
+          data.ball.y - data.ball.radius,
+          data.ball.radius * 2,
+          data.ball.radius * 2
+        );
+      } else {
+        ballImage.onload = function () {
+          ctx.drawImage(
+            ballImage,
+            data.ball.x - data.ball.radius,
+            data.ball.y - data.ball.radius,
+            data.ball.radius * 2,
+            data.ball.radius * 2
+          );
+        };
+      }
+
     ctx.restore();
-    
-    for (var i = 0; i < data.players.length; i++) {
-        drawText(data.players[i].score, canvas.game_width + 20, canvas.height/5 * (i+1));
+
+    if (data.winner) {
+        if (data.winner == userId) {
+          drawText("You Win!", 250, 250);
+        }
+        else {
+          drawText("You Lose!", 250, 250);
+        }
+      }
     }
-}

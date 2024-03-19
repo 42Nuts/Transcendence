@@ -24,6 +24,10 @@ gameSocket.onmessage = function (e) {
   // }
 };
 
+gameSocket.onclose = function (e) {
+  console.error("Game socket closed");
+};
+
 function updateScore(players) {
   const player1 = document.getElementById("player1");
   const player2 = document.getElementById("player2");
@@ -32,10 +36,6 @@ function updateScore(players) {
     player2.innerText = players[1].score;
   }
 }
-
-gameSocket.onclose = function (e) {
-  console.error("Game socket closed");
-};
 
 // draw a rectangle, will be used to draw paddles
 function drawRect(x, y, w, h, color) {

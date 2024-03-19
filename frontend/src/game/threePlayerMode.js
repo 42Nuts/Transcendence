@@ -20,7 +20,7 @@ function updateScore(players) {
     const player1 = document.getElementById("player1");
     const player2 = document.getElementById("player2");
     const player3 = document.getElementById("player3");
-    if (player1 && player2) {
+    if (player1 && player2 && player3) {
       player1.innerText = players[0].score;
       player2.innerText = players[1].score;
       player2.innerText = players[2].score;
@@ -85,7 +85,7 @@ document.addEventListener("keydown", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = true;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 // 키보드 떼기 이벤트 핸들러
@@ -95,7 +95,7 @@ document.addEventListener("keyup", function(event) {
     } else if (event.keyCode === 39) { // 오른쪽 화살표 키
         keyState.rightArrow = false;
     }
-    gameSocket.send(JSON.stringify({ playerId: 'player1', ...keyState }));
+    gameSocket.send(JSON.stringify({ playerId: userId, ...keyState }));
 });
 
 

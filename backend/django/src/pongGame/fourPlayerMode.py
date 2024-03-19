@@ -54,7 +54,7 @@ class Paddle:
 
 class fourPlayer:
     def __init__(self, player_ids):
-        self.canvas = GameCanvas(width=600, height=600, paddle_length=100)
+        self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
         self.last_touch_player = None
         self.reset_angle = 0
