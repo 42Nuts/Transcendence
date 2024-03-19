@@ -52,7 +52,7 @@ class Paddle:
         }
 
 class PongGame:
-    def __init__(self):
+    def __init__(self, player_ids):
         self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
 
@@ -66,7 +66,7 @@ class PongGame:
             leftArrow=False,
             rightArrow=False,
             angle = 0,
-            id="1"
+            id=player_ids[0]
         ))
 
         self.players.append(Paddle(
@@ -79,7 +79,7 @@ class PongGame:
             leftArrow=False,
             rightArrow=False,
             angle = 180,
-            id="2"
+            id=player_ids[1]
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -113,6 +113,7 @@ class PongGame:
         b.right = b.x + b.radius
 
         return p.left < b.right and p.top < b.bottom and p.right > b.left and p.bottom > b.top
+
     def update_player_movement(self, index, player):
         if player.leftArrow and player.rightArrow:
             return

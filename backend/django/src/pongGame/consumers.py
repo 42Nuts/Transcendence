@@ -76,18 +76,25 @@ class GameConsumer(AsyncWebsocketConsumer):
             logger.info("room_group_name = %s", self.room_group_name)
             room_id[mode] += 1
 
-            # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
-            if self.room_group_name not in group_game_instances:
-                group_game_instances[self.room_group_name] = PongGame()
-
-            self.game = group_game_instances[self.room_group_name]
+            player_ids = []
+            players = []
 
             for _ in range(limit_size[mode]):
-                playerId, player = matching_queue[mode].pop()
+                playerId, player = matching_queue[mode].popleft()
+                player_ids.append(playerId)
+                players.append(player)
                 logger.info(
-                    f'playerId : {playerId}, player : {player}, channel_name : {player.channel_name}')
+                f'playerId : {playerId}, player : {player}, channel_name : {player.channel_name}')
 
-                group_member_count[self.room_group_name] = limit_size[mode]
+
+            # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
+            if self.room_group_name not in group_game_instances:
+                group_game_instances[self.room_group_name] = PongGame(player_ids)
+
+            self.game = group_game_instances[self.room_group_name]
+            group_member_count[self.room_group_name] = limit_size[mode]
+
+            for player in players:
                 player.game = self.game
                 await player.channel_layer.group_add(
                     self.room_group_name,
