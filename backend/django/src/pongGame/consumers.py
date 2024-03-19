@@ -100,6 +100,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 # elif mode == "tournament":
                 #     group_game_instances[self.room_group_name] = tournament(player_ids)
                 else:
+                    await self.close()
                     return
 
             self.game = group_game_instances[self.room_group_name]

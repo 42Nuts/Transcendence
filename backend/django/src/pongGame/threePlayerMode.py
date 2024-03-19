@@ -102,7 +102,7 @@ class threePlayer:
         self.ball = GameBall(
             x = self.canvas.width / 2,
             y = self.canvas.height - self.canvas.width / (2 * (3 ** 0.5)),
-            radius = 10,
+            radius = 15,
             velocity_x = 3 * math.cos(math.radians(self.reset_angle)),
             velocity_y = 3 * math.sin(math.radians(self.reset_angle)),
             speed = 3,

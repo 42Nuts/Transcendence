@@ -116,7 +116,7 @@ class fourPlayer:
         self.ball = GameBall(
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
-            radius=10,
+            radius=15,
             velocity_x=7,
             velocity_y=1,
             speed=7,
