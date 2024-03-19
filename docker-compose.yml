@@ -145,6 +145,15 @@ services:
     command:
      - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
 
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - our_net
+
 volumes:
   prometheus_data:
   grafana_data:
