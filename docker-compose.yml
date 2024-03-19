@@ -121,6 +121,21 @@ services:
     depends_on:
       - prometheus
 
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
+    ports:
+     - 9100:9100
+    environment:
+     - "TZ=Asia/Seoul"
+    restart: always
+    networks:
+      - our_net
+    command:
+     - '--collector.disable-defaults'
+     - '--collector.cpu'
+     - '--collector.loadavg'
+
 volumes:
   prometheus_data:
   grafana_data:
