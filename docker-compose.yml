@@ -90,6 +90,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./backend/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./backend/prometheus/web-config.yml:/etc/prometheus/web-config.yml
+      - ./backend/prometheus/rules.yml:/etc/prometheus/rules.yml
       - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
