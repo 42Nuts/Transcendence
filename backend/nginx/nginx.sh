@@ -34,6 +34,11 @@ http {
           proxy_set_header Connection "Upgrade";
           proxy_set_header Host \$host;
         }
+
+        location /metrics {
+          stub_status on;
+          allow all;
+        }
     }
 }
 " > /etc/nginx/nginx.conf
