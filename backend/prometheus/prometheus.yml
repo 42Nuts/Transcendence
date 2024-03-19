@@ -7,6 +7,9 @@ scrape_configs:
       - targets: ['django:8000']
     metrics_path: /prometheus/metrics
     scheme: http
-    basic_auth:
-      username: hyeoan
-      password: pwd
+
+  - job_name: 'server'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
