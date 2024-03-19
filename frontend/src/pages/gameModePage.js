@@ -114,7 +114,6 @@ class GameModePage extends Component {
     playButtonHref.appendChild(playButton);
     playButtonPos.appendChild(playButtonHref);
 
-
     container.appendChild(this.gridContainer);
     container.appendChild(gameBoard);
     container.appendChild(playButtonPos);

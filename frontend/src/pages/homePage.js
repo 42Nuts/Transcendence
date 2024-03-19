@@ -109,7 +109,7 @@ class HomePage extends Component {
 
     // 프로필 이미지 설정
     const profileImageHref = document.createElement("a");
-    profileImageHref.setAttribute("href", "/options/");
+    profileImageHref.setAttribute("href", "/profile/");
 
     const profileImage = document.createElement("img");
     profileImage.className = "profile-image w-[72px] h-[72px]";
