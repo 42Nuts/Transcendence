@@ -136,6 +136,15 @@ services:
      - '--collector.cpu'
      - '--collector.loadavg'
 
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: nginx-prometheus-exporter
+    restart: always
+    networks:
+      - our_net
+    command:
+     - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
+
 volumes:
   prometheus_data:
   grafana_data:
