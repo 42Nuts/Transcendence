@@ -33,7 +33,7 @@ urlpatterns = [
     path('v2/users/', include('users.urls')),
     path('v2/game/', game),
     path('health/', health_check),
-    path('metrics/', include('django_prometheus.urls')),
+    path('prometheus/', include('django_prometheus.urls')),
     # path('v2/matches/', include('matches.urls')),
     # path('v2/relationships/', include('relationships.urls')),
 ]

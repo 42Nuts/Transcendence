@@ -29,13 +29,9 @@ def tokenCheck(get_response):
         logger.info("Request GET: %s", str(request.GET))
         logger.info("Request Headers: %s", str(request.headers))
 
-        if request.path == '/health/':
+        if request.path in ('/health/', '/prometheus/metrics'):
             response = get_response(request)
             return response
-        
-        if request.path == '/metrics/':
-            data = {'message': 'metrics hihi'}
-            return JsonResponse(data)
 
         try:
             # 토큰 검사 (토큰 재발급 로직 필요)
