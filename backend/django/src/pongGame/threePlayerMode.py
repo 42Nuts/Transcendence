@@ -52,7 +52,7 @@ class Paddle:
         }
 
 class threePlayer:
-    def __init__(self):
+    def __init__(self, player_ids):
         self.canvas = GameCanvas(width=600, height=(3 ** (1/2)) / 2 * 600, paddle_length=100)
         self.players = []
         self.last_touch_player = None
@@ -67,7 +67,7 @@ class threePlayer:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1",
+            id=player_ids[0],
             angle=0
         ))
 
@@ -80,7 +80,7 @@ class threePlayer:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2",
+            id=player_ids[1],
             angle=60
         ))
 
@@ -93,7 +93,7 @@ class threePlayer:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player3",
+            id=player_ids[2],
             angle= -60
         ))
 
@@ -266,6 +266,13 @@ class threePlayer:
                 closest_paddle = paddle
 
         return closest_paddle
+    
+    def check_winner(self):
+        for player in self.players:
+            if player.score >= 5:
+                self.winner = player.id
+                return True
+        return False
 
     def update(self, user_input=None):
         # score
@@ -311,8 +318,10 @@ class threePlayer:
         for index, player in enumerate(self.players):
             self.update_player_movement(index, player)
 
+        self.check_winner()
         # 프론트엔드에 필요한 정보 보내기
         return {
+            "winner": self.winner,
             "ball": self.ball.to_dict(),
             "players": [player.to_dict() for player in self.players],
         }
