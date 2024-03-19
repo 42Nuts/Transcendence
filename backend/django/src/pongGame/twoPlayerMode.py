@@ -55,6 +55,7 @@ class PongGame:
     def __init__(self, player_ids):
         self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
+        self.winner = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -127,6 +128,13 @@ class PongGame:
                 player.x += 8
             if player.rightArrow and player.x > 0:
                 player.x -= 8
+    
+    def check_winner(self):
+        for player in self.players:
+            if player.score >= 5:
+                self.winner = player.id
+                return True
+        return False
 
     def update(self, user_input=None):
         # score
@@ -181,8 +189,10 @@ class PongGame:
         for index, player in enumerate(self.players):
             self.update_player_movement(index, player)
 
+        self.check_winner()
         # 프론트엔드에 필요한 정보 보내기
         return {
+            "winner": self.winner,
             "ball": self.ball.to_dict(),
             "players": [player.to_dict() for player in self.players]
         }

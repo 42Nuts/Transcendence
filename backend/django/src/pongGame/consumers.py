@@ -125,13 +125,16 @@ class GameConsumer(AsyncWebsocketConsumer):
                 game_data = self.game.update(user_input)
             else:
                 game_data = self.game.update()  # 게임 상태 업데이트
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_update',
-                    'game_data': game_data
-                }
-            )
+            
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_end',
+                        'game_data': game_data
+                    }
+                )
+            if game_data.get('winner') is not None:
+                break
 
     async def receive(self, text_data):
         user_input = json.loads(text_data)
@@ -140,7 +143,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'self.game : {self.game}')
         logger.info('---------------')
         self.game.update(user_input)  # 사용자 입력에 따른 게임 상태 업데이트
-
-    async def game_update(self, event):
+    
+    async def game_end(self, event):
         game_data = event['game_data']
         await self.send(text_data=json.dumps(game_data))

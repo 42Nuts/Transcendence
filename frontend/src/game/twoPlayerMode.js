@@ -160,4 +160,13 @@ function render(data) {
   }
 
   ctx.restore();
+
+  if (data.winner) {
+    if (data.winner == userId) {
+      drawText("You Win!", 250, 250);
+    }
+    else {
+      drawText("You Lose!", 250, 250);
+    }
+  }
 }
