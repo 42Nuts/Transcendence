@@ -26,7 +26,8 @@ class TournamentResultCard extends Component {
 
     const image = document.createElement("img");
     image.src = this.props.imageSrc;
-    image.className = "w-[122.18px] h-[122.18px] left-0 top-0 absolute";
+    image.className =
+      "w-[122.18px] h-[122.18px] left-0 top-0 absolute shadow-md rounded-full";
 
     imageBox.appendChild(image);
     imageContainer.appendChild(imageBox);

@@ -15,6 +15,10 @@ class ExitOption extends Component {
       iconSrc: this.props.iconSrc,
       bgColorClass: this.props.bgColorClass,
       optionName: this.props.optionName,
+      containerWidth: "w-[72px]",
+      containerHeight: "h-[72px]",
+      iconWidth: "w-[48px]",
+      iconHeight: "h-[48px]",
     });
 
     option.appendChild(optionText);
