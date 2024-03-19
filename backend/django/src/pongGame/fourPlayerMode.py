@@ -53,7 +53,7 @@ class Paddle:
         }
 
 class fourPlayer:
-    def __init__(self):
+    def __init__(self, player_ids):
         self.canvas = GameCanvas(width=600, height=600, paddle_length=100)
         self.players = []
         self.last_touch_player = None
@@ -68,7 +68,7 @@ class fourPlayer:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1",
+            id=player_ids[0],
             angle=0
         ))
 
@@ -81,7 +81,7 @@ class fourPlayer:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2",
+            id=player_ids[1],
             angle=90
         ))
 
@@ -94,7 +94,7 @@ class fourPlayer:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player3",
+            id=player_ids[2],
             angle=180
         ))
 
@@ -107,7 +107,7 @@ class fourPlayer:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player4",
+            id=player_ids[3],
             angle=270
         ))
 
@@ -219,6 +219,13 @@ class fourPlayer:
                     self.players[3].score += 1
             self.reset_ball()
 
+    def check_winner(self):
+        for player in self.players:
+            if player.score >= 5:
+                self.winner = player.id
+                return True
+        return False
+
     def update(self, user_input=None):
         # score
         self.update_score(self.ball)
@@ -226,9 +233,6 @@ class fourPlayer:
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
-
-        # computer ai
-        # self.players[2].x += ((self.ball.x - (self.players[2].x + self.players[2].width / 2)) * 0.1)
 
         # 공의 위치에 따른 플레이어 확인 (야매로  함,  확인  필요!)
         index, player = self.find_closest_paddle()
@@ -269,8 +273,10 @@ class fourPlayer:
         for index, player in enumerate(self.players):
             self.update_player_movement(index, player)
 
+        self.check_winner()
         # 프론트엔드에 필요한 정보 보내기
         return {
+            "winner": self.winner,
             "ball": self.ball.to_dict(),
             "players": [player.to_dict() for player in self.players]
         }
