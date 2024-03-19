@@ -13,3 +13,7 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 
+  - job_name: 'nginx-prometheus-exporter'
+    static_configs:
+      - targets: ['nginx-prometheus-exporter:9113']
+
