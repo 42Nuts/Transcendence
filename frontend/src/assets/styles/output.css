@@ -1771,6 +1771,10 @@ video {
   font-size: 15px;
 }
 
+.text-\[240px\] {
+  font-size: 240px;
+}
+
 .text-\[27\.15px\] {
   font-size: 27.15px;
 }
@@ -1846,6 +1850,10 @@ video {
 
 .leading-9 {
   line-height: 2.25rem;
+}
+
+.leading-\[240px\] {
+  line-height: 240px;
 }
 
 .leading-\[80px\] {
