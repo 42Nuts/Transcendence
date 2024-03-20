@@ -91,7 +91,7 @@ class twoPlayer:
             radius=15,
             velocity_x=2,
             velocity_y=2,
-            speed=2,
+            speed=4,
             color="WHITE"
         )
 
@@ -100,7 +100,7 @@ class twoPlayer:
         self.ball.y = self.canvas.height / 2
         self.ball.velocity_x = -2 if self.ball.velocity_x > 0 else 2
         self.ball.velocity_y = -2 if self.ball.velocity_y > 0 else 2
-        self.ball.speed = 2
+        self.ball.speed = 4
 
     def collision(self, b, p):
         p.top = p.y

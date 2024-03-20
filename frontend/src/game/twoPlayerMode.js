@@ -173,6 +173,12 @@ class TwoPlayerMode extends Component {
 
     this.gameSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
+
+      if (data.type == 'game_end') {
+        this.showResult("win");
+        return;
+      }
+
       this.renderGame(data);
       this.updateScore(data.players);
     };

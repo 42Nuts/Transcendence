@@ -120,6 +120,15 @@ class GameConsumer(AsyncWebsocketConsumer):
                 player.update_task = asyncio.create_task(player.game_update_task())
 
     async def disconnect(self, close_code):
+        logger.info(f'disconnect')
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'game_end',
+                'message': "game end",
+            }
+        )
+
         matching_queue[self.mode] = deque(filter(lambda x: x[0] != self.userId, matching_queue[self.mode]))
 
         await self.channel_layer.group_discard(
@@ -174,3 +183,6 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def game_update(self, event):
         game_data = event['game_data']
         await self.send(text_data=json.dumps(game_data))
+
+    async def game_end(self, event):
+        await self.send(text_data=json.dumps({'type' : 'game_end'}))
