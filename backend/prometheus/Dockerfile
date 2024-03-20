@@ -12,8 +12,8 @@ RUN openssl req \
     -keyout /etc/prometheus/private.key \
     -out /etc/prometheus/certificate.crt
 
-ENTRYPOINT [ "prometheus", \
-            "--config.file=/etc/prometheus/prometheus.yml", \
-            "--storage.tsdb.path=/prometheus", \
-            "--web.enable-lifecycle", \
-            "--web.config.file=/etc/prometheus/web-config.yml"]
+COPY ./prometheus.sh /usr/local/bin/prometheus.sh
+
+RUN chmod +x /usr/local/bin/prometheus.sh
+
+ENTRYPOINT [ "prometheus.sh" ]
