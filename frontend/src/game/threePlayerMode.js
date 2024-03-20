@@ -7,7 +7,7 @@ canvas.height = (3 ** 0.5) / 2 * canvas.width;
 const ctx = canvas.getContext('2d');
 
 const gameSocket = new WebSocket(
-    'wss://' + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
+    'wss://' + window.location.host + `/ws/game/?mode=3p&userId=${userId}`
 );
 
 gameSocket.onmessage = function(e) {

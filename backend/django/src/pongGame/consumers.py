@@ -119,14 +119,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 )
                 player.update_task = asyncio.create_task(player.game_update_task())
 
-            # await self.channel_layer.group_send(
-            #         self.room_group_name,
-            #         {
-            #             'type': 'game_start',
-            #             'message': 'game_start',
-            #         }
-            #     )
-
     async def disconnect(self, close_code):
         matching_queue[self.mode] = deque(filter(lambda x: x[0] != self.userId, matching_queue[self.mode]))
 
