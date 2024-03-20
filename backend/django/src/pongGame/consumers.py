@@ -153,6 +153,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     # 게임 상태 업데이트 및 그룹에 전송
     async def game_update_task(self):
+        await asyncio.sleep(3)
         while True:
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
 
