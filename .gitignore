@@ -7,3 +7,6 @@ db.sqlite3
 .vscode/
 *.log
 index.html
+
+# db
+data
