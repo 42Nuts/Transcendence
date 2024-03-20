@@ -33,10 +33,7 @@
       "id": 10,
       "panels": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bdg6psmjresqof"
-          },
+          "datasource": "prometheus",
           "fieldConfig": {
             "defaults": {
               "mappings": [],
@@ -85,10 +82,7 @@
           "pluginVersion": "10.4.0",
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "bdg6psmjresqof"
-              },
+              "datasource": "prometheus",
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "pg_database_size_bytes{datname=\"Transcendence_db\"}",
@@ -119,10 +113,7 @@
       "id": 6,
       "panels": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bdg6psmjresqof"
-          },
+          "datasource": "prometheus",
           "description": "",
           "fieldConfig": {
             "defaults": {
@@ -170,10 +161,7 @@
           "pluginVersion": "10.4.0",
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "bdg6psmjresqof"
-              },
+              "datasource": "prometheus",
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "nginx_http_requests_total",
@@ -190,10 +178,7 @@
           "type": "stat"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bdg6psmjresqof"
-          },
+          "datasource": "prometheus",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -269,10 +254,7 @@
           },
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "bdg6psmjresqof"
-              },
+              "datasource": "prometheus",
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "nginx_connections_active",
@@ -303,10 +285,7 @@
       "id": 5,
       "panels": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bdg6psmjresqof"
-          },
+          "datasource": "prometheus",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -382,10 +361,7 @@
           },
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "bdg6psmjresqof"
-              },
+              "datasource": "prometheus",
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "django_http_requests_before_middlewares_total",
@@ -416,10 +392,7 @@
       "id": 4,
       "panels": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "bdg6psmjresqof"
-          },
+          "datasource": "prometheus",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -495,10 +468,7 @@
           },
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "bdg6psmjresqof"
-              },
+              "datasource": "prometheus",
               "disableTextWrap": false,
               "editorMode": "builder",
               "expr": "100 - (avg by (instance) (irate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
