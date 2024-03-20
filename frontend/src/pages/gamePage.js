@@ -1,6 +1,6 @@
 import { Component, createComponent } from "../core/index.js";
 import { TwoPlayerMode } from "../game/index.js";
-import { Loading } from "../game/loading/index.js";
+import { Loading } from "../game/Loading/index.js";
 import Store from "../store/index.js";
 
 class GamePage extends Component {

@@ -999,6 +999,10 @@ video {
   height: 48px;
 }
 
+.h-\[500px\] {
+  height: 500px;
+}
+
 .h-\[54px\] {
   height: 54px;
 }
@@ -1217,6 +1221,10 @@ video {
 
 .w-\[48px\] {
   width: 48px;
+}
+
+.w-\[500px\] {
+  width: 500px;
 }
 
 .w-\[54px\] {
@@ -1541,9 +1549,29 @@ video {
   border-color: rgb(255 255 249 / var(--tw-border-opacity));
 }
 
+.border-primary-color1 {
+  --tw-border-opacity: 1;
+  border-color: rgb(58 130 175 / var(--tw-border-opacity));
+}
+
+.border-primary-color2 {
+  --tw-border-opacity: 1;
+  border-color: rgb(252 190 91 / var(--tw-border-opacity));
+}
+
+.border-primary-color3 {
+  --tw-border-opacity: 1;
+  border-color: rgb(254 74 101 / var(--tw-border-opacity));
+}
+
 .border-primary-color4 {
   --tw-border-opacity: 1;
   border-color: rgb(31 207 127 / var(--tw-border-opacity));
+}
+
+.border-primary-color5 {
+  --tw-border-opacity: 1;
+  border-color: rgb(250 188 4 / var(--tw-border-opacity));
 }
 
 .border-primary-text {
@@ -1571,6 +1599,16 @@ video {
   background-color: rgb(255 255 249 / var(--tw-bg-opacity));
 }
 
+.bg-primary-color1 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(58 130 175 / var(--tw-bg-opacity));
+}
+
+.bg-primary-color2 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(252 190 91 / var(--tw-bg-opacity));
+}
+
 .bg-primary-color3 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 74 101 / var(--tw-bg-opacity));
@@ -1579,6 +1617,11 @@ video {
 .bg-primary-color4 {
   --tw-bg-opacity: 1;
   background-color: rgb(31 207 127 / var(--tw-bg-opacity));
+}
+
+.bg-primary-color5 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 188 4 / var(--tw-bg-opacity));
 }
 
 .bg-primary-inner_card_board {
@@ -1604,6 +1647,10 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.bg-opacity-20 {
+  --tw-bg-opacity: 0.2;
 }
 
 .bg-opacity-50 {
@@ -1771,6 +1818,10 @@ video {
   font-size: 15px;
 }
 
+.text-\[240px\] {
+  font-size: 240px;
+}
+
 .text-\[27\.15px\] {
   font-size: 27.15px;
 }
@@ -1846,6 +1897,10 @@ video {
 
 .leading-9 {
   line-height: 2.25rem;
+}
+
+.leading-\[240px\] {
+  line-height: 240px;
 }
 
 .leading-\[80px\] {

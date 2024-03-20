@@ -3,6 +3,7 @@ import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
 import { mapImages, themeImages } from "../config/index.js";
 import { Result } from "./Result/index.js";
+import { Countdown } from "./Loading/index.js";
 import Store from "../store/index.js";
 
 class TwoPlayerMode extends Component {
@@ -21,9 +22,9 @@ class TwoPlayerMode extends Component {
   }
 
   showResult(message) {
-    const overlay = createComponent(Result, {result: message});
+    const overlay = createComponent(Result, { result: message });
     overlay.setAttribute("href", "/gameMode/");
-    
+
     if (!this.result) {
       document.body.appendChild(overlay);
     }
@@ -39,10 +40,22 @@ class TwoPlayerMode extends Component {
   renderGame(data) {
     // draw backGround
     if (this.backGround.complete) {
-      this.ctx.drawImage(this.backGround, 0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.drawImage(
+        this.backGround,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
     } else {
       this.backGround.onload = function () {
-        this.ctx.drawImage(this.backGround, 0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.drawImage(
+          this.backGround,
+          0,
+          0,
+          this.canvas.width,
+          this.canvas.height
+        );
       };
     }
 
@@ -180,15 +193,16 @@ class TwoPlayerMode extends Component {
     this.gameSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
 
-      if (data.type == 'game_end') {
+      if (data.type == "game_end") {
         this.showResult("win");
         return;
       }
 
-      if (data.type == 'game_start') {
+      if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
+        document.body.appendChild(createComponent(Countdown, {}));
       }
-      
+
       this.renderGame(data);
       this.updateScore(data.players);
     };
@@ -198,18 +212,18 @@ class TwoPlayerMode extends Component {
     };
 
     this.handlePopState = this.closeWebSocketOnBack.bind(this);
-    window.addEventListener('popstate', this.handlePopState);
+    window.addEventListener("popstate", this.handlePopState);
   }
 
   closeWebSocketOnBack() {
     if (this.gameSocket && this.gameSocket.readyState === WebSocket.OPEN) {
-        this.gameSocket.close();
+      this.gameSocket.close();
     }
   }
 
   destroy() {
     // 필요한 경우 페이지를 벗어날 때 호출
-    window.removeEventListener('popstate', this.handlePopState);
+    window.removeEventListener("popstate", this.handlePopState);
   }
 
   render() {
