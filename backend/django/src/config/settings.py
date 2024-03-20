@@ -31,7 +31,9 @@ DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = ['https://localhost:5000', 'https://127.0.0.1:5000']
 
-ALLOWED_HOSTS = ['django']
+# ALLOWED_HOSTS = ['django']
+# ALLOWED_HOSTS = ['django', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -50,9 +52,11 @@ INSTALLED_APPS = [
     'matches',
     'pongGame',
     'relationships',
+	'django_prometheus',
 ]
 
 MIDDLEWARE = [
+	'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'config.middleware.tokenCheck',
+	'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -91,7 +96,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis-cache', 6379)],
+            "hosts": [(os.environ.get('REDIS_CACHE_HOST'), os.environ.get('REDIS_CACHE_PORT'))],
             "capacity": 1500,  # default 100
             "expiry": 10,  # default 60
         },
