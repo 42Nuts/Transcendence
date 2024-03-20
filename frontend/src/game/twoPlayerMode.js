@@ -1,6 +1,8 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
+import { mapImages, themeImages } from "../config/index.js";
+import Store from "../store/index.js";
 
 class TwoPlayerMode extends Component {
   constructor(props) {
@@ -10,10 +12,10 @@ class TwoPlayerMode extends Component {
       rightArrow: false,
     };
     this.backGround = new Image();
-    this.backGround.src = "/static/assets/images/map-pingpong.svg";
+    this.backGround.src = mapImages[Store.state.theme];
 
     this.ballImage = new Image();
-    this.ballImage.src = "/static/assets/images/ball-pingpong.svg";
+    this.ballImage.src = themeImages[Store.state.theme];
   }
 
   renderGame(data) {
