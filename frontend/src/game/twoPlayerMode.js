@@ -8,6 +8,7 @@ import Store from "../store/index.js";
 class TwoPlayerMode extends Component {
   constructor(props) {
     super(props);
+    this.result = false;
     this.keyState = {
       leftArrow: false,
       rightArrow: false,
@@ -23,11 +24,16 @@ class TwoPlayerMode extends Component {
     const overlay = createComponent(Result, {result: message});
     overlay.setAttribute("href", "/gameMode/");
     
-    document.body.appendChild(overlay);
+    if (!this.result) {
+      document.body.appendChild(overlay);
+    }
 
     overlay.addEventListener("click", () => {
       document.body.removeChild(overlay);
+      this.result = false;
     });
+
+    this.result = true;
   }
 
   renderGame(data) {

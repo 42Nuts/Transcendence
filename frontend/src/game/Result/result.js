@@ -35,7 +35,7 @@ class Result extends Component {
     const overlay = document.createElement("a");
     overlay.className = "fixed inset-0 bg-primary-color3 bg-opacity-50 z-50 flex justify-center items-center";
 
-    const resultContainer = document.createElement("a");
+    const resultContainer = document.createElement("div");
     resultContainer.className = "w-[281px] h-48 relative";
 
     const resultText = document.createElement("div");
@@ -43,7 +43,7 @@ class Result extends Component {
     resultText.innerText = "YOU\nLOSE";
 
     const ballImageContainer = document.createElement("div");
-    ballImageContainer.className = "w-[74px] h-[74px] left-[100px] top-[11px] absolute";
+    ballImageContainer.className = "w-[74px] h-[74px] left-[100px] top-[12px] absolute";
 
     const ballImage = document.createElement("img");
     ballImage.src = themeImages[Store.state.theme];
