@@ -2,6 +2,7 @@ import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
 import { mapImages, themeImages } from "../config/index.js";
+import { Result } from "./Result/index.js";
 import Store from "../store/index.js";
 
 class TwoPlayerMode extends Component {
@@ -16,6 +17,17 @@ class TwoPlayerMode extends Component {
 
     this.ballImage = new Image();
     this.ballImage.src = themeImages[Store.state.theme];
+  }
+
+  showResult(message) {
+    const overlay = createComponent(Result, {result: message});
+    overlay.setAttribute("href", "/gameMode/");
+    
+    document.body.appendChild(overlay);
+
+    overlay.addEventListener("click", () => {
+      document.body.removeChild(overlay);
+    });
   }
 
   renderGame(data) {
@@ -74,9 +86,9 @@ class TwoPlayerMode extends Component {
 
     if (data.winner) {
       if (data.winner == userId) {
-        this.drawText("You Win!", 250, 250);
+        this.showResult("win");
       } else {
-        this.drawText("You Lose!", 250, 250);
+        this.showResult("lose");
       }
     }
   }

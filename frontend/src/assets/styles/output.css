@@ -778,6 +778,34 @@ video {
   top: 85%;
 }
 
+.left-\[12-px\] {
+  left: 12-px;
+}
+
+.top-\[10px\] {
+  top: 10px;
+}
+
+.top-12 {
+  top: 3rem;
+}
+
+.top-\[12px\] {
+  top: 12px;
+}
+
+.left-\[103px\] {
+  left: 103px;
+}
+
+.left-\[100px\] {
+  left: 100px;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
 .col-span-3 {
   grid-column: span 3 / span 3;
 }
@@ -1007,6 +1035,10 @@ video {
   height: 72px;
 }
 
+.h-\[74px\] {
+  height: 74px;
+}
+
 .h-\[782px\] {
   height: 782px;
 }
@@ -1131,6 +1163,10 @@ video {
   width: 224.40px;
 }
 
+.w-\[234px\] {
+  width: 234px;
+}
+
 .w-\[25px\] {
   width: 25px;
 }
@@ -1211,6 +1247,10 @@ video {
   width: 72px;
 }
 
+.w-\[74px\] {
+  width: 74px;
+}
+
 .w-\[80px\] {
   width: 80px;
 }
@@ -1225,6 +1265,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[281px\] {
+  width: 281px;
 }
 
 .min-w-11 {
@@ -1513,21 +1557,6 @@ video {
   border-color: rgb(255 255 249 / var(--tw-border-opacity));
 }
 
-.border-primary-color1 {
-  --tw-border-opacity: 1;
-  border-color: rgb(58 130 175 / var(--tw-border-opacity));
-}
-
-.border-primary-color2 {
-  --tw-border-opacity: 1;
-  border-color: rgb(252 190 91 / var(--tw-border-opacity));
-}
-
-.border-primary-color3 {
-  --tw-border-opacity: 1;
-  border-color: rgb(254 74 101 / var(--tw-border-opacity));
-}
-
 .border-primary-color4 {
   --tw-border-opacity: 1;
   border-color: rgb(31 207 127 / var(--tw-border-opacity));
@@ -1536,6 +1565,11 @@ video {
 .border-primary-text {
   --tw-border-opacity: 1;
   border-color: rgb(62 66 68 / var(--tw-border-opacity));
+}
+
+.bg-orange-400 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(251 146 60 / var(--tw-bg-opacity));
 }
 
 .bg-primary {
@@ -1556,21 +1590,6 @@ video {
 .bg-primary-card_background {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 249 / var(--tw-bg-opacity));
-}
-
-.bg-primary-color1 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(58 130 175 / var(--tw-bg-opacity));
-}
-
-.bg-primary-color2 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(252 190 91 / var(--tw-bg-opacity));
-}
-
-.bg-primary-color3 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 74 101 / var(--tw-bg-opacity));
 }
 
 .bg-primary-color4 {
@@ -1603,14 +1622,14 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.bg-zinc-300 {
+.bg-black {
   --tw-bg-opacity: 1;
-  background-color: rgb(212 212 216 / var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
-.bg-zinc-700 {
+.bg-primary-color1 {
   --tw-bg-opacity: 1;
-  background-color: rgb(63 63 70 / var(--tw-bg-opacity));
+  background-color: rgb(58 130 175 / var(--tw-bg-opacity));
 }
 
 .bg-opacity-50 {
@@ -1765,6 +1784,11 @@ video {
   line-height: 2.5rem;
 }
 
+.text-8xl {
+  font-size: 6rem;
+  line-height: 1;
+}
+
 .text-\[10px\] {
   font-size: 10px;
 }
@@ -1854,8 +1878,16 @@ video {
   line-height: 80px;
 }
 
+.leading-\[96px\] {
+  line-height: 96px;
+}
+
 .tracking-\[4px\] {
   letter-spacing: 4px;
+}
+
+.tracking-\[9\.60px\] {
+  letter-spacing: 9.60px;
 }
 
 .text-primary-button {
@@ -1888,9 +1920,9 @@ video {
   color: rgb(238 235 222 / var(--tw-text-opacity));
 }
 
-.text-zinc-700 {
+.text-white {
   --tw-text-opacity: 1;
-  color: rgb(63 63 70 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .opacity-10 {
@@ -1908,6 +1940,12 @@ video {
 .shadow {
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.shadow-inner {
+  --tw-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  --tw-shadow-colored: inset 0 2px 4px 0 var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
@@ -1950,6 +1988,11 @@ video {
 :is(.dark .dark\:bg-secondary-card_background) {
   --tw-bg-opacity: 1;
   background-color: rgb(61 67 74 / var(--tw-bg-opacity));
+}
+
+:is(.dark .dark\:bg-secondary-inner_card_top) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(103 112 118 / var(--tw-bg-opacity));
 }
 
 :is(.dark .dark\:bg-secondary-text) {
