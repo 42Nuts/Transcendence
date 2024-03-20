@@ -20,6 +20,7 @@ module.exports = {
           color2: "#FCBE5B",
           color3: "#FE4A65",
           color4: "#1FCF7F",
+          color5: "#FABC04",
           bronze_from: "#C9A67F",
           bronze_to: "#E0BB92",
           sliver_from: "#C3CFD9",

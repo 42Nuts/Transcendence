@@ -6,6 +6,8 @@ import {
   GameModePage,
   LoadingPage,
   GamePage,
+  TournamentPage,
+  TournamentResultPage,
 } from "./pages/index.js";
 import Component from "./core/component.js";
 
@@ -24,6 +26,8 @@ class App {
       "/gameMode/": GameModePage,
       "/loading/": LoadingPage,
       "/game/": GamePage,
+      "/tournament/": TournamentPage,
+      "/tournamentResult/": TournamentResultPage,
     });
 
     Object.values(this.router.routes).forEach((Page) => {

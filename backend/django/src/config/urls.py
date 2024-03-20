@@ -31,7 +31,7 @@ urlpatterns = [
     path('42oauth/', fourtytwo_oauth),
     path('home/', home),
     path('v2/users/', include('users.urls')),
-    path('v2/game/', game),
+    path('v2/game/', include('pongGame.urls')),
     path('health/', health_check),
     path('prometheus/', include('django_prometheus.urls')),
     # path('v2/matches/', include('matches.urls')),
