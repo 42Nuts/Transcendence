@@ -1,4 +1,5 @@
-import { Component } from "../../core/index.js";
+import { Component, createComponent } from "../../core/index.js";
+import { Easter } from "./Credits/index.js";
 
 class CreditsOption extends Component {
   render() {
@@ -7,7 +8,7 @@ class CreditsOption extends Component {
       "col-end-8 mt-auto mb-auto w-[280px] h-[782px] flex-col justify-start items-center gap-8 inline-flex";
 
     // Logo
-    const logoContainer = document.createElement("div");
+    const logoContainer = document.createElement("button");
     logoContainer.className =
       "w-[92px] h-[92px] px-[7.50px] pt-[4.50px] pb-[4.51px] justify-center items-center inline-flex";
     const logoImg = document.createElement("img");
@@ -15,6 +16,11 @@ class CreditsOption extends Component {
     logoImg.className = "w-[80px] h-[80px]";
     logoContainer.appendChild(logoImg);
     container.appendChild(logoContainer);
+
+    logoContainer.addEventListener("click", () => {
+      const easter = createComponent(Easter, {});
+      document.body.appendChild(easter);
+    });
 
     // Sections
     const sections = [
