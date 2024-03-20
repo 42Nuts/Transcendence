@@ -19,7 +19,7 @@ class Countdown extends Component {
       } else {
         countdownText.innerText = (currentCount - 1).toString();
       }
-    }, 1000);
+    }, 700);
 
     return overlay;
   }
