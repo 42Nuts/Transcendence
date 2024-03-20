@@ -1,17 +1,9 @@
-import { Component } from "../core/index.js";
+import { Component } from "../../core/index.js";
 
-class LoadingPage extends Component {
-  componentDidMount() {
-    console.log("LoadingPage mounted");
-    setTimeout(() => {
-      this.route("/game/");
-      // window.location.href = "/gameMode/";
-    }, 1000);
-  }
-
+class Loading extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = "flex justify-center items-center min-h-screen";
+    container.className = "fixed inset-0 bg-primary z-50 flex justify-center items-center";
 
     const loadingContainer = document.createElement("div");
     loadingContainer.className = "w-[424px] h-[468px] flex-col justify-start items-center gap-1 inline-flex";
@@ -58,4 +50,4 @@ class LoadingPage extends Component {
   }
 }
 
-export default LoadingPage;
+export default Loading;

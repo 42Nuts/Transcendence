@@ -185,6 +185,10 @@ class TwoPlayerMode extends Component {
         return;
       }
 
+      if (data.type == 'game_start') {
+        Store.dispatch("updateGameStart");
+      }
+      
       this.renderGame(data);
       this.updateScore(data.players);
     };

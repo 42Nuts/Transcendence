@@ -14,4 +14,5 @@ export default {
 
   //Game Mode
   gameMode: "2p",
+  gameStart: false,
 };

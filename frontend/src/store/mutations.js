@@ -35,4 +35,8 @@ export default {
     state.gameMode = payload;
     return state;
   },
+  updateGameStart(state) {
+    state.gameStart = !state.gameStart;
+    return state;
+  }
 };

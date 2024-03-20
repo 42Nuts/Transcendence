@@ -1,11 +1,30 @@
 import { Component, createComponent } from "../core/index.js";
 import { TwoPlayerMode } from "../game/index.js";
+import { Loading } from "../game/loading/index.js";
+import Store from "../store/index.js";
 
 class GamePage extends Component {
+  constructor(props) {
+    super(props);
+    Store.events.subscribe("gameStartChange", this.onGameStartChange.bind(this));
+  }
+
+  onGameStartChange() {
+    this.load.remove();
+  }
+
   render() {
+    const container = document.createElement("div");
+
+
+    this.load = createComponent(Loading, {});
+
     const game = createComponent(TwoPlayerMode, {});
 
-    return game;
+    container.appendChild(game);
+    container.appendChild(this.load);
+
+    return container;
   }
 }
 
