@@ -234,6 +234,14 @@ class TwoPlayerMode extends Component {
     this.container.appendChild(this.gameContainer);
     this.container.appendChild(this.exitButtonPos);
 
+    this.exitButton.addEventListener("click", () => {
+      // WebSocket 연결이 열려있다면 종료
+      if (this.gameSocket && this.gameSocket.readyState === WebSocket.OPEN) {
+        this.gameSocket.close();
+        console.log("WebSocket connection closed.");
+      }
+    });
+
     return this.container;
   }
 }
