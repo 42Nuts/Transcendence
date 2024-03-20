@@ -41,6 +41,8 @@ class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.input_buffer = [] 
+        self.mode = None
+        self.userId = None
 
     async def connect(self):
         global matching_queue, limit_size, room_cnt
@@ -57,6 +59,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         if None in (userId, mode):
             await self.close()
             return
+
+        self.mode = mode
+        self.userId = userId
 
         logger.info('mode = %s', str(mode))
         logger.info('userId = %s', str(userId))
@@ -123,6 +128,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             #     )
 
     async def disconnect(self, close_code):
+        matching_queue[self.mode] = deque(filter(lambda x: x[0] != self.userId, matching_queue[self.mode]))
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -175,7 +182,3 @@ class GameConsumer(AsyncWebsocketConsumer):
     async def game_update(self, event):
         game_data = event['game_data']
         await self.send(text_data=json.dumps(game_data))
-
-    # async def game_start(self, event):
-    #     start = event['game_start']
-    #     await self.send(text_data=json.dumps(start))
