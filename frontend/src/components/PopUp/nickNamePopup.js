@@ -17,7 +17,7 @@ class NickNamePopUp extends Component {
     // put nickname to store
     Store.dispatch("updateNickname", this.name);
     // fetch nickname to server
-    fetch("/v2/users/1/nickname/", {
+    fetch(`/v2/users/${userId}/nickname/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -65,7 +65,7 @@ class OptionsPage extends Component {
   }
 
   sendOptionSetting() {
-    fetch("/v2/users/1/theme-index/", {
+    fetch(`/v2/users/${userId}/theme-index/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -82,7 +82,7 @@ class OptionsPage extends Component {
       .catch((error) => {
         console.error("Error:", error);
       });
-    fetch("/v2/users/1/dark-mode/", {
+    fetch(`/v2/users/${userId}/dark-mode/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

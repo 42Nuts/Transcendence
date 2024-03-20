@@ -19,19 +19,19 @@ class HomePage extends Component {
 
   initState() {
     Promise.all([
-      fetch("/v2/users/1/profile-index/", {
+      fetch(`/v2/users/${userId}/profile-index/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json()),
-      fetch("/v2/users/1/theme-index/", {
+      fetch(`/v2/users/${userId}/theme-index/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json()),
-      fetch("/v2/users/1/dark-mode/", {
+      fetch(`/v2/users/${userId}/dark-mode/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
