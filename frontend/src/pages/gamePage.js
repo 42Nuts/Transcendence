@@ -1,5 +1,6 @@
 import { Component, createComponent } from "../core/index.js";
 import { TwoPlayerMode, ThreePlayerMode, FourPlayerMode } from "../game/index.js";
+import { GameRouter } from "../utils/index.js";
 import { Loading } from "../game/Loading/index.js";
 import Store from "../store/index.js";
 
@@ -7,6 +8,12 @@ class GamePage extends Component {
   constructor(props) {
     super(props);
     Store.events.subscribe("gameStartChange", this.onGameStartChange.bind(this));
+
+    this.gameRouter = new GameRouter({
+      "2p": TwoPlayerMode,
+      "3p": ThreePlayerMode,
+      "4p": FourPlayerMode,
+    });
   }
 
   onGameStartChange() {
@@ -19,21 +26,7 @@ class GamePage extends Component {
 
     this.load = createComponent(Loading, {});
 
-    let game;
-    switch (Store.state.gameMode) {
-      case "2p":
-        game = createComponent(TwoPlayerMode, {});
-        break;
-      case "3p":
-        game = createComponent(ThreePlayerMode, {});
-        break;
-      case "4p":
-        game = createComponent(FourPlayerMode, {});
-        break;
-      default:
-        game = createComponent(TwoPlayerMode, {});
-        break;
-    }
+    const game = this.gameRouter.getComponent(Store.state.gameMode);
 
     container.appendChild(game);
     container.appendChild(this.load);
