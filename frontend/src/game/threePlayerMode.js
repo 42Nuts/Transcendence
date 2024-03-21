@@ -59,7 +59,7 @@ class ThreePlayerMode extends Component {
       };
     }
 
-    drawTriangle(
+    this.drawTriangle(
       this.canvas.width / 2,
       0,
       0,
@@ -77,7 +77,7 @@ class ThreePlayerMode extends Component {
         player = data.players[i];
       }
     }
-    rotate(
+    this.rotate(
       0,
       0,
       this.canvas.width,
@@ -87,14 +87,14 @@ class ThreePlayerMode extends Component {
 
     for (var i = 0; i < data.players.length; i++) {
       this.ctx.save();
-      rotate(
+      this.rotate(
         data.players[i].x,
         data.players[i].y,
         data.players[i].width,
         data.players[i].height,
         data.players[i].angle * -1
       );
-      drawRect(
+      this.drawRect(
         data.players[i].x,
         data.players[i].y,
         data.players[i].width,
@@ -223,11 +223,22 @@ class ThreePlayerMode extends Component {
 
     this.gameSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
+
+      if (data.type == "game_end") {
+        this.showResult("win");
+        return;
+      }
+
+      if (data.type == "game_start") {
+        Store.dispatch("updateGameStart");
+        document.body.appendChild(createComponent(Countdown, {}));
+      }
+
       this.renderGame(data);
       this.updateScore(data.players);
     };
 
-    this.gameSocket.onclose = (e) => {
+    this.gameSocket.onclose = function (e) {
       console.error("Game socket closed");
     };
 
@@ -281,8 +292,8 @@ class ThreePlayerMode extends Component {
 
     // canvas to draw the game
     this.canvas = document.createElement("canvas");
-    this.canvas.className =
-      "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
+    // this.canvas.className =
+    //   "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
     this.keyboardEvent();
