@@ -3,3 +3,4 @@ export { themeImages } from "./theme.js";
 export { darkModeImages } from "./dark.js";
 export { backgroundColors } from "./background.js";
 export { mapImages } from "./map.js";
+export { mapThreeImages } from "./mapThree.js";

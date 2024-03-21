@@ -1,7 +1,7 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
-import { mapImages, themeImages } from "../config/index.js";
+import { mapThreeImages, themeImages } from "../config/index.js";
 import { Result } from "./Result/index.js";
 import { Countdown } from "./Loading/index.js";
 import Store from "../store/index.js";
@@ -15,7 +15,7 @@ class ThreePlayerMode extends Component {
       rightArrow: false,
     };
     this.backGround = new Image();
-    this.backGround.src = "/static/assets/images/map-3players.svg";
+    this.backGround.src = mapThreeImages[Store.state.theme];
 
     this.ballImage = new Image();
     this.ballImage.src = themeImages[Store.state.theme];
