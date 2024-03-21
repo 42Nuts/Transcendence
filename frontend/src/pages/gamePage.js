@@ -17,7 +17,7 @@ class GamePage extends Component {
     const container = document.createElement("div");
     console.log("Store theme", Store.state.theme);
 
-    // this.load = createComponent(Loading, {});
+    this.load = createComponent(Loading, {});
 
     let game;
     switch (Store.state.gameMode) {
@@ -33,7 +33,7 @@ class GamePage extends Component {
     }
 
     container.appendChild(game);
-    // container.appendChild(this.load);
+    container.appendChild(this.load);
 
     return container;
   }
