@@ -15,7 +15,7 @@ class ThreePlayerMode extends Component {
       rightArrow: false,
     };
     this.backGround = new Image();
-    this.backGround.src = mapImages[Store.state.theme];
+    this.backGround.src = "/static/assets/images/map-3players.svg";
 
     this.ballImage = new Image();
     this.ballImage.src = themeImages[Store.state.theme];
@@ -59,15 +59,15 @@ class ThreePlayerMode extends Component {
       };
     }
 
-    this.drawTriangle(
-      this.canvas.width / 2,
-      0,
-      0,
-      this.canvas.height,
-      this.canvas.width,
-      this.canvas.height,
-      "#000"
-    );
+    // this.drawTriangle(
+    //   this.canvas.width / 2,
+    //   0,
+    //   0,
+    //   this.canvas.height,
+    //   this.canvas.width,
+    //   this.canvas.height,
+    //   "#000"
+    // );
 
     let player;
 
@@ -290,10 +290,19 @@ class ThreePlayerMode extends Component {
     this.scoreContainer.appendChild(this.player2);
     this.scoreContainer.appendChild(this.player3);
 
+    // border
+
+    const border = document.createElement("div");
+    border.className = "absolute";
+
+    const borderImage = document.createElement("img");
+    borderImage.src = "/static/assets/images/border.svg";
+    borderImage.className = "w-full h-full";
+
+    border.appendChild(borderImage);
+
     // canvas to draw the game
     this.canvas = document.createElement("canvas");
-    // this.canvas.className =
-    //   "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
     this.keyboardEvent();
@@ -313,6 +322,7 @@ class ThreePlayerMode extends Component {
     this.gameContainer.appendChild(this.canvas);
     this.gameContainer.appendChild(this.scoreContainer);
     this.container.appendChild(this.gameContainer);
+    this.container.appendChild(border);
     this.container.appendChild(this.exitButtonPos);
 
     this.exitButton.addEventListener("click", () => {
