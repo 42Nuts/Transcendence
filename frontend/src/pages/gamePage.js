@@ -1,5 +1,5 @@
 import { Component, createComponent } from "../core/index.js";
-import { TwoPlayerMode, ThreePlayerMode } from "../game/index.js";
+import { TwoPlayerMode, ThreePlayerMode, FourPlayerMode } from "../game/index.js";
 import { Loading } from "../game/Loading/index.js";
 import Store from "../store/index.js";
 
@@ -26,6 +26,9 @@ class GamePage extends Component {
         break;
       case "3p":
         game = createComponent(ThreePlayerMode, {});
+        break;
+      case "4p":
+        game = createComponent(FourPlayerMode, {});
         break;
       default:
         game = createComponent(TwoPlayerMode, {});
