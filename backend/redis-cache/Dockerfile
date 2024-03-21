@@ -1,4 +1,4 @@
-FROM alpine:
+FROM alpine
 RUN apk update && apk add \
     redis \
     && rm -rf /var/cache/apk/*
