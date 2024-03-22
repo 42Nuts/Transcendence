@@ -1,7 +1,7 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
-import { mapImages, themeImages } from "../config/index.js";
+import { mapImages, themeImages, profileImages } from "../config/index.js";
 import { Result } from "./Result/index.js";
 import { Countdown } from "./Loading/index.js";
 import Store from "../store/index.js";
@@ -173,10 +173,10 @@ class FourPlayerMode extends Component {
   }
 
   updateScore(players) {
-    const player1 = document.getElementById("player1");
-    const player2 = document.getElementById("player2");
-    const player3 = document.getElementById("player3");
-    const player4 = document.getElementById("player4");
+    const player1 = document.getElementById("Score1");
+    const player2 = document.getElementById("Score2");
+    const player3 = document.getElementById("Score3");
+    const player4 = document.getElementById("Score4");
     if (player1 && player2 && player3 && player4) {
       player1.innerText = players[0].score;
       player2.innerText = players[1].score;
