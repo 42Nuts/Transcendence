@@ -190,6 +190,30 @@ services:
       retries: 30
     env_file:
       - .env
+
+  logstash: 
+    image: logstash:7.14.0
+    container_name: logstash
+    build:
+      context: ./backend/ELK/logstash
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/django/logs:/usr/share/logstash/logs
+    # ports:
+    # environment:
+      # LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - net
+    depends_on:
+      nginx:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -k https://$NGINX_HOST:$NGINX_PORT
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    env_file:
+      - .env
     env_file:
       - .env
 
