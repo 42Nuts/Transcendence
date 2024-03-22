@@ -256,7 +256,7 @@ class ThreePlayerMode extends Component {
     };
 
     this.gameSocket.onclose = function (e) {
-      console.error("Game socket closed");
+      console.log("Game socket closed");
     };
 
     this.handlePopState = this.closeWebSocketOnBack.bind(this);
