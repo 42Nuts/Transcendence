@@ -195,6 +195,7 @@ class TwoPlayerMode extends Component {
 
       if (data.type == "game_end") {
         this.showResult("win");
+        this.gameSocket.close();
         return;
       }
 
