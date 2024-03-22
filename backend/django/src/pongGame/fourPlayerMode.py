@@ -58,6 +58,7 @@ class fourPlayer:
         self.players = []
         self.last_touch_player = None
         self.reset_angle = 0
+        self.winner = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
