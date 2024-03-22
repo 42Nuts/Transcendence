@@ -82,6 +82,10 @@ services:
     init: true
     image: postgresql
     container_name: $POSTGRES_HOST
+    command:
+      - "postgres"
+      - "-c"
+      - "config_file=/var/lib/postgresql/postgresql.conf"
     build:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
@@ -94,7 +98,7 @@ services:
       retries: 50
     volumes:
       - ./backend/PostgreSQL/data:/var/lib/postgresql/data
-      - ./backend/PostgreSQL/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./backend/PostgreSQL/postgresql.conf:/var/lib/postgresql/postgresql.conf
       - ./backend/PostgreSQL/logs:/var/log/postgresql
     env_file:
       - .env
