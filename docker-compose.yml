@@ -22,6 +22,11 @@ services:
     depends_on:
       django:
         condition: service_healthy
+    healthcheck:
+      test: curl --fail -k https://$NGINX_HOST:$NGINX_PORT/metrics
+      interval: 3s
+      timeout: 2s
+      retries: 30
     ports:
       - "$NGINX_PORT:$NGINX_PORT"
     volumes:
