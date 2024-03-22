@@ -109,6 +109,8 @@ class TwoPlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
+        this.gameSocket.close();
+        //추가
     }
   }
 
@@ -196,12 +198,14 @@ class TwoPlayerMode extends Component {
       if (data.type == "game_end") {
         this.showResult("win");
         this.gameSocket.close();
+        //추가
         return;
       }
 
       else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
+        this.keyboardEvent();
       }
 
       else {
@@ -262,7 +266,7 @@ class TwoPlayerMode extends Component {
       "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
-    this.keyboardEvent();
+    // this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");

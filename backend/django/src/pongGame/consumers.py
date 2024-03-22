@@ -60,8 +60,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.close()
             return
 
-        self.mode = mode
-        self.userId = userId
 
         logger.info('mode = %s', str(mode))
         logger.info('userId = %s', str(userId))
@@ -76,6 +74,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         # 큐에 넣기
 
         matching_queue[mode].appendleft((userId, self))
+        self.mode = mode
         self.userId = userId
         if (len(matching_queue[mode]) >= limit_size[mode]):
             self.room_name = str(room_id[mode]) + '_' + mode
@@ -129,12 +128,18 @@ class GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def disconnect(self, close_code):
-        if self.userId in matching_queue[self.mode]:
-            matching_queue[self.mode].remove(self.userId)
-            self.close()
-            return
-
         logger.info(f'disconnect')
+        logger.info(f'queue:{matching_queue[self.mode]}')
+
+
+        idx = 0           
+        for playerId, player in matching_queue[self.mode]:
+            if playerId == self.userId:
+                del matching_queue[self.mode][idx]
+                self.close()
+                return
+            idx += 1
+
         if group_member_count[self.room_group_name] == limit_size[self.mode]:
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -186,7 +191,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
-                await self.close()
+                # await self.close()
                 break
 
     async def receive(self, text_data):
