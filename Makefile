@@ -4,6 +4,10 @@ all:
 clean:
 	docker compose down
 
+fclean:
+	make rmImage
+	make rmData
+
 docker: 
 	./docker/docker.sh
 
@@ -24,4 +28,4 @@ rmContainer:
 rmImage: rmContainer
 	docker rmi -f $(shell docker images -q)
 	
-.PHONY: all clean rmContainer rmImage docker 
+.PHONY: all clean fclean re fre rmData rmContainer rmImage docker
