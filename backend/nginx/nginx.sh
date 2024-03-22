@@ -15,6 +15,7 @@ http {
         listen $NGINX_PORT ssl;
 
         error_page 404 /assets/static/404.html;
+        error_page 401 /assets/static/401.html;
 
         ssl_certificate /etc/nginx/certificate.crt;
         ssl_certificate_key /etc/nginx/private.key;
@@ -38,7 +39,7 @@ http {
           proxy_set_header Host \$host;
         }
 
-        location /assets/static/404.html {
+        location /assets/static/ {
           root /var/www/html;
         }
 
