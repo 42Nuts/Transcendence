@@ -49,6 +49,24 @@ class ThreePlayerMode extends Component {
 
   renderGame(data) {
     // draw backGround
+    let player;
+
+    for (var i = 0; i < data.players.length; i++) {
+      if (userId == data.players[i].playerId) {
+        player = data.players[i];
+      }
+    }
+
+    // this.ctx.save();
+
+    // this.rotate(
+    //   0,
+    //   0,
+    //   this.canvas.width,
+    //   2 * this.canvas.height - this.canvas.width / 3 ** 0.5,
+    //   player.angle * -1
+    // );
+
     if (this.backGround.complete) {
       this.ctx.drawImage(
         this.backGround,
@@ -69,34 +87,6 @@ class ThreePlayerMode extends Component {
       };
     }
 
-    // this.drawTriangle(
-    //   this.canvas.width / 2,
-    //   0,
-    //   0,
-    //   this.canvas.height,
-    //   this.canvas.width,
-    //   this.canvas.height,
-    //   "#000"
-    // );
-
-
-    this.ctx.save();
-
-    let player;
-
-    for (var i = 0; i < data.players.length; i++) {
-      if (userId == data.players[i].playerId) {
-        player = data.players[i];
-      }
-    }
-
-    // this.rotate(
-    //   0,
-    //   0,
-    //   this.canvas.width,
-    //   2 * this.canvas.height - this.canvas.width / 3 ** 0.5,
-    //   player.angle * -1
-    // );
 
     for (var i = 0; i < data.players.length; i++) {
       this.ctx.save();

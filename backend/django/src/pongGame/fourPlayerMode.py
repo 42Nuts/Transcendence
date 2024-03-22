@@ -118,25 +118,25 @@ class fourPlayer:
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
             radius=15,
-            velocity_x=7,
-            velocity_y=1,
-            speed=7,
+            velocity_x=0.5,
+            velocity_y=0.5,
+            speed=0.5,
             color="WHITE"
         )
 
     def reset_ball(self):
-        self.reset_angle += 90
-        if self.reset_angle == 360:
+        self.reset_angle += 92
+        if self.reset_angle >= 360:
             self.reset_angle = 0
 
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.speed = 5
+        self.ball.speed = 0.5
         self.last_touch_player = None
 
         angle_radians = math.radians(self.reset_angle)
-        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians) + 1
-        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians) + 1
+        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians)
+        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians)
 
     def collision(self, b, p):
         p.top = p.y

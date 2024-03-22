@@ -104,9 +104,9 @@ class threePlayer:
             x = self.canvas.width / 2,
             y = self.canvas.height - self.canvas.width / (2 * (3 ** 0.5)),
             radius = 15,
-            velocity_x = 2 * math.cos(math.radians(self.reset_angle)),
-            velocity_y = 2 * math.sin(math.radians(self.reset_angle)),
-            speed = 2,
+            velocity_x = 1 * math.cos(math.radians(self.reset_angle)),
+            velocity_y = 1 * math.sin(math.radians(self.reset_angle)),
+            speed = 1,
             color = "WHITE"
         )
 
@@ -117,7 +117,7 @@ class threePlayer:
 
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height - self.canvas.width / (2 * (3 ** 0.5))
-        self.ball.speed = 2
+        self.ball.speed = 1
         self.last_touch_player = None
 
         angle_radians = math.radians(self.reset_angle)
