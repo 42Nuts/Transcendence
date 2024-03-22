@@ -19,6 +19,16 @@ class ThreePlayerMode extends Component {
 
     this.ballImage = new Image();
     this.ballImage.src = themeImages[Store.state.theme];
+
+    Store.events.subscribe("darkModeChange", this.onDarkModeChange.bind(this));
+  }
+
+  onDarkModeChange() {
+    if (Store.state.darkMode) {
+      this.borderImage.src = "/static/assets/images/border-dark.svg";
+    } else {
+      this.borderImage.src = "/static/assets/images/border.svg";
+    }
   }
 
   showResult(message) {
@@ -295,11 +305,15 @@ class ThreePlayerMode extends Component {
     const border = document.createElement("div");
     border.className = "absolute";
 
-    const borderImage = document.createElement("img");
-    borderImage.src = "/static/assets/images/border.svg";
-    borderImage.className = "w-full h-full";
+    this.borderImage = document.createElement("img");
+    if (Store.state.darkMode) {
+      this.borderImage.src = "/static/assets/images/border-dark.svg";
+    } else {
+      this.borderImage.src = "/static/assets/images/border.svg";
+    }
+    this.borderImage.className = "w-full h-full";
 
-    border.appendChild(borderImage);
+    border.appendChild(this.borderImage);
 
     // canvas to draw the game
     this.canvas = document.createElement("canvas");
