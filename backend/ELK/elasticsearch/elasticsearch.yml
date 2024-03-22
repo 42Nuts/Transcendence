@@ -1,0 +1,35 @@
+# ----------------------- Cluster -----------------------
+# 클러스터 이름 설저
+cluster.name: "docker-cluster"
+
+# ----------------------- Node -----------------------
+# 노드 이름 설정
+# node.name:
+
+# ----------------------- Network -----------------------
+# 노드가 통신을 위해 사용할 네트워크 인터페이스 설정
+network.host: 0.0.0.0
+
+# HTTP 통신에 사용할 포트 설정
+# http.port:
+
+# ----------------------- Directories -----------------------
+# 데이터 파일을 저장할 경로 설정
+# path.data:
+# 로그 파일을 저장할 경로 설정
+# path.logs:
+
+# ----------------------- Discovery -----------------------
+# 클러스터 형성에 참여할 초기 노드의 호스트 설정
+# discovery.seed_hosts:
+# 최초 클러스터 형성 시 마스터 노드로 선출될 후보 이름 설정
+# cluster.initial_master_nodes:
+discovery.type: single-node
+
+# ----------------------- X-Pack -----------------------
+# 기계 학습 기능 사용 여부 설정
+# xpack.ml.enabled:
+# 보안 기능 활성화 설정
+# xpack.security.enabled:
+# 클러스터 간 통신에 SSL/TLS 보안 사용 설정
+# xpack.security.transport.ssl.enabled:
