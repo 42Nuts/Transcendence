@@ -1,6 +1,7 @@
 FROM alpine
 
 RUN apk update && apk --no-cache add \
+    curl \
     nginx \
     openssl
 
