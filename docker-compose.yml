@@ -33,7 +33,7 @@ services:
       - ./backend/nginx/logs:/var/log/nginx
       - ./frontend/src:/var/www/html
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -57,7 +57,7 @@ services:
     volumes:
       - ./backend/django/src:/django
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -69,7 +69,7 @@ services:
       context: ./backend/redis-cache
       dockerfile: Dockerfile
     networks:
-      - our_net
+      - net
     healthcheck:
       test: redis-cli -h redis-cache ping
       interval: 3s
@@ -81,12 +81,12 @@ services:
   postgresql:
     init: true
     image: postgresql
-    container_name: postgresql
+    container_name: $POSTGRES_HOST
     build:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
     networks:
-      - our_net
+      - net
     healthcheck:
       test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
       interval: 3s
@@ -109,7 +109,7 @@ services:
     volumes:
       - ./backend/grafana/data:/var/lib/grafana
     networks:
-      - our_net
+      - net
     depends_on:
       prometheus:
         condition: service_healthy
@@ -128,7 +128,7 @@ services:
     volumes:
       - ./backend/prometheus/data:/prometheus
     networks:
-      - our_net
+      - net
     healthcheck:
       test: curl -k --fail https://$PROMETHEUS_HOST:$PROMETHEUS_PORT/-/healthy
       interval: 3s
@@ -148,7 +148,7 @@ services:
     ports:
      - "$NODE_EXPORTER_PORT:$NODE_EXPORTER_PORT"
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -158,7 +158,7 @@ services:
     command:
      - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -166,6 +166,10 @@ services:
     image: prometheuscommunity/postgres-exporter
     container_name: $POSTGRES_EXPORTER_HOST
     networks:
+      - net
+    env_file:
+      - .env
+
   elasticsearch:
     image: elasticsearch:7.14.0
     container_name: elasticsearch
@@ -235,6 +239,6 @@ services:
       - .env
 
 networks:
-  our_net:
-    name: taeypark_hyeoan_network
+  net:
+    name: transcendence_network
     driver: bridge
