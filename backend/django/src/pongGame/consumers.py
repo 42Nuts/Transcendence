@@ -128,15 +128,20 @@ class GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def disconnect(self, close_code):
-        matching_queue[self.mode] = deque(filter(lambda x: x[0] != self.userId, matching_queue[self.mode]))
+        if self.userId in matching_queue[self.mode]:
+            matching_queue[self.mode].remove(self.userId)
+            self.close()
+            return
+
         logger.info(f'disconnect')
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'game_end',
-                'message': "game end",
-            }
-        )
+        if group_member_count[self.room_group_name] == limit_size[self.mode]:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_end',
+                    'message': "game end",
+                }
+            )
 
 
         await self.channel_layer.group_discard(
@@ -150,6 +155,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         if group_member_count[self.room_group_name] == 0:
             del group_game_instances[self.room_group_name]  # 게임 인스턴스 삭제
             del group_member_count[self.room_group_name]  # 참여자 수 추적 삭제
+
+        self.close()
 
     # 게임 상태 업데이트 및 그룹에 전송
     async def game_update_task(self):
