@@ -110,38 +110,37 @@ class TwoPlayerMode extends Component {
         this.showResult("lose");
       }
         this.gameSocket.close();
-        //추가
+        this.destroy();
     }
   }
 
   keyboardEvent() {
-    // 키보드 누름 이벤트 핸들러
-    document.addEventListener("keydown", (event) => {
+    this.handleKeyDown = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = true;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
-
-    // 키보드 떼기 이벤트 핸들러
-    document.addEventListener("keyup", (event) => {
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    // 키보드 이벤트 리스너 연결
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+  }
+
+  removeKeyboardEvent() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
   }
 
   rotate(x, y, width, height, angle) {
@@ -198,7 +197,7 @@ class TwoPlayerMode extends Component {
       if (data.type == "game_end") {
         this.showResult("win");
         this.gameSocket.close();
-        //추가
+        this.destroy();
         return;
       }
 
@@ -231,6 +230,7 @@ class TwoPlayerMode extends Component {
   destroy() {
     // 필요한 경우 페이지를 벗어날 때 호출
     window.removeEventListener("popstate", this.handlePopState);
+    this.removeKeyboardEvent();
   }
 
   render() {

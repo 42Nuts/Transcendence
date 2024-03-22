@@ -123,7 +123,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                     self.room_group_name,
                     {
                         'type': 'game_start',
-                        'game_start': "game start",
+                        'game_start': player_ids,
                     }
                 )
 
@@ -210,4 +210,5 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({'type' : 'game_end'}))
 
     async def game_start(self, event):
-        await self.send(text_data=json.dumps({'type' : 'game_start'}))
+        player_ids = event['game_start']
+        await self.send(text_data=json.dumps({'type' : 'game_start', 'player_ids' : player_ids}))
