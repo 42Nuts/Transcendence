@@ -89,9 +89,9 @@ services:
       - net
     healthcheck:
       test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
-      interval: 3s
+      interval: 10s
       timeout: 2s
-      retries: 30
+      retries: 50
     volumes:
       - ./backend/PostgreSQL/data:/var/lib/postgresql/data
     env_file:
