@@ -58,6 +58,7 @@ class fourPlayer:
         self.players = []
         self.last_touch_player = None
         self.reset_angle = 0
+        self.winner = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -117,25 +118,25 @@ class fourPlayer:
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
             radius=15,
-            velocity_x=7,
+            velocity_x=1,
             velocity_y=1,
-            speed=7,
+            speed=1,
             color="WHITE"
         )
 
     def reset_ball(self):
-        self.reset_angle += 90
-        if self.reset_angle == 360:
+        self.reset_angle += 92
+        if self.reset_angle >= 360:
             self.reset_angle = 0
 
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.speed = 5
+        self.ball.speed = 1
         self.last_touch_player = None
 
         angle_radians = math.radians(self.reset_angle)
-        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians) + 1
-        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians) + 1
+        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians)
+        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians)
 
     def collision(self, b, p):
         p.top = p.y
@@ -168,7 +169,7 @@ class fourPlayer:
     
     def update_player_movement(self, index, player):
         angle_radians = math.radians(180 - player.angle)
-        move_distance = 8  # 움직임의 기본 단위
+        move_distance = 4  # 움직임의 기본 단위
         # index 0: 바닥 변을 따라 움직임
         if index == 0:
             if player.leftArrow and player.x > 0:
@@ -177,20 +178,19 @@ class fourPlayer:
                 player.x += move_distance
         # index 1: 왼쪽 변을 따라 움직임
         elif index == 1:
-            if player.leftArrow and player.y - player.width / 2 + 5 > 0:
+            if player.leftArrow and player.y > 0:
                 player.y -= move_distance 
-            if player.rightArrow and player.y + player.width / 2  < self.canvas.height:
+            if player.rightArrow and player.y + player.height  < self.canvas.height:
                 player.y += move_distance 
-        # index 2: 오른쪽 변을 따라 움직임
         elif index == 2:
             if player.leftArrow and player.x < self.canvas.width - player.width:
                 player.x += move_distance 
             if player.rightArrow and player.x > 0:
                 player.x -= move_distance
         elif index == 3:
-            if player.rightArrow and player.y - player.width / 2 + 5 > 0:
+            if player.rightArrow and player.y > 0:
                 player.y -= move_distance 
-            if player.leftArrow and player.y + player.width / 2  < self.canvas.height:
+            if player.leftArrow and player.y + player.height  < self.canvas.height:
                 player.y += move_distance
 
     def update_score(self, ball):

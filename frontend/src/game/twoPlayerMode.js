@@ -242,7 +242,7 @@ class TwoPlayerMode extends Component {
     };
 
     this.gameSocket.onclose = function (e) {
-      console.error("Game socket closed");
+      console.log("Game socket closed");
     };
 
     this.handlePopState = this.closeWebSocketOnBack.bind(this);
@@ -294,7 +294,6 @@ class TwoPlayerMode extends Component {
       "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
-    // this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");

@@ -49,48 +49,44 @@ class ThreePlayerMode extends Component {
 
   renderGame(data) {
     // draw backGround
-    // if (this.backGround.complete) {
-    //   this.ctx.drawImage(
-    //     this.backGround,
-    //     0,
-    //     0,
-    //     this.canvas.width,
-    //     this.canvas.height
-    //   );
-    // } else {
-    //   this.backGround.onload = function () {
-    //     this.ctx.drawImage(
-    //       this.backGround,
-    //       0,
-    //       0,
-    //       this.canvas.width,
-    //       this.canvas.height
-    //     );
-    //   };
-    // }
+    let player;
 
-    this.drawTriangle(
-      this.canvas.width / 2,
-      0,
-      0,
-      this.canvas.height,
-      this.canvas.width,
-      this.canvas.height,
-      "#000"
-    );
+    for (var i = 0; i < data.players.length; i++) {
+      if (userId == data.players[i].playerId) {
+        player = data.players[i];
+      }
+    }
 
+    // this.ctx.save();
 
-    this.ctx.save();
+    // this.rotate(
+    //   0,
+    //   0,
+    //   this.canvas.width,
+    //   2 * this.canvas.height - this.canvas.width / 3 ** 0.5,
+    //   player.angle * -1
+    // );
 
-    const player = data.players.find(p => p.playerId === userId);
+    if (this.backGround.complete) {
+      this.ctx.drawImage(
+        this.backGround,
+        0,
+        0,
+        this.canvas.width,
+        this.canvas.height
+      );
+    } else {
+      this.backGround.onload = function () {
+        this.ctx.drawImage(
+          this.backGround,
+          0,
+          0,
+          this.canvas.width,
+          this.canvas.height
+        );
+      };
+    }
 
-    this.rotate(
-      0,
-      0,
-      this.canvas.width,
-      2 * this.canvas.height - this.canvas.width / 3 ** 0.5,
-      player.angle * -1
-    );
 
     for (var i = 0; i < data.players.length; i++) {
       this.ctx.save();
@@ -140,35 +136,38 @@ class ThreePlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
+        this.gameSocket.close();
+        this.destroy();
     }
   }
 
   keyboardEvent() {
-    document.addEventListener("keydown", (event) => {
+    this.handleKeyDown = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = true;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
-
-    document.addEventListener("keyup", (event) => {
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    // 키보드 이벤트 리스너 연결
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+  }
+
+  removeKeyboardEvent() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
   }
 
   rotate(x, y, width, height, angle) {
@@ -205,6 +204,11 @@ class ThreePlayerMode extends Component {
     this.ctx.fill();
   }
 
+  drawRect(x, y, w, h, color) {
+    this.ctx.fillStyle = color;
+    this.ctx.fillRect(x, y, w, h);
+  }
+
   updateScore(players) {
     const player1 = document.getElementById("player1");
     const player2 = document.getElementById("player2");
@@ -234,12 +238,15 @@ class ThreePlayerMode extends Component {
       if (data.type == "game_end") {
         this.showResult("win");
         this.gameSocket.close();
+        this.destroy();
         return;
       }
 
       else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
+        console.log(data.player_ids);
+        this.keyboardEvent();
       }
 
       else {
@@ -249,7 +256,7 @@ class ThreePlayerMode extends Component {
     };
 
     this.gameSocket.onclose = function (e) {
-      console.error("Game socket closed");
+      console.log("Game socket closed");
     };
 
     this.handlePopState = this.closeWebSocketOnBack.bind(this);
@@ -265,6 +272,7 @@ class ThreePlayerMode extends Component {
   destroy() {
     // 필요한 경우 페이지를 벗어날 때 호출
     window.removeEventListener("popstate", this.handlePopState);
+    this.removeKeyboardEvent();
   }
 
   render() {
@@ -319,7 +327,6 @@ class ThreePlayerMode extends Component {
     this.canvas = document.createElement("canvas");
 
     this.initializeGame();
-    this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");
@@ -352,6 +359,7 @@ class ThreePlayerMode extends Component {
 }
 
 export default ThreePlayerMode;
+
 
 // // select canvas element
 // const canvas = document.getElementById("game");
