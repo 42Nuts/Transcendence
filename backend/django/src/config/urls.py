@@ -19,10 +19,12 @@ from django.urls import path, include
 from login.views import fourtytwo_oauth, home, loginPage
 from pongGame.views import game
 from django.http import HttpResponse
+from django_prometheus import exports as django_prometheus_expots
 
 
 def health_check(request):
     return HttpResponse("I am Healthy :)")
+
 
 urlpatterns = [
     path('', loginPage),
@@ -31,6 +33,8 @@ urlpatterns = [
     path('v2/users/', include('users.urls')),
     path('v2/game/', include('pongGame.urls')),
     path('health/', health_check),
+    path('prometheus/', include('django_prometheus.urls')),
     # path('v2/matches/', include('matches.urls')),
     # path('v2/relationships/', include('relationships.urls')),
 ]
+ 
