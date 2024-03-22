@@ -13,6 +13,7 @@ class ScoreBoard extends Component {
     profileImg.className = "w-[54px] h-[54px] relative";
 
     const img = document.createElement("img");
+    img.id = "Img" + this.props.id;
     img.className = "w-[54px] h-[54px] shadow-md rounded-full";
     img.src = this.props.imgSrc;
 
@@ -20,7 +21,7 @@ class ScoreBoard extends Component {
     profile.appendChild(profileImg);
 
     const score = document.createElement("div");
-    score.id = this.props.id;
+    score.id = "Score" + this.props.id;
     score.className =
       "text-primary-text dark:text-secondary-text text-[40px] font-black font-['Inter']";
     score.innerText = "0";

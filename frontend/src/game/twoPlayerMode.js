@@ -1,7 +1,7 @@
 import { Component, createComponent } from "../core/index.js";
 import { BasicButton } from "../components/Button/index.js";
 import { ScoreBoard } from "../components/Board/index.js";
-import { mapImages, themeImages } from "../config/index.js";
+import { mapImages, themeImages, profileImages } from "../config/index.js";
 import { Result } from "./Result/index.js";
 import { Countdown } from "./Loading/index.js";
 import Store from "../store/index.js";
@@ -109,8 +109,8 @@ class TwoPlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
-        this.gameSocket.close();
-        this.destroy();
+      this.gameSocket.close();
+      this.destroy();
     }
   }
 
@@ -121,18 +121,22 @@ class TwoPlayerMode extends Component {
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     // 키보드 이벤트 리스너 연결
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
@@ -172,13 +176,40 @@ class TwoPlayerMode extends Component {
   }
 
   updateScore(players) {
-    const player1 = document.getElementById("player1");
-    const player2 = document.getElementById("player2");
+    const player1 = document.getElementById("Score1");
+    const player2 = document.getElementById("Score2");
 
     if (player1 && player2) {
       player1.innerText = players[0].score;
       player2.innerText = players[1].score;
     }
+  }
+
+  updateScoreBoardImage(playerIds) {
+    // player2의 이미지를 업데이트하기 위한 로직
+    playerIds.forEach((playerId, index) => {
+        // 현재 사용자가 아닌 다른 플레이어를 찾음
+        fetch(`/v2/users/${playerId}/profile-index/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const playerImage = document.getElementById(`Img${index + 1}`);
+            if (playerImage) {
+              playerImage.src = profileImages[data.profile_index];
+            }
+          })
+          .catch((error) =>
+            console.error("Error fetching profile index:", error)
+          );
+
+        // 찾은 후 forEach 루프를 더 이상 진행하지 않도록 break 대신 사용할 수 있는 방법은 없으나,
+        // 최소한 한 번만 실행될 것이므로 이 이후의 로직은 필요하지 않습니다.
+      }
+    );
   }
 
   initializeGame() {
@@ -199,16 +230,12 @@ class TwoPlayerMode extends Component {
         this.gameSocket.close();
         this.destroy();
         return;
-      }
-
-      else if (data.type == "game_start") {
+      } else if (data.type == "game_start") {
+        this.updateScoreBoardImage(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
-        console.log(data.player_ids);
         this.keyboardEvent();
-      }
-
-      else {
+      } else {
         this.renderGame(data);
         this.updateScore(data.players);
       }
@@ -250,12 +277,12 @@ class TwoPlayerMode extends Component {
 
     this.player1 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
-      id: "player1",
+      id: "1",
     });
 
     this.player2 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-taeypark.svg",
-      id: "player2",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "2",
     });
 
     this.scoreContainer.appendChild(this.player1);

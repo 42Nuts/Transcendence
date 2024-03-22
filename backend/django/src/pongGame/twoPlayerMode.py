@@ -139,10 +139,10 @@ class twoPlayer:
     def update(self, user_input=None):
         # score
         if self.ball.y - self.ball.radius < 0:
-            self.players[1].score += 1
+            self.players[0].score += 1
             self.reset_ball()
         elif self.ball.y + self.ball.radius > self.canvas.height:
-            self.players[0].score += 1
+            self.players[1].score += 1
             self.reset_ball()
         
         # 공의 위치 변경
