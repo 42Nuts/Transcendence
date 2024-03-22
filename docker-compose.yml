@@ -166,7 +166,30 @@ services:
     image: prometheuscommunity/postgres-exporter
     container_name: $POSTGRES_EXPORTER_HOST
     networks:
-      - our_net
+  elasticsearch:
+    image: elasticsearch:7.14.0
+    container_name: elasticsearch
+    build:
+      context: ./backend/ELK/elasticsearch
+      dockerfile: Dockerfile
+    ports:
+      - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
+    # volumes:
+    # environment:
+      # ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      # discovery.type: single-node
+    networks:
+      - net
+    depends_on:
+      logstash:
+        condition: service_healthy
+    healthcheck:
+      test: curl --fail -k http://$ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT/_cat/health
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    env_file:
+      - .env
     env_file:
       - .env
 
