@@ -71,7 +71,13 @@ class FourPlayerMode extends Component {
     this.rotate(0, 0, this.canvas.width, this.canvas.height, player.angle * -1);
 
     for (var i = 0; i < data.players.length; i++) {
-      this.drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
+      this.drawRect(
+        data.players[i].x,
+        data.players[i].y,
+        data.players[i].width,
+        data.players[i].height,
+        data.players[i].color
+      );
     }
 
     // draw the ball
@@ -103,8 +109,8 @@ class FourPlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
-        this.gameSocket.close();
-        this.destroy();
+      this.gameSocket.close();
+      this.destroy();
     }
   }
 
@@ -115,18 +121,22 @@ class FourPlayerMode extends Component {
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     // 키보드 이벤트 리스너 연결
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
@@ -158,7 +168,7 @@ class FourPlayerMode extends Component {
 
   rotate(x, y, width, height, angle) {
     this.ctx.translate(x + width / 2, y + height / 2);
-    this.ctx.rotate(angle * Math.PI / 180);
+    this.ctx.rotate((angle * Math.PI) / 180);
     this.ctx.translate(-(x + width / 2), -(y + height / 2));
   }
 
@@ -173,6 +183,27 @@ class FourPlayerMode extends Component {
       player3.innerText = players[2].score;
       player4.innerText = players[3].score;
     }
+  }
+
+  updateScoreBoardImage(playerIds) {
+    playerIds.forEach((playerId, index) => {
+      fetch(`/v2/users/${playerId}/profile-index/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          const playerImage = document.getElementById(`Img${index + 1}`);
+          if (playerImage) {
+            playerImage.src = profileImages[data.profile_index];
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching profile index:", error)
+        );
+    });
   }
 
   initializeGame() {
@@ -192,16 +223,12 @@ class FourPlayerMode extends Component {
         this.gameSocket.close();
         this.destroy();
         return;
-      }
-
-      else if (data.type == "game_start") {
+      } else if (data.type == "game_start") {
+        this.updateScoreBoardImage(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
-        console.log(data.player_ids);
         this.keyboardEvent();
-      }
-
-      else {
+      } else {
         this.renderGame(data);
         this.updateScore(data.players);
       }
@@ -243,23 +270,22 @@ class FourPlayerMode extends Component {
 
     this.player1 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
-      id: "player1",
+      id: "1",
     });
 
     this.player2 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-taeypark.svg",
-      id: "player2",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "2",
     });
 
-
     this.player3 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-hyeoan.svg",
-      id: "player3",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "3",
     });
 
     this.player4 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-jinheo.svg",
-      id: "player4",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "4",
     });
 
     this.scoreContainer.appendChild(this.player1);
@@ -310,8 +336,6 @@ export default FourPlayerMode;
 // canvas.width = 700;
 // canvas.height = 700;
 
-
-
 // // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 // const ctx = canvas.getContext('2d');
 
@@ -340,7 +364,6 @@ export default FourPlayerMode;
 //       player4.innerText = players[3].score;
 //     }
 //   }
-
 
 // // draw a rectangle, will be used to draw paddles
 // function drawRect(x, y, w, h, color){
@@ -408,7 +431,7 @@ export default FourPlayerMode;
 //         ctx.drawImage(backGround, 0, 0, canvas.width, canvas.height);
 //         };
 //     }
-    
+
 //     ctx.save();
 //     for (var i = 0; i < data.players.length; i++) {
 //         if (userId == data.players[i].playerId) {
@@ -421,7 +444,7 @@ export default FourPlayerMode;
 //     for (var i = 0; i < data.players.length; i++) {
 //         drawRect(data.players[i].x, data.players[i].y, data.players[i].width, data.players[i].height, data.players[i].color);
 //     }
-    
+
 //     // draw the ball
 //     if (ballImage.complete) {
 //         ctx.drawImage(
