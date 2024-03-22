@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 echo "
 worker_processes auto;
@@ -12,7 +12,7 @@ events {
 http {
     include mime.types;
     server {
-        listen $NGINX_PORT ssl;
+        listen $NGINX_HOST:$NGINX_PORT ssl;
 
         ssl_certificate /etc/nginx/certificate.crt;
         ssl_certificate_key /etc/nginx/private.key;
