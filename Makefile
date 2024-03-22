@@ -11,8 +11,12 @@ re:
 	make clean
 	make all
 
+fre:
+	make fclean
+	make all
+
 rmData:
-	find . -name data -exec rm -rf {} \; 2> /dev/null
+	rm -rf $(shell find . -name data)
 
 rmContainer:
 	docker rm -f $(shell docker ps -aq)
