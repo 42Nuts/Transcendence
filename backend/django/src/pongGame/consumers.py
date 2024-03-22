@@ -113,6 +113,7 @@ class GameConsumer(AsyncWebsocketConsumer):
 
             for player in players:
                 player.game = self.game
+                player.room_group_name = self.room_group_name
                 await player.channel_layer.group_add(
                     self.room_group_name,
                     player.channel_name
