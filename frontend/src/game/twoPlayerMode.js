@@ -204,6 +204,7 @@ class TwoPlayerMode extends Component {
       else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
+        console.log(data.player_ids);
         this.keyboardEvent();
       }
 
