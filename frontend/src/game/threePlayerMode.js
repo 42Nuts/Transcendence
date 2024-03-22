@@ -49,44 +49,41 @@ class ThreePlayerMode extends Component {
 
   renderGame(data) {
     // draw backGround
-    if (this.backGround.complete) {
-      this.ctx.drawImage(
-        this.backGround,
-        0,
-        0,
-        this.canvas.width,
-        this.canvas.height
-      );
-    } else {
-      this.backGround.onload = function () {
-        this.ctx.drawImage(
-          this.backGround,
-          0,
-          0,
-          this.canvas.width,
-          this.canvas.height
-        );
-      };
-    }
+    // if (this.backGround.complete) {
+    //   this.ctx.drawImage(
+    //     this.backGround,
+    //     0,
+    //     0,
+    //     this.canvas.width,
+    //     this.canvas.height
+    //   );
+    // } else {
+    //   this.backGround.onload = function () {
+    //     this.ctx.drawImage(
+    //       this.backGround,
+    //       0,
+    //       0,
+    //       this.canvas.width,
+    //       this.canvas.height
+    //     );
+    //   };
+    // }
 
-    // this.drawTriangle(
-    //   this.canvas.width / 2,
-    //   0,
-    //   0,
-    //   this.canvas.height,
-    //   this.canvas.width,
-    //   this.canvas.height,
-    //   "#000"
-    // );
+    this.drawTriangle(
+      this.canvas.width / 2,
+      0,
+      0,
+      this.canvas.height,
+      this.canvas.width,
+      this.canvas.height,
+      "#000"
+    );
 
-    let player;
 
     this.ctx.save();
-    for (var i = 0; i < data.players.length; i++) {
-      if (userId == data.players[i].playerId) {
-        player = data.players[i];
-      }
-    }
+
+    const player = data.players.find(p => p.playerId === userId);
+
     this.rotate(
       0,
       0,
@@ -239,13 +236,15 @@ class ThreePlayerMode extends Component {
         return;
       }
 
-      if (data.type == "game_start") {
+      else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
       }
 
-      this.renderGame(data);
-      this.updateScore(data.players);
+      else {
+        this.renderGame(data);
+        this.updateScore(data.players);
+      }
     };
 
     this.gameSocket.onclose = function (e) {
