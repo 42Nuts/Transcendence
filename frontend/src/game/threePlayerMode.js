@@ -87,7 +87,6 @@ class ThreePlayerMode extends Component {
       };
     }
 
-
     for (var i = 0; i < data.players.length; i++) {
       this.ctx.save();
       this.rotate(
@@ -136,8 +135,8 @@ class ThreePlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
-        this.gameSocket.close();
-        this.destroy();
+      this.gameSocket.close();
+      this.destroy();
     }
   }
 
@@ -148,18 +147,22 @@ class ThreePlayerMode extends Component {
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+      this.gameSocket.send(
+        JSON.stringify({ playerId: userId, ...this.keyState })
+      );
     };
-  
+
     // 키보드 이벤트 리스너 연결
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("keyup", this.handleKeyUp);
@@ -220,6 +223,28 @@ class ThreePlayerMode extends Component {
     }
   }
 
+  updateScoreBoardImage(playerIds) {
+    playerIds.forEach((playerId, index) => {
+        fetch(`/v2/users/${playerId}/profile-index/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const playerImage = document.getElementById(`Img${index + 1}`);
+            if (playerImage) {
+              playerImage.src = profileImages[data.profile_index];
+            }
+          })
+          .catch((error) =>
+            console.error("Error fetching profile index:", error)
+          );
+      }
+    );
+  }
+
   initializeGame() {
     // select canvas element
     this.canvas.width = 700;
@@ -240,16 +265,12 @@ class ThreePlayerMode extends Component {
         this.gameSocket.close();
         this.destroy();
         return;
-      }
-
-      else if (data.type == "game_start") {
+      } else if (data.type == "game_start") {
+        this.updateScoreBoardImage(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
-        console.log(data.player_ids);
         this.keyboardEvent();
-      }
-
-      else {
+      } else {
         this.renderGame(data);
         this.updateScore(data.players);
       }
@@ -291,17 +312,17 @@ class ThreePlayerMode extends Component {
 
     this.player1 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
-      id: "player1",
+      id: "1",
     });
 
     this.player2 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-taeypark.svg",
-      id: "player2",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "2",
     });
 
     this.player3 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-yim.svg",
-      id: "player3",
+      imgSrc: "/static/assets/images/profile-default.svg",
+      id: "3",
     });
 
     this.scoreContainer.appendChild(this.player1);
@@ -359,7 +380,6 @@ class ThreePlayerMode extends Component {
 }
 
 export default ThreePlayerMode;
-
 
 // // select canvas element
 // const canvas = document.getElementById("game");
