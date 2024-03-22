@@ -214,6 +214,23 @@ services:
       retries: 30
     env_file:
       - .env
+
+  kibana:
+    image: kibana:7.14.0
+    container_name: kibana
+    build:
+      context: ./backend/ELK/kibana
+      dockerfile: Dockerfile
+    ports:
+      - '$KIBANA_PORT:$KIBANA_PORT'
+    # environment:
+    #   - ELASTICSEARCH_URL=http://elasticsearch:9200
+    # volumes:
+    networks:
+      - net
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     env_file:
       - .env
 
