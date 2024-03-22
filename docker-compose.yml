@@ -193,7 +193,7 @@ services:
     networks:
       - net
     depends_on:
-      logstash:
+      nginx:
         condition: service_healthy
     healthcheck:
       test: curl --fail -k http://$ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT/_cat/health
@@ -219,7 +219,7 @@ services:
     networks:
       - net
     depends_on:
-      nginx:
+      elasticsearch:
         condition: service_healthy
     healthcheck:
       test: curl --fail -k https://$NGINX_HOST:$NGINX_PORT
