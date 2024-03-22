@@ -267,7 +267,6 @@ class TwoPlayerMode extends Component {
       "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
-    // this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");

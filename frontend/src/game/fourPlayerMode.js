@@ -100,31 +100,41 @@ class FourPlayerMode extends Component {
     if (data.winner) {
       if (data.winner == userId) {
         this.showResult("win");
-      }
-      else {
+      } else {
         this.showResult("lose");
       }
+        this.gameSocket.close();
+        this.destroy();
     }
   }
 
   keyboardEvent() {
-    document.addEventListener("keydown", (event) => {
+    this.handleKeyDown = (event) => {
       if (event.keyCode === 37) {
         this.keyState.leftArrow = true;
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = true;
       }
       this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
-    });
-
-    document.addEventListener("keyup", (event) => {
+    };
+  
+    this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
         this.keyState.rightArrow = false;
       }
       this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
-    });
+    };
+  
+    // 키보드 이벤트 리스너 연결
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+  }
+
+  removeKeyboardEvent() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
   }
 
   drawRect(x, y, w, h, color) {
@@ -180,12 +190,15 @@ class FourPlayerMode extends Component {
       if (data.type == "game_end") {
         this.showResult("win");
         this.gameSocket.close();
+        this.destroy();
         return;
       }
 
       else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
+        console.log(data.player_ids);
+        this.keyboardEvent();
       }
 
       else {
@@ -211,6 +224,7 @@ class FourPlayerMode extends Component {
   destroy() {
     // 필요한 경우 페이지를 벗어날 때 호출
     window.removeEventListener("popstate", this.handlePopState);
+    this.removeKeyboardEvent();
   }
 
   render() {
@@ -259,7 +273,6 @@ class FourPlayerMode extends Component {
       "rounded-3xl border-8 border-primary-card_background dark:border-secondary-card_background shadow-md";
 
     this.initializeGame();
-    this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");

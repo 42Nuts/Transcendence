@@ -82,7 +82,11 @@ class ThreePlayerMode extends Component {
 
     this.ctx.save();
 
-    const player = data.players.find(p => p.playerId === userId);
+    for (var i = 0; i < data.players.length; i++) {
+      if (userId == data.players[i].playerId) {
+        player = data.players[i];
+      }
+    }
 
     this.rotate(
       0,
@@ -140,35 +144,38 @@ class ThreePlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
+        this.gameSocket.close();
+        this.destroy();
     }
   }
 
   keyboardEvent() {
-    document.addEventListener("keydown", (event) => {
+    this.handleKeyDown = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = true;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = true;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
-
-    document.addEventListener("keyup", (event) => {
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    this.handleKeyUp = (event) => {
       if (event.keyCode === 37) {
-        // 왼쪽 화살표 키
         this.keyState.leftArrow = false;
       } else if (event.keyCode === 39) {
-        // 오른쪽 화살표 키
         this.keyState.rightArrow = false;
       }
-      this.gameSocket.send(
-        JSON.stringify({ playerId: userId, ...this.keyState })
-      );
-    });
+      this.gameSocket.send(JSON.stringify({ playerId: userId, ...this.keyState }));
+    };
+  
+    // 키보드 이벤트 리스너 연결
+    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener("keyup", this.handleKeyUp);
+  }
+
+  removeKeyboardEvent() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
   }
 
   rotate(x, y, width, height, angle) {
@@ -234,12 +241,15 @@ class ThreePlayerMode extends Component {
       if (data.type == "game_end") {
         this.showResult("win");
         this.gameSocket.close();
+        this.destroy();
         return;
       }
 
       else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
+        console.log(data.player_ids);
+        this.keyboardEvent();
       }
 
       else {
@@ -265,6 +275,7 @@ class ThreePlayerMode extends Component {
   destroy() {
     // 필요한 경우 페이지를 벗어날 때 호출
     window.removeEventListener("popstate", this.handlePopState);
+    this.removeKeyboardEvent();
   }
 
   render() {
@@ -319,7 +330,6 @@ class ThreePlayerMode extends Component {
     this.canvas = document.createElement("canvas");
 
     this.initializeGame();
-    this.keyboardEvent();
 
     // button to exit the game
     this.exitButtonPos = document.createElement("div");
