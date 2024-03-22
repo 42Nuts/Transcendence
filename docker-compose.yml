@@ -94,6 +94,8 @@ services:
       retries: 50
     volumes:
       - ./backend/PostgreSQL/data:/var/lib/postgresql/data
+      - ./backend/PostgreSQL/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./backend/PostgreSQL/logs:/var/log/postgresql
     env_file:
       - .env
 
@@ -102,7 +104,7 @@ services:
     image: grafana/grafana
     container_name: $GRAFANA_HOST
     build: 
-      context: ./backend/grafana
+      context: ./backend/grafana 
       dockerfile: Dockerfile
     ports:
       - "$GRAFANA_PORT:$GRAFANA_PORT"
@@ -179,6 +181,8 @@ services:
     ports:
       - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
     # volumes:
+    #   - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+
     # environment:
       # ES_JAVA_OPTS: "-Xmx256m -Xms256m"
       # discovery.type: single-node
@@ -202,7 +206,9 @@ services:
       context: ./backend/ELK/logstash
       dockerfile: Dockerfile
     volumes:
-      - ./backend/django/logs:/usr/share/logstash/logs
+      - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
+      - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
+      - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
     # ports:
     # environment:
       # LS_JAVA_OPTS: "-Xmx256m -Xms256m"
