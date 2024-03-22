@@ -182,13 +182,15 @@ class FourPlayerMode extends Component {
         return;
       }
 
-      if (data.type == "game_start") {
+      else if (data.type == "game_start") {
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
       }
 
-      this.renderGame(data);
-      this.updateScore(data.players);
+      else {
+        this.renderGame(data);
+        this.updateScore(data.players);
+      }
     };
 
     this.gameSocket.onclose = function (e) {
