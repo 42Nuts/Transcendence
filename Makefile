@@ -7,6 +7,7 @@ clean:
 fclean:
 	make rmImage
 	make rmData
+	make rmLog
 
 docker: 
 	./docker/docker.sh
@@ -21,6 +22,9 @@ fre:
 
 rmData:
 	rm -rf $(shell find . -name data)
+
+rmLog:
+	rm -rf $(shell find . -name logs)
 
 rmContainer:
 	docker rm -f $(shell docker ps -aq)
