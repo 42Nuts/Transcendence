@@ -3,14 +3,20 @@
 echo "
 input {
     file {
-        path => [ '/usr/share/logstash/logs/*.log' ]
+        type => 'nginx'
+        path => [ '/usr/share/logstash/logs/nginx.log' ]
+        start_position => 'beginning'
+    }
         start_position => 'beginning'
     }
 }
 
 filter {
-    grok {
-        match => { 'message' => '%{IPORHOST:remote_addr} - %{USER:remote_user} \[%{HTTPDATE:time_local}\] (?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest}) %{NUMBER:status} (?:%{NUMBER:body_bytes_sent}|-) %{GREEDYDATA:referrer} %{GREEDYDATA:http_user_agent} %{DATA:forwarder}' }
+    if [type] == 'nginx' {
+        grok {
+            match => { 'message' => '%{IPORHOST:remote_addr} - %{USER:remote_user} \[%{HTTPDATE:time_local}\] (?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest}) %{NUMBER:status} (?:%{NUMBER:body_bytes_sent}|-) %{GREEDYDATA:referrer} %{GREEDYDATA:http_user_agent} %{DATA:forwarder}' }
+        }
+    }
     }
 }
 
