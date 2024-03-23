@@ -1,4 +1,4 @@
-FROM logstash:7.14.0
+FROM logstash:7.17.18
 
 USER root
 

@@ -159,6 +159,7 @@ services:
       - .env
 
   nginx-prometheus-exporter:
+    init: true
     image: nginx/nginx-prometheus-exporter
     container_name: $NGINX_EXPORTER_HOST
     command:
@@ -169,6 +170,7 @@ services:
       - .env
 
   postgres-exporter:
+    init: true
     image: prometheuscommunity/postgres-exporter
     container_name: $POSTGRES_EXPORTER_HOST
     networks:
@@ -177,7 +179,8 @@ services:
       - .env
 
   elasticsearch:
-    image: elasticsearch:7.14.0
+    init: true
+    image: elasticsearch
     container_name: elasticsearch
     build:
       context: ./backend/ELK/elasticsearch
@@ -204,7 +207,8 @@ services:
       - .env
 
   logstash: 
-    image: logstash:7.14.0
+    init: true
+    image: logstash
     container_name: logstash
     build:
       context: ./backend/ELK/logstash
@@ -230,7 +234,8 @@ services:
       - .env
 
   kibana:
-    image: kibana:7.14.0
+    init: true
+    image: kibana
     container_name: kibana
     build:
       context: ./backend/ELK/kibana
