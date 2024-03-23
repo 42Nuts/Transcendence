@@ -185,7 +185,7 @@ class TwoPlayerMode extends Component {
     }
   }
 
-  updateScoreBoardImage(playerIds) {
+  updateScoreBoard(playerIds) {
     playerIds.forEach((playerId, index) => {
       Promise.all([
         fetch(`/v2/users/${playerId}/profile-index/`, {
@@ -235,7 +235,7 @@ class TwoPlayerMode extends Component {
         this.destroy();
         return;
       } else if (data.type == "game_start") {
-        this.updateScoreBoardImage(data.player_ids);
+        this.updateScoreBoard(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
