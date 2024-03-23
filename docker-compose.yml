@@ -181,7 +181,7 @@ services:
   elasticsearch:
     init: true
     image: elasticsearch
-    container_name: elasticsearch
+    container_name: $ELASTICSEARCH_HOST
     build:
       context: ./backend/ELK/elasticsearch
       dockerfile: Dockerfile
@@ -206,7 +206,7 @@ services:
   logstash: 
     init: true
     image: logstash
-    container_name: logstash
+    container_name: $LOGSTASH_HOST
     build:
       context: ./backend/ELK/logstash
       dockerfile: Dockerfile
@@ -220,7 +220,7 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: curl --fail -k https://$NGINX_HOST:$NGINX_PORT
+      test: curl --fail http://$LOGSTASH_HOST:$LOGSTASH_PORT
       interval: 3s
       timeout: 2s
       retries: 30
@@ -230,7 +230,7 @@ services:
   kibana:
     init: true
     image: kibana
-    container_name: kibana
+    container_name: $KIBANA_HOST
     build:
       context: ./backend/ELK/kibana
       dockerfile: Dockerfile
@@ -241,7 +241,7 @@ services:
     networks:
       - net
     depends_on:
-      elasticsearch:
+      logstash:
         condition: service_healthy
     env_file:
       - .env

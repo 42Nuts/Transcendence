@@ -24,7 +24,7 @@ input {
 filter {
     if [type] == 'nginx' {
         grok {
-            match => { 'message' => '%{IPORHOST:remote_addr} - %{USER:remote_user} \[%{HTTPDATE:time_local}\] (?:%{WORD:verb} %{NOTSPACE:request}(?: HTTP/%{NUMBER:httpversion})?|%{DATA:rawrequest}) %{NUMBER:status} (?:%{NUMBER:body_bytes_sent}|-) %{GREEDYDATA:referrer} %{GREEDYDATA:http_user_agent} %{DATA:forwarder}' }
+            match => { 'message' => '%{IPORHOST:remote_addr} - \[%{HTTPDATE:time_local}\] %{GREEDYDATA:request_method} %{GREEDYDATA:request_uri} %{NUMBER:status} %{GREEDYDATA:country_name} %{GREEDYDATA:city}' }
         }
     }
     else if [type] == 'django' {
@@ -34,7 +34,7 @@ filter {
     }
     else if [type] == 'postgresql' {
         grok {
-            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} [%{NUMBER:process_id}] %{WORD:log_level}:  %{GREEDYDATA:message}' }
+            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} \[%{NUMBER:process_id}\] %{WORD:log_level}:  %{GREEDYDATA:message}' }
         }
     }
 }

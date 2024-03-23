@@ -4,6 +4,7 @@ echo "
 worker_processes auto;
 
 error_log /var/log/nginx/error.log warn;
+load_module "modules/ngx_http_geoip_module.so";
 
 events {
 	worker_connections 1024;
@@ -11,7 +12,11 @@ events {
 
 http {
     include mime.types;
+    log_format  main  '\$remote_addr - [\$time_local] \$request_method \$request_uri '
+                      '\$status \$geoip_country_name \$geoip_city';
+
     server {
+        access_log /var/log/nginx/access.log main;
         listen $NGINX_HOST:$NGINX_PORT ssl;
 
         ssl_certificate /etc/nginx/certificate.crt;
