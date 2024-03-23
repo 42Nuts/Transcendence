@@ -187,12 +187,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
-    # volumes:
-    #   - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    volumes:
+      - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
 
-    # environment:
-      # ES_JAVA_OPTS: "-Xmx256m -Xms256m"
-      # discovery.type: single-node
     networks:
       - net
     depends_on:
@@ -217,9 +214,6 @@ services:
       - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
       - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
       - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
-    # ports:
-    # environment:
-      # LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - net
     depends_on:
@@ -242,9 +236,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - '$KIBANA_PORT:$KIBANA_PORT'
-    # environment:
-    #   - ELASTICSEARCH_URL=http://elasticsearch:9200
-    # volumes:
+    volumes:
+      - ./backend/ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
       - net
     depends_on:
