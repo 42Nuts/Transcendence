@@ -185,24 +185,34 @@ class FourPlayerMode extends Component {
     }
   }
 
-  updateScoreBoardImage(playerIds) {
+  updateScoreBoard(playerIds) {
     playerIds.forEach((playerId, index) => {
-      fetch(`/v2/users/${playerId}/profile-index/`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
+      Promise.all([
+        fetch(`/v2/users/${playerId}/profile-index/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => response.json()),
+        fetch(`/v2/users/${playerId}/nickname/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => response.json()),
+      ])
         .then((data) => {
+          const [profileResponse, nicknameResponse] = data;
           const playerImage = document.getElementById(`Img${index + 1}`);
-          if (playerImage) {
-            playerImage.src = profileImages[data.profile_index];
+          const playerName = document.getElementById(`Name${index + 1}`);
+          if (playerImage && playerName) {
+            playerImage.src = profileImages[profileResponse.profile_index];
+            playerName.innerText = nicknameResponse.nickname;
           }
         })
-        .catch((error) =>
-          console.error("Error fetching profile index:", error)
-        );
+        .catch((error) => {
+          console.error("Error fetching player data:", error);
+        });
     });
   }
 
@@ -224,7 +234,7 @@ class FourPlayerMode extends Component {
         this.destroy();
         return;
       } else if (data.type == "game_start") {
-        this.updateScoreBoardImage(data.player_ids);
+        this.updateScoreBoard(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
@@ -270,21 +280,29 @@ class FourPlayerMode extends Component {
 
     this.player1 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 1",
       id: "1",
     });
 
     this.player2 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 2",
       id: "2",
     });
 
     this.player3 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 3",
       id: "3",
     });
 
     this.player4 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 4",
       id: "4",
     });
 
