@@ -186,30 +186,34 @@ class TwoPlayerMode extends Component {
   }
 
   updateScoreBoardImage(playerIds) {
-    // player2의 이미지를 업데이트하기 위한 로직
     playerIds.forEach((playerId, index) => {
-        // 현재 사용자가 아닌 다른 플레이어를 찾음
+      Promise.all([
         fetch(`/v2/users/${playerId}/profile-index/`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
+        }).then((response) => response.json()),
+        fetch(`/v2/users/${playerId}/nickname/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }).then((response) => response.json()),
+      ])
+        .then((data) => {
+          const [profileResponse, nicknameResponse] = data;
+          const playerImage = document.getElementById(`Img${index + 1}`);
+          const playerName = document.getElementById(`Name${index + 1}`);
+          if (playerImage && playerName) {
+            playerImage.src = profileImages[profileResponse.profile_index];
+            playerName.innerText = nicknameResponse.nickname;
+          }
         })
-          .then((response) => response.json())
-          .then((data) => {
-            const playerImage = document.getElementById(`Img${index + 1}`);
-            if (playerImage) {
-              playerImage.src = profileImages[data.profile_index];
-            }
-          })
-          .catch((error) =>
-            console.error("Error fetching profile index:", error)
-          );
-
-        // 찾은 후 forEach 루프를 더 이상 진행하지 않도록 break 대신 사용할 수 있는 방법은 없으나,
-        // 최소한 한 번만 실행될 것이므로 이 이후의 로직은 필요하지 않습니다.
-      }
-    );
+        .catch((error) => {
+          console.error("Error fetching player data:", error);
+        });
+    });
   }
 
   initializeGame() {
@@ -277,11 +281,15 @@ class TwoPlayerMode extends Component {
 
     this.player1 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 1",
       id: "1",
     });
 
     this.player2 = createComponent(ScoreBoard, {
       imgSrc: "/static/assets/images/profile-default.svg",
+      tierSrc: "/static/assets/images/tier-bronze.svg",
+      name: "Player 2",
       id: "2",
     });
 
