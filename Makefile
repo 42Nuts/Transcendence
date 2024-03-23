@@ -5,6 +5,7 @@ clean:
 	docker compose down
 
 fclean:
+	make clean
 	make rmImage
 	make rmData
 	make rmLog
@@ -29,7 +30,7 @@ rmLog:
 rmContainer:
 	docker rm -f $(shell docker ps -aq)
 
-rmImage: rmContainer
+rmImage:
 	docker rmi -f $(shell docker images -q)
-	
+
 .PHONY: all clean fclean re fre rmData rmContainer rmImage docker
