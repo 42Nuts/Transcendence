@@ -34,7 +34,7 @@ filter {
     }
     else if [type] == 'postgresql' {
         grok {
-            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} [%{NUMBER:process_id}] %{WORD:log_level}:  %{GREEDYDATA:message}' }
+            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} \[%{NUMBER:process_id}\] %{WORD:log_level}:  %{GREEDYDATA:message}' }
         }
     }
 }
