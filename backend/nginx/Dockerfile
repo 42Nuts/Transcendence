@@ -3,6 +3,7 @@ FROM alpine
 RUN apk update && apk --no-cache add \
     curl \
     nginx \
+    nginx-mod-http-geoip \
     openssl
 
 RUN openssl req \
@@ -19,4 +20,4 @@ RUN chmod +x /usr/local/bin/nginx.sh
 
 EXPOSE 443 
 
-ENTRYPOINT ["nginx.sh"]
+CMD ["nginx.sh"]
