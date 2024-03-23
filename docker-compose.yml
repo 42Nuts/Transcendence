@@ -189,17 +189,17 @@ services:
       - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
     volumes:
       - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-
+      - ./backend/ELK/kibana/token:/usr/share/elasticsearch/token
     networks:
       - net
     depends_on:
       nginx:
         condition: service_healthy
     healthcheck:
-      test: curl --fail -k http://$ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT/_cat/health
-      interval: 3s
-      timeout: 2s
-      retries: 30
+      test: if [ -f ./madeToken ]; then exit 0; else bin/elasticsearch-create-enrollment-token -s kibana > ./token && touch ./madeToken; fi
+      interval: 5s
+      timeout: 5s
+      retries: 50
     env_file:
       - .env
 
@@ -238,6 +238,7 @@ services:
       - '$KIBANA_PORT:$KIBANA_PORT'
     volumes:
       - ./backend/ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./backend/ELK/kibana/token:/usr/share/kibana/token
     networks:
       - net
     depends_on:
