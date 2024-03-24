@@ -219,9 +219,9 @@ services:
       elasticsearch:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://$LOGSTASH_HOST:$LOGSTASH_PORT
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
       retries: 30
     env_file:
       - .env
