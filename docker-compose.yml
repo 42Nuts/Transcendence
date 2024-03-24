@@ -187,8 +187,9 @@ services:
     ports:
       - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
     volumes:
-      - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      # - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./backend/ELK/kibana/token:/usr/share/elasticsearch/token
+      - ./backend/ELK/elasticsearch/hostname:/usr/share/elasticsearch/hostname
     networks:
       - net
     depends_on:
@@ -213,6 +214,7 @@ services:
       - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
       - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
       - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
+      - ./backend/ELK/logstash/http_ca.crt:/usr/share/logstash/http_ca.crt
     networks:
       - net
     depends_on:
