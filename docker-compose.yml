@@ -135,9 +135,9 @@ services:
     networks:
       - net
     healthcheck:
-      test: curl -k --fail https://$PROMETHEUS_HOST:$PROMETHEUS_PORT/-/healthy
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
       retries: 30
     env_file:
       - .env
