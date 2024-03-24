@@ -50,9 +50,9 @@ services:
       redis-cache:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://$DJANGO_HOST:$DJANGO_PORT/health/ && curl --fail http://$DJANGO_HOST:$WS_PORT/health/
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
       retries: 30
     volumes:
       - ./backend/django/src:/django
