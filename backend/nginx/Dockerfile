@@ -15,8 +15,10 @@ RUN openssl req \
     -out /etc/nginx/certificate.crt
 
 COPY ./nginx.sh /usr/local/bin/nginx.sh
+COPY ./healthcheck.sh /usr/local/bin/healthcheck.sh
 
 RUN chmod +x /usr/local/bin/nginx.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
 
 EXPOSE 443 
 
