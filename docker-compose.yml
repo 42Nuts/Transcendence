@@ -71,9 +71,9 @@ services:
     networks:
       - net
     healthcheck:
-      test: redis-cli -h redis-cache ping
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
       retries: 30
     env_file:
       - .env
