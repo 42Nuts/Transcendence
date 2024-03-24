@@ -195,9 +195,9 @@ services:
       nginx:
         condition: service_healthy
     healthcheck:
-      test: if [ -f ./madeToken ]; then exit 0; else bin/elasticsearch-create-enrollment-token -s kibana > ./token && touch ./madeToken; fi
-      interval: 5s
-      timeout: 5s
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
       retries: 50
     env_file:
       - .env

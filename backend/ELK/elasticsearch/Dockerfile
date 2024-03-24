@@ -17,4 +17,12 @@ RUN openssl req \
 RUN chmod 644 /usr/share/elasticsearch/config/certificate.crt && \
     chmod 644 /usr/share/elasticsearch/config/private.key
 
+COPY ./elasticsearch.sh /usr/local/bin/elasticsearch.sh
+COPY ./healthcheck.sh /usr/local/bin/healthcheck.sh
+
+RUN chmod +x /usr/local/bin/elasticsearch.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
+
 USER elasticsearch
+
+ENTRYPOINT [ "elasticsearch.sh" ]
