@@ -79,7 +79,6 @@ services:
       - .env
 
   postgresql:
-    init: true
     image: postgresql
     container_name: $POSTGRES_HOST
     command:
@@ -92,9 +91,9 @@ services:
     networks:
       - net
     healthcheck:
-      test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
+      test: healthcheck.sh
       interval: 10s
-      timeout: 2s
+      timeout: 10s
       retries: 50
     volumes:
       - ./backend/PostgreSQL/data:/var/lib/postgresql/data
