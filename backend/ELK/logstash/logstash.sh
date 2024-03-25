@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+export ELASTICSEARCH_HOSTNAME=$(cat /usr/share/logstash/es_hostname)
+
 echo "
 input {
     file {
@@ -41,9 +43,22 @@ filter {
 
 output {
     elasticsearch {
-        hosts  => [ 'http://elasticsearch:9200' ]
+        hosts => [ 'https://$ELASTICSEARCH_HOSTNAME:$ELASTICSEARCH_PORT' ]
+        cacert => '/usr/share/logstash/config/certs/http_ca.crt'
+        user => '$ELASTICSEARCH_USER'
+        password => '$ELASTICSEARCH_PASSWORD'
+        ssl => true
     }
 }
 " > ./logstash.conf
+
+echo "
+http.host: '0.0.0.0'
+xpack.monitoring.elasticsearch.hosts: [ 'https://$ELASTICSEARCH_HOSTNAME:$ELASTICSEARCH_PORT' ]
+xpack.monitoring.elasticsearch.username: '$ELASTICSEARCH_USER'
+xpack.monitoring.elasticsearch.password: => '$ELASTICSEARCH_PASSWORD'
+xpack.monitoring.elasticsearch.ssl.certificate_authority: '/usr/share/logstash/config/certs/http_ca.crt'
+xpack.monitoring.elasticsearch.ssl.verification_mode: certificate
+" > ./config/logstash.yml
 
 logstash -f ./logstash.conf

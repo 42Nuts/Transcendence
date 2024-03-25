@@ -214,7 +214,7 @@ services:
       - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
       - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
       - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
-      - ./backend/ELK/logstash/http_ca.crt:/usr/share/logstash/http_ca.crt
+      - ./backend/ELK/elasticsearch/hostname:/usr/share/logstash/es_hostname
     networks:
       - net
     depends_on:
