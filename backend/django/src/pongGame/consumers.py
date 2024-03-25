@@ -4,6 +4,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from .twoPlayerMode import twoPlayer
 from .threePlayerMode import threePlayer
 from .fourPlayerMode import fourPlayer
+from .tournamentMode import tournament
 from collections import deque
 import json
 import logging
@@ -40,7 +41,7 @@ room_id = {
 class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.input_buffer = [] 
+        # self.input_buffer = [] 
         self.mode = None
         self.userId = None
 
@@ -101,8 +102,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                     group_game_instances[self.room_group_name] = threePlayer(player_ids)
                 elif mode == "4p":
                     group_game_instances[self.room_group_name] = fourPlayer(player_ids)
-                # elif mode == "tournament":
-                #     group_game_instances[self.room_group_name] = tournament(player_ids)
+                elif mode == "tournament":
+                    group_game_instances[self.room_group_name] = tournament(player_ids)
                 else:
                     await self.close()
                     return
@@ -170,19 +171,19 @@ class GameConsumer(AsyncWebsocketConsumer):
         while True:
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
 
-            if self.input_buffer:
-                user_input = self.input_buffer.pop(0)
-                game_data = self.game.update(user_input)
-            else:
-                game_data = self.game.update()  # 게임 상태 업데이트
+            # if self.input_buffer:
+                # user_input = self.input_buffer.pop(0)
+                # game_data = self.game.update(user_input)
+            # else:
+            game_data = self.game.update()  # 게임 상태 업데이트
             
-                await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_update',
-                        'game_data': game_data
-                    }
-                )
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_update',
+                    'game_data': game_data
+                }
+            )
             if game_data.get('winner') is not None:
                 await self.channel_layer.group_send(
                     self.room_group_name,
