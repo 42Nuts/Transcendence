@@ -38,5 +38,9 @@ export default {
   updateGameStart(state) {
     state.gameStart = !state.gameStart;
     return state;
+  },
+  updateTournamentMode(state) {
+    state.tournamentMode = (state.tournamentMode + 1) % 3;
+    return state;
   }
 };

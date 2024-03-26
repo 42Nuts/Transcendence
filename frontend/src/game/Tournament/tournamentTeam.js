@@ -29,7 +29,10 @@ class TournamentTeam extends Component {
       document.body.appendChild(overlay);
     }
 
-    overlay.addEventListener("click", () => {
+    overlay.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      Store.dispatch("updateTournamentMode");
       document.body.removeChild(overlay);
       this.result = false;
     });
