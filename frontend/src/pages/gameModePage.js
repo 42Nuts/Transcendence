@@ -2,6 +2,7 @@ import { Component, createComponent } from "../core/index.js";
 import { BackIconButton, BasicButton } from "../components/Button/index.js";
 import { Card, LockCard } from "../components/Card/index.js";
 import Store from "../store/index.js";
+import getCookie from "../utils/getCookie.js";
 
 class GameModePage extends Component {
   render() {
@@ -96,7 +97,7 @@ class GameModePage extends Component {
       //     method: "PUT",
       //     headers: {
       //       "Content-Type": "application/json",
-      //       "X-CSRFToken": document.cookie.split("=")[1],
+      //       "X-CSRFToken": getCookie("csrftoken"),
       //     },
       //     body: JSON.stringify({
       //       profile_index: Store.state.profile,
