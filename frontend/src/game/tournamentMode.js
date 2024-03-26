@@ -43,7 +43,7 @@ class TournamentMode extends Component {
 
   showResult(message) {
     const overlay = createComponent(Result, { result: message });
-    overlay.setAttribute("href", "/gameMode/");
+    // overlay.setAttribute("href", "/gameMode/");
 
     if (!this.result) {
       document.body.appendChild(overlay);
@@ -130,8 +130,10 @@ class TournamentMode extends Component {
         this.showResult("lose");
       }
       //tournamet 인지 확인
-      this.gameSocket.close();
-      this.destroy();
+      if (Store.state.gameMode != "tournament") {
+        this.gameSocket.close();
+        this.destroy();
+      }
     }
   }
 
@@ -252,8 +254,10 @@ class TournamentMode extends Component {
 
       if (data.type == "game_end") {
         this.showResult("win");
-        this.gameSocket.close();
-        this.destroy();
+        if (Store.state.gameMode != "tournament") {
+          this.gameSocket.close();
+          this.destroy();
+        }
         return;
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);

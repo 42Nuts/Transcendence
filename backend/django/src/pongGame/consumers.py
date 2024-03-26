@@ -174,18 +174,18 @@ class GameConsumer(AsyncWebsocketConsumer):
             }
         )
     
-    async def final_tournament_round(self, base_room_name, winners):
-        group_game_instances[base_room_name] = twoPlayer(winners)
-        group_member_count[base_room_name] = 2
-        self.game = group_game_instances[base_room_name]
+    async def final_tournament_round(self, winner_room_name, winners):
+        group_game_instances[winner_room_name] = twoPlayer(winners)
+        group_member_count[winner_room_name] = 2
+        self.game = group_game_instances[winner_room_name]
 
         for winner in winners:
             await self.channel_layer.group_add(
-                base_room_name,
+                winner_room_name,
                 winner.channel_name
             )
             winner.game = self.game
-            winner.room_group_name = base_room_name
+            winner.room_group_name = winner_room_name
             winner.update_task = asyncio.create_task(winner.game_update_task())
 
             await self.channel_layer.group_send(
@@ -210,8 +210,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.close()
                 return
             idx += 1
-
-        if group_member_count[self.room_group_name] == limit_size[self.mode]:
+        
+        if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -220,6 +220,14 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
 
+        elif group_member_count[self.room_group_name] == limit_size[self.mode]:
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_end',
+                    'message': "game end",
+                }
+            )
 
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -269,15 +277,19 @@ class GameConsumer(AsyncWebsocketConsumer):
                         self.room_group_name,
                         self.channel_name
                     )
-                    base_room_name = self.room_group_name.rsplit("_", 1)[0]
+                    if (self.userId == game_data.get('winner')):
+                        await self.close()
+                        return
+                    winner_room_name = self.room_group_name.rsplit("_", 1)[0]
                     check = self.room_group_name.rsplit("_", 1)[1]
-                    if (check != "1" or check != "2"):
-                        break
-                    if base_room_name not in tournament_winner:
-                        tournament_winner[base_room_name] = []
-                    tournament_winner[base_room_name].append(game_data.get('winner'))
-                    if len(tournament_winner[base_room_name]) == 2:
-                        await self.final_tournament_round(base_room_name, tournament_winner[base_room_name])
+                    if (check != "1" and check != "2"):
+                        await self.close()
+                        return
+                    if winner_room_name not in tournament_winner:
+                        tournament_winner[winner_room_name] = []
+                    tournament_winner[winner_room_name].append(game_data.get('winner'))
+                    if len(tournament_winner[winner_room_name]) == 2:
+                        await self.final_tournament_round(winner_room_name, tournament_winner[winner_room_name])
                 break
 
     async def receive(self, text_data):
