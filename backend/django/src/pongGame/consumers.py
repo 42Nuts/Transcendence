@@ -210,7 +210,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.close()
                 return
             idx += 1
-        
+
         if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -272,14 +272,11 @@ class GameConsumer(AsyncWebsocketConsumer):
                     }
                 )
 
-                if (self.mode == "tournament"):
+                if self.mode == "tournament":
                     await self.channel_layer.group_discard(
                         self.room_group_name,
                         self.channel_name
                     )
-                    if (self.userId == game_data.get('winner')):
-                        await self.close()
-                        return
                     winner_room_name = self.room_group_name.rsplit("_", 1)[0]
                     check = self.room_group_name.rsplit("_", 1)[1]
                     if (check != "1" and check != "2"):
@@ -289,7 +286,10 @@ class GameConsumer(AsyncWebsocketConsumer):
                         tournament_winner[winner_room_name] = []
                     tournament_winner[winner_room_name].append(game_data.get('winner'))
                     if len(tournament_winner[winner_room_name]) == 2:
+                        logger.info('before final')
                         await self.final_tournament_round(winner_room_name, tournament_winner[winner_room_name])
+                        logger.info('after final')
+                        return
                 break
 
     async def receive(self, text_data):
