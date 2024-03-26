@@ -49,6 +49,17 @@ def request_user_info(access_token):
     # HTTP 요청 실패 시 예외 발생
     user_response.raise_for_status()
     return user_response.json()
+
+# 이메일 주소로 사용자를 조회하고, 존재하지 않으면 새로운 사용자를 생성하는 함수
+def get_or_create_user_by_email(email):
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        logger.info('email: %s', email)
+        user = User.objects.create(email=email)
+    return user
+
+# OAuth 인증 과정 처리 및 인증에 성공한 사용자에게 JWT 토큰을 발급하는 함수
 def fourtytwo_oauth(request):
     if request.method != 'GET':
         return JsonResponse({'status': 403})
