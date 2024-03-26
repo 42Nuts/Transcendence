@@ -109,6 +109,7 @@ class TwoPlayerMode extends Component {
       } else {
         this.showResult("lose");
       }
+      //tournamet 인지 확인
       this.gameSocket.close();
       this.destroy();
     }

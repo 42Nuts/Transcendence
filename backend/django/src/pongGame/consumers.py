@@ -15,6 +15,7 @@ from urllib.parse import parse_qs
 logger = logging.getLogger('django')
 group_game_instances = {}
 group_member_count = {}
+tournament_winner = {}
 
 matching_queue = {
     "2p": deque(),
@@ -103,7 +104,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                 elif mode == "4p":
                     group_game_instances[self.room_group_name] = fourPlayer(player_ids)
                 elif mode == "tournament":
-                    group_game_instances[self.room_group_name] = tournament(player_ids)
+                    self.start_tournament(player_ids, players)
+                    return
                 else:
                     await self.close()
                     return
@@ -127,6 +129,69 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_start': player_ids,
                     }
                 )
+
+    async def start_tournament(self, player_ids, players):
+        group_game_instances[self.room_group_name + "_1"] = twoPlayer(player_ids[0:2])
+        group_game_instances[self.room_group_name + "_2"] = twoPlayer(player_ids[2:4])
+        group_member_count[self.room_group_name + "_1"] = 2
+        group_member_count[self.room_group_name + "_2"] = 2
+
+        for player in players[0:2]:
+            player.room_group_name = self.room_group_name + "_1"
+            await player.channel_layer.group_add(
+                player.room_group_name,
+                player.channel_name
+            )
+            player.update_task = asyncio.create_task(player.game_update_task())
+
+        for player in players[2:4]:
+            player.room_group_name = self.room_group_name + "_2"
+            await player.channel_layer.group_add(
+                player.room_group_name,
+                player.channel_name
+            )
+            player.update_task = asyncio.create_task(player.game_update_task())
+        
+        await self.channel_layer.group_send(
+            self.room_group_name + "_1",
+            {
+                'type': 'game_start',
+                'game_start': player_ids,
+            }
+        )
+
+        await self.channel_layer.group_send(
+            self.room_group_name + "_2",
+            {
+                'type': 'game_start',
+                'game_start': player_ids,
+            }
+        )
+    
+    async def final_tournament_round(self, base_room_name, winners):
+        final_game = twoPlayer(winners)
+        group_game_instances[base_room_name] = final_game
+        group_member_count[base_room_name] = 2
+        self.game = group_game_instances[base_room_name]
+
+        for winner in winners:
+            await self.channel_layer.group_add(
+                base_room_name,
+                winner.channel_name
+            )
+            winner.game = self.game
+            winner.room_group_name = base_room_name
+            winner.update_task = asyncio.create_task(winner.game_update_task())
+
+            await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_start',
+                        'game_start': winners,
+                    }
+                )
+
+
 
     async def disconnect(self, close_code):
         logger.info(f'disconnect')
@@ -166,6 +231,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.close()
 
     # 게임 상태 업데이트 및 그룹에 전송
+    # member 제거
     async def game_update_task(self):
         await asyncio.sleep(2.1)
         while True:
@@ -192,7 +258,21 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
-                # await self.close()
+
+                if (self.mode == "tournament"):
+                    await self.channel_layer.group_discard(
+                        self.room_group_name,
+                        self.channel_name
+                    )
+                    base_room_name = self.room_group_name.rsplit("_", 1)[0]
+                    check = self.room_group_name.rsplit("_", 1)[1]
+                    if (check != "1" or check != "2"):
+                        break
+                    if base_room_name not in tournament_winner:
+                        tournament_winner[base_room_name] = []
+                    tournament_winner[base_room_name].append(game_data.get('winner'))
+                    if len(tournament_winner[base_room_name]) == 2:
+                        await self.final_tournament_round(base_room_name, tournament_winner[base_room_name])
                 break
 
     async def receive(self, text_data):
