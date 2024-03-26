@@ -39,40 +39,32 @@ def is_authorized_path(user, request):
             return False
     return True
 
+
+def tokenCheck(get_response):
+    def middleware(request):
+        log_detail(request)
+
         if request.path in ('/health/', '/prometheus/metrics'):
-            response = get_response(request)
-            return response
+            return get_response(request)
 
         try:
             # 토큰 검사 (토큰 재발급 로직 필요)
             user = get_user(request.COOKIES.get('access_token'))
+            if not is_authorized_path(user, request):
+                logger.inof('접근 권한 없음')
+                return HttpResponseForbidden()
 
-            # API 유효성 검사
-            splitedUrl = list(request.path.strip('/').split('/'))
-            logger.info(f'len : {len(splitedUrl)}')
-            if splitedUrl[0] == 'v2':
-                if len(splitedUrl) >= 3:
-                    logger.info("user pk: %s", str(user.pk))
-                    logger.info("splitedUrl0: %s", str(splitedUrl[1]))
-                    logger.info("splitedUrl1: %s", str(splitedUrl[2]))
-                    if (request.method in ('PUT', 'DELETE')) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
-                        return HttpResponseForbidden()
-
-            logger.info('after checck')
-            request.user = user
-            logger.info("User: %s", str(user))
             logger.info('미들웨어 통과: 인증 성공')
 
             if request.path in ('/', '/42oauth/'):
                 return HttpResponseRedirect('/home/')
 
-            response = get_response(request)
-            return response
+            request.user = user
+            return get_response(request)
         # (토큰 검증 성공 후의 로직)
         except (AuthenticationFailed, InvalidToken) as e:
             if request.path in ('/', '/42oauth/'):  # 인증
-                response = get_response(request)
-                return response
+                return get_response(request)
             return HttpResponse(str(e), status=401)
         except Exception as e:
             logger.info("Unexpected error: %s", str(e))
