@@ -10,12 +10,13 @@ class SwitchOption extends Component {
     // 텍스트 영역
     const optionText = document.createElement("div");
     optionText.className =
-      "text-center text-primary-text text-[40px] font-semibold font-['Inter'] leading-10";
+      "text-center text-primary-text dark:text-secondary-text text-[40px] font-semibold font-['Inter'] leading-10";
     optionText.textContent = this.props.textContent;
 
     const modeButton = createComponent(ModeButton, {
       imageSrc: this.props.imageSrc,
       optionName: this.props.optionName,
+      startIndex: this.props.startIndex,
     });
 
     // 구조 조립

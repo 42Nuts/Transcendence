@@ -12,9 +12,9 @@ RUN openssl req \
     -keyout /etc/nginx/private.key \
     -out /etc/nginx/certificate.crt
 
-COPY ./nginx.sh /usr/bin/nginx.sh
+COPY ./nginx.sh /usr/local/bin/nginx.sh
 
-RUN chmod +x /usr/bin/nginx.sh
+RUN chmod +x /usr/local/bin/nginx.sh
 
 EXPOSE 443 
 

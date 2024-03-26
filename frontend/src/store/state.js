@@ -1,13 +1,17 @@
 export default {
   //Game Options
-  nickName: false,
+  nickname: "",
   theme: 0,
   darkMode: false,
+  
+  //profile
+  profile: 0,
+  background: 0,
 
   //Account Options
   logout: false,
   deleteAccount: false,
 
   //Game Mode
-  gameMode: 0,
+  gameMode: "2p",
 };

@@ -15,7 +15,7 @@ def dark_mode_handler(request, user_id):
             logger.info("GET: %s", str(user))
         except User.DoesNotExist:
             raise Http404()
-        return HttpResponse(user.dark_mode)
+        return JsonResponse({'dark_mode': user.dark_mode})
     elif request.method == 'PUT':
         data = json.loads(request.body.decode('utf-8'))
         dark_mode = data.get('dark_mode')
@@ -38,7 +38,7 @@ def theme_handler(request, user_id):
             logger.info("GET: %s", str(user))
         except User.DoesNotExist:
             raise Http404()
-        return HttpResponse(str(user.theme_index))
+        return JsonResponse({'theme_index': user.theme_index})
     elif request.method == 'PUT':
         data = json.loads(request.body.decode('utf-8'))
         theme_index = data.get('theme_index')
@@ -48,7 +48,7 @@ def theme_handler(request, user_id):
             return HttpResponse(status=422)
         request.user.theme_index = theme_index
         request.user.save()
-        return HttpResponse(str(request.user.theme_index))
+        return JsonResponse({'theme_index': request.user.theme_index})
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
 
@@ -61,7 +61,7 @@ def nickname_handler(request, user_id):
             logger.info("GET: %s", str(user))
         except User.DoesNotExist:
             raise Http404()
-        return HttpResponse(str(user.nickname))
+        return JsonResponse({'nickname': user.nickname})
     elif request.method == 'PUT':
         data = json.loads(request.body.decode('utf-8'))
         nickname = data.get('nickname')
@@ -71,7 +71,7 @@ def nickname_handler(request, user_id):
             return HttpResponse(status=422)
         request.user.nickname = nickname
         request.user.save()
-        return HttpResponse(str(request.user.nickname))
+        return JsonResponse({'nickname': request.user.nickname})
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
 
@@ -84,7 +84,7 @@ def profile_url_handler(request, user_id):
             logger.info("GET: %s", str(user))
         except User.DoesNotExist:
             raise Http404()
-        return HttpResponse(str(user.profile_index))
+        return JsonResponse({'profile_index': request.user.profile_index})
     elif request.method == 'PUT':
         data = json.loads(request.body.decode('utf-8'))
         profile_index = data.get('profile_index')
@@ -94,7 +94,7 @@ def profile_url_handler(request, user_id):
             return HttpResponse(status=422)
         request.user.profile_index = profile_index
         request.user.save()
-        return HttpResponse(str(request.user.profile_index))
+        return JsonResponse({'profile_index': request.user.profile_index})
 
     return HttpResponseNotAllowed(['GET', 'PUT'])
 
@@ -130,7 +130,7 @@ def followers_count_handler(request, user_id):
     pass
 
 
-def followings_counnt_handler(request, user_id):
+def followings_count_handler(request, user_id):
     pass
 
 

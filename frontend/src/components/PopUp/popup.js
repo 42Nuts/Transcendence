@@ -43,11 +43,19 @@ class PopUp extends Component {
       iconSrc: "/static/assets/images/icon-close.svg",
       bgColorClass: "bg-primary-text",
       optionName: this.props.optionName,
+      containerWidth: "w-[72px]",
+      containerHeight: "h-[72px]",
+      iconWidth: "w-[48px]",
+      iconHeight: "h-[48px]",
     });
 
     const confirmButton = createComponent(IconButton, {
       iconSrc: "/static/assets/images/icon-check.svg",
       bgColorClass: "bg-primary-text",
+      containerWidth: "w-[72px]",
+      containerHeight: "h-[72px]",
+      iconWidth: "w-[48px]",
+      iconHeight: "h-[48px]",
     });
 
     textContainer.appendChild(title);

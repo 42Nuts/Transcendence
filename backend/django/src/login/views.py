@@ -101,7 +101,7 @@ def logout(request):
 
 def home(request):
     context = {
-        'requireNickName': (request.user.nickname is ''),
+        'requireNickName': (request.user.nickname == ''),
         'isHomePage': True,
         'userId': request.user.pk,
     }

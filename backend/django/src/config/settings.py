@@ -29,8 +29,10 @@ SECRET_KEY = 'django-insecure-qd%5r=g1i8lcexi$x%_h(kg6m3akv59zr6ziosita=pqkcc6+)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['django']
+CSRF_TRUSTED_ORIGINS = ['https://localhost:5000', 'https://127.0.0.1:5000']
 
+# ALLOWED_HOSTS = ['django']
+# ALLOWED_HOSTS = ['django', 'localhost', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -50,9 +52,11 @@ INSTALLED_APPS = [
     'matches',
     'pongGame',
     'relationships',
+	'django_prometheus',
 ]
 
 MIDDLEWARE = [
+	'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'config.middleware.tokenCheck',
+	'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -91,7 +96,9 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('redis-cache', 6379)],
+            "hosts": [(os.environ.get('REDIS_CACHE_HOST'), os.environ.get('REDIS_CACHE_PORT'))],
+            "capacity": 1500,  # default 100
+            "expiry": 10,  # default 60
         },
     },
 }
@@ -253,11 +260,11 @@ SIMPLE_JWT = {
     # 인증 헤더 이름 설정 ('Authorization' 사용)
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
 
-    # 사용자 식별에 사용될 필드 ('id' 사용)
-    "USER_ID_FIELD": "id",
+    # 사용자 식별에 사용될 필드 ('email' 사용)
+    "USER_ID_FIELD": "email",
 
     # 토큰에 포함될 사용자 식별 정보 필드 ('user_id' 사용)
-    "USER_ID_CLAIM": "user_id",
+    "USER_ID_CLAIM": "user_email",
 
     # 사용자 인증 규칙 설정
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",

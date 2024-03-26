@@ -1,85 +1,170 @@
+# container key order
+# 0. init
+# 1. image
+# 2. container_name
+# 3. command
+# 4. build
+# 5. ports
+# 6. volumes
+# 7. network
+# 8. depends_on
+# 9. healthcheck
+# 10. env_file
+
 services:
   nginx:
+    init: true
     image: nginx
-    container_name: nginx
+    container_name: $NGINX_HOST
     build:
       context: ./backend/nginx
       dockerfile: Dockerfile
-    volumes:
-      # - ./backend/nginx/src:/var/www/html
-      - ./backend/nginx/logs:/var/log/nginx
-      - ./frontend/src:/var/www/html
-    init: true
-    ports:
-      - "$NGINX_PORT:$NGINX_PORT"
-    env_file:
-      - .env
-    networks:
-      - our_net
     depends_on:
       django:
         condition: service_healthy
+    ports:
+      - "$NGINX_PORT:$NGINX_PORT"
+    volumes:
+      - ./backend/nginx/logs:/var/log/nginx
+      - ./frontend/src:/var/www/html
+    networks:
+      - our_net
+    env_file:
+      - .env
 
   django:
+    init: true
     image: django
-    container_name: django
+    container_name: $DJANGO_HOST
     build:
       context: ./backend/django
       dockerfile: Dockerfile
-    volumes:
-      - ./backend/django/src:/django
-    init: true
-    env_file:
-      - .env
-    networks:
-      - our_net
-    healthcheck:
-      test: cat $DJANGO_HEALTH
-      interval: 3s
-      timeout: 2s
-      retries: 30
     depends_on:
       postgresql:
         condition: service_healthy
       redis-cache:
         condition: service_healthy
-   
-  redis-cache:
-    image: redis-cache
-    container_name: redis-cache
-    build:
-      context: ./backend/redis-cache
-      dockerfile: Dockerfile
-    init: true
-    env_file:
-      - .env
-    networks:
-      - our_net
     healthcheck:
-      test: cat $REDIS_HEALTH
+      test: curl --fail http://$DJANGO_HOST:$DJANGO_PORT/health/ && curl --fail http://$DJANGO_HOST:$WS_PORT/health/
       interval: 3s
       timeout: 2s
       retries: 30
+    volumes:
+      - ./backend/django/src:/django
+    networks:
+      - our_net
+    env_file:
+      - .env
+
+  redis-cache:
+    init: true
+    image: redis-cache
+    container_name: $REDIS_CACHE_HOST
+    build:
+      context: ./backend/redis-cache
+      dockerfile: Dockerfile
+    networks:
+      - our_net
+    healthcheck:
+      test: redis-cli -h redis-cache ping
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    env_file:
+      - .env
 
   postgresql:
+    init: true
     image: postgresql
     container_name: postgresql
     build:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
-    # volumes:
-    #   - 
-    init: true
-    env_file:
-      - .env
     networks:
-      - our_net 
+      - our_net
     healthcheck:
-      test: cat $POSTGRES_HEALTH
+      test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
       interval: 3s
       timeout: 2s
       retries: 30
-    
+    volumes:
+      - ./backend/PostgreSQL/data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  grafana:
+    init: true
+    image: grafana/grafana
+    container_name: $GRAFANA_HOST
+    build: 
+      context: ./backend/grafana
+      dockerfile: Dockerfile
+    ports:
+      - "$GRAFANA_PORT:$GRAFANA_PORT"
+    volumes:
+      - ./backend/grafana/data:/var/lib/grafana
+    networks:
+      - our_net
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  prometheus:
+    init: true
+    image: prom/prometheus
+    container_name: $PROMETHEUS_HOST
+    build:
+      context: ./backend/prometheus
+      dockerfile: Dockerfile
+    ports:
+      - "$PROMETHEUS_PORT:$PROMETHEUS_PORT"
+    volumes:
+      - ./backend/prometheus/data:/prometheus
+    networks:
+      - our_net
+    healthcheck:
+      test: curl -k --fail https://$PROMETHEUS_HOST:$PROMETHEUS_PORT/-/healthy
+      interval: 3s
+      timeout: 2s
+      retries: 30
+    env_file:
+      - .env
+
+  node-exporter:
+    init: true
+    image: prom/node-exporter
+    container_name: $NODE_EXPORTER_HOST
+    command:
+     - '--collector.disable-defaults'
+     - '--collector.cpu'
+     - '--collector.loadavg'
+    ports:
+     - "$NODE_EXPORTER_PORT:$NODE_EXPORTER_PORT"
+    networks:
+      - our_net
+    env_file:
+      - .env
+
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter
+    container_name: $NGINX_EXPORTER_HOST
+    command:
+     - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
+    networks:
+      - our_net
+    env_file:
+      - .env
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: $POSTGRES_EXPORTER_HOST
+    networks:
+      - our_net
+    env_file:
+      - .env
+
 networks:
   our_net:
     name: taeypark_hyeoan_network

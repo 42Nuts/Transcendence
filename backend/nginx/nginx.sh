@@ -24,15 +24,20 @@ http {
         }
 
         location / {
-          proxy_pass http://$DJANGO_IP:$DJANGO_PORT;
+          proxy_pass http://$DJANGO_HOST:$DJANGO_PORT;
         }
 
         location /ws {
-          proxy_pass http://$DJANGO_IP:$WS_PORT;
+          proxy_pass http://$DJANGO_HOST:$WS_PORT;
           proxy_http_version 1.1;
           proxy_set_header Upgrade \$http_upgrade;
           proxy_set_header Connection "Upgrade";
           proxy_set_header Host \$host;
+        }
+
+        location /metrics {
+          stub_status on;
+          allow all;
         }
     }
 }

@@ -5,3 +5,8 @@ db.sqlite3
 #files
 .DS_Store
 .vscode/
+*.log
+index.html
+
+# db
+data

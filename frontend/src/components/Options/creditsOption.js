@@ -34,7 +34,7 @@ class CreditsOption extends Component {
 
       const titleDiv = document.createElement("div");
       titleDiv.className =
-        "text-primary-text text-2xl font-semibold font-['Inter']";
+        "text-primary-text dark:text-secondary-text text-2xl font-semibold font-['Inter']";
       titleDiv.textContent = title;
       section.appendChild(titleDiv);
 
@@ -45,7 +45,7 @@ class CreditsOption extends Component {
         names.forEach((name) => {
           const nameDiv = document.createElement("div");
           nameDiv.className =
-            "text-primary-text text-xl font-normal font-['Inter']";
+            "text-primary-text dark:text-secondary-text text-xl font-normal font-['Inter']";
           nameDiv.textContent = name;
           namesContainer.appendChild(nameDiv);
         });

@@ -4,19 +4,19 @@ from django.http import HttpResponse, Http404, HttpResponseForbidden, HttpRespon
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
+
 # authenitcate() verifies and decode the token
 # if token is invalid, it raises an exception and returns 401
 logger = logging.getLogger('django')
 JWT_authenticator = JWTAuthentication()
 
 
-def get_user(request):
-    token = request.COOKIES.get('access_token')
-    if token is None:
+def get_user(access_token):
+    if access_token is None:
         raise AuthenticationFailed()
-    logger.info(f'access_token : {str(token)}')
+    logger.info(f'access_token : {str(access_token)}')
 
-    validated_token = JWT_authenticator.get_validated_token(token)
+    validated_token = JWT_authenticator.get_validated_token(access_token)
     user = JWT_authenticator.get_user(validated_token)
     return user
 
@@ -28,9 +28,13 @@ def tokenCheck(get_response):
         logger.info("Request GET: %s", str(request.GET))
         logger.info("Request Headers: %s", str(request.headers))
 
+        if request.path in ('/health/', '/prometheus/metrics'):
+            response = get_response(request)
+            return response
+
         try:
             # 토큰 검사 (토큰 재발급 로직 필요)
-            user = get_user(request)
+            user = get_user(request.COOKIES.get('access_token'))
 
             # API 유효성 검사
             splitedUrl = list(request.path.strip('/').split('/'))

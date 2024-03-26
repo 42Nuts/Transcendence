@@ -1,13 +1,20 @@
 export default {
-  // Game Options
-  updateNickName(context) {
-    context.commit("updateNickName");
+  updateNickname(context, payload) {
+    context.commit("updateNickname", payload);
   },
+  // Game Options
   updateTheme(context) {
     context.commit("updateTheme");
   },
   toggleDarkMode(context) {
     context.commit("toggleDarkMode");
+  },
+  // Profile
+  updateProfile(context, payload) {
+    context.commit("updateProfile", payload);
+  },
+  updateBackgroundColor(context, payload) {
+    context.commit("updateBackgroundColor", payload);
   },
   // Account Options
   toggleLogout(context) {

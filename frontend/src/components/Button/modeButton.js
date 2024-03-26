@@ -4,21 +4,46 @@ import Store from "../../store/index.js";
 class ModeButton extends Component {
   handleClick() {
     Store.dispatch(this.props.optionName);
+    this.handleStateChange();
+  }
+
+  handleStateChange() {
+    const newState = Store.state;
+    var newImageSrc;
+
+    if (this.props.optionName === "updateProfile") {
+      newImageSrc = this.props.imageSrc[newState.profile];
+    } else if (this.props.optionName === "updateTheme") {
+      newImageSrc = this.props.imageSrc[newState.theme];
+    } else if (this.props.optionName === "toggleDarkMode") {
+      const darkModeValue = newState.darkMode ? 1 : 0;
+      newImageSrc = this.props.imageSrc[darkModeValue];
+      document.documentElement.classList.toggle("dark");
+    }
+
+    this.updateImage(newImageSrc);
+  }
+
+  updateImage(newImageSrc) {
+    const image = this.button.querySelector("img");
+    if (image) {
+      image.src = newImageSrc;
+    }
   }
 
   render() {
-    const button = document.createElement("button");
-    button.className =
+    this.button = document.createElement("button");
+    this.button.className =
       "w-[72px] h-[72px] relative inline-flex justify-center items-center";
 
     const image = document.createElement("img");
-    image.src = this.props.imageSrc;
+    image.src = this.props.imageSrc[this.props.startIndex];
     image.className = "w-[72px] h-[72px]";
-    button.appendChild(image);
+    this.button.appendChild(image);
 
-    button.addEventListener("click", this.handleClick.bind(this));
+    this.button.addEventListener("click", this.handleClick.bind(this));
 
-    return button;
+    return this.button;
   }
 }
 

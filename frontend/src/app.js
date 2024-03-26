@@ -1,5 +1,15 @@
 import { Router } from "./utils/index.js";
-import { HomePage, OptionsPage, ProfilePage, GamePage } from "./pages/index.js";
+import {
+  HomePage,
+  OptionsPage,
+  ProfilePage,
+  GameModePage,
+  LoadingPage,
+  GamePage,
+  TournamentPage,
+  TournamentResultPage,
+} from "./pages/index.js";
+import Component from "./core/component.js";
 
 class App {
   constructor(props) {
@@ -13,7 +23,17 @@ class App {
       "/home/": HomePage,
       "/options/": OptionsPage,
       "/profile/": ProfilePage,
+      "/gameMode/": GameModePage,
+      "/loading/": LoadingPage,
       "/game/": GamePage,
+      "/tournament/": TournamentPage,
+      "/tournamentResult/": TournamentResultPage,
+    });
+
+    Object.values(this.router.routes).forEach((Page) => {
+      if (Page.prototype instanceof Component) {
+        Page.prototype.route = this.router.routePush.bind(this.router);
+      }
     });
 
     this.router.init(el);
