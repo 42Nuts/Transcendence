@@ -21,12 +21,11 @@ def get_user(access_token):
     return user
 
 
-def tokenCheck(get_response):
-    def middleware(request):
-        logger.info("Request Path: %s", str(request.path))
-        logger.info("Request Method: %s", str(request.method))
-        logger.info("Request GET: %s", str(request.GET))
-        logger.info("Request Headers: %s", str(request.headers))
+def log_detail(request):
+    logger.info("Request Path: %s", str(request.path))
+    logger.info("Request Method: %s", str(request.method))
+    logger.info("Request GET: %s", str(request.GET))
+    logger.info("Request Headers: %s", str(request.headers))
 
         if request.path in ('/health/', '/prometheus/metrics'):
             response = get_response(request)
