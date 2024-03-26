@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render
@@ -93,11 +93,12 @@ def loginPage(request):
 
 
 def logout(request):
-    response = HttpResponseRedirect('/')
-    response.set_cookie('access_token', '', max_age=0)
-    response.set_cookie('refresh_token', '', max_age=0)
-    return response
-
+    if request.method == 'POST':
+        response = HttpResponseRedirect('/')
+        response.set_cookie('access_token', '', max_age=0)
+        response.set_cookie('refresh_token', '', max_age=0)
+        return response
+    return HttpResponseNotAllowed(['POST'])
 
 def home(request):
     context = {
