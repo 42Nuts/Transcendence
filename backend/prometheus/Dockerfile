@@ -1,6 +1,7 @@
 FROM alpine
 
 RUN apk update && apk --no-cache add \
+    curl \
     openssl \
     prometheus
 
@@ -13,7 +14,9 @@ RUN openssl req \
     -out /etc/prometheus/certificate.crt
 
 COPY ./prometheus.sh /usr/local/bin/prometheus.sh
+COPY ./healthcheck.sh /usr/local/bin/healthcheck.sh
 
 RUN chmod +x /usr/local/bin/prometheus.sh
+RUN chmod +x /usr/local/bin/healthcheck.sh
 
 ENTRYPOINT [ "prometheus.sh" ]

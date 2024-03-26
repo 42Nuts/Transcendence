@@ -1,0 +1,54 @@
+# ---------- Kibana 서버 설정 ----------
+
+# Kibana가 사용할 포트 번호를 설정
+server.port: 5601
+
+# Kibana 서버가 바인딩할 호스트 주소를 설정
+server.host: "0.0.0.0"
+
+# Kibana가 종료 신호를 받았을 때까지 대기하는 최대 시간을 설정
+server.shutdownTimeout: "5s"
+
+# Kibana 인스턴스의 이름을 설정
+# server.name: ""
+
+# ---------- Elasticsearch 설정 ----------
+# Kibana가 연결할 Elasticsearch 서버의 주소 목록
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+
+# Elasticsearch에 연결할 때 사용할 사용자 이름
+# elasticsearch.username: "kibana_user"
+
+# Elasticsearch에 연결할 때 사용할 비밀번호
+# elasticsearch.password: "kibana_password"
+
+# ----------기본 Kibana 인덱스 및 로케일 ----------
+# Kibana가 사용할 기본 Elasticsearch 인덱스 이름
+# kibana.index: ".kibana"
+
+# Kibana의 UI 언어 설정
+# i18n.locale: "en"
+
+# ----------로깅 설정 ----------
+# 로그 파일의 저장 위치
+# logging.dest: /var/log/kibana.log
+
+# 로깅 수준을 설정합니다. verbose 모드가 활성화되면 더 많은 정보가 로그에 기록
+# logging.verbose: false
+
+# ----------보안 설정 (X-Pack 필요) ----------
+# X-Pack 보안 기능의 활성화 여부를 설정
+# xpack.security.enabled: true
+
+# HTTPS를 통한 접근만 허용할지 여부를 설정
+server.ssl.enabled: true
+
+# SSL 인증서의 파일 경로를 설정
+server.ssl.certificate: /usr/share/kibana/config/certificate.crt
+
+# SSL 키의 파일 경로를 설정
+server.ssl.key: /usr/share/kibana/config/private.key
+
+# ----------모니터링 UI 설정 ----------
+# Elasticsearch가 컨테이너 환경에서 실행되고 있는 경우 모니터링 UI를 해당 환경에 맞게 조정할지 여부를 설정
+monitoring.ui.container.elasticsearch.enabled: true

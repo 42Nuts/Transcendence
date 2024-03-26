@@ -22,13 +22,18 @@ services:
     depends_on:
       django:
         condition: service_healthy
+    healthcheck:
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 10s
+      retries: 30
     ports:
       - "$NGINX_PORT:$NGINX_PORT"
     volumes:
       - ./backend/nginx/logs:/var/log/nginx
       - ./frontend/src:/var/www/html
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -45,14 +50,14 @@ services:
       redis-cache:
         condition: service_healthy
     healthcheck:
-      test: curl --fail http://$DJANGO_HOST:$DJANGO_PORT/health/ && curl --fail http://$DJANGO_HOST:$WS_PORT/health/
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 10s
       retries: 30
     volumes:
       - ./backend/django/src:/django
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
@@ -64,31 +69,36 @@ services:
       context: ./backend/redis-cache
       dockerfile: Dockerfile
     networks:
-      - our_net
+      - net
     healthcheck:
-      test: redis-cli -h redis-cache ping
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 10s
       retries: 30
     env_file:
       - .env
 
   postgresql:
-    init: true
     image: postgresql
-    container_name: postgresql
+    container_name: $POSTGRES_HOST
+    command:
+      - "postgres"
+      - "-c"
+      - "config_file=/var/lib/postgresql/postgresql.conf"
     build:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
     networks:
-      - our_net
+      - net
     healthcheck:
-      test: pg_isready --dbname=$POSTGRES_DB --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER
-      interval: 3s
-      timeout: 2s
-      retries: 30
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 10s
+      retries: 50
     volumes:
       - ./backend/PostgreSQL/data:/var/lib/postgresql/data
+      - ./backend/PostgreSQL/postgresql.conf:/var/lib/postgresql/postgresql.conf
+      - ./backend/PostgreSQL/logs:/var/log/postgresql
     env_file:
       - .env
 
@@ -97,14 +107,14 @@ services:
     image: grafana/grafana
     container_name: $GRAFANA_HOST
     build: 
-      context: ./backend/grafana
+      context: ./backend/grafana 
       dockerfile: Dockerfile
     ports:
       - "$GRAFANA_PORT:$GRAFANA_PORT"
     volumes:
       - ./backend/grafana/data:/var/lib/grafana
     networks:
-      - our_net
+      - net
     depends_on:
       prometheus:
         condition: service_healthy
@@ -123,11 +133,11 @@ services:
     volumes:
       - ./backend/prometheus/data:/prometheus
     networks:
-      - our_net
+      - net
     healthcheck:
-      test: curl -k --fail https://$PROMETHEUS_HOST:$PROMETHEUS_PORT/-/healthy
-      interval: 3s
-      timeout: 2s
+      test: healthcheck.sh
+      interval: 5s
+      timeout: 10s
       retries: 30
     env_file:
       - .env
@@ -143,29 +153,104 @@ services:
     ports:
      - "$NODE_EXPORTER_PORT:$NODE_EXPORTER_PORT"
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
   nginx-prometheus-exporter:
+    init: true
     image: nginx/nginx-prometheus-exporter
     container_name: $NGINX_EXPORTER_HOST
     command:
      - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
     networks:
-      - our_net
+      - net
     env_file:
       - .env
 
   postgres-exporter:
+    init: true
     image: prometheuscommunity/postgres-exporter
     container_name: $POSTGRES_EXPORTER_HOST
     networks:
-      - our_net
+      - net
+    env_file:
+      - .env
+
+  elasticsearch:
+    init: true
+    image: elasticsearch
+    container_name: $ELASTICSEARCH_HOST
+    build:
+      context: ./backend/ELK/elasticsearch
+      dockerfile: Dockerfile
+    ports:
+      - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
+    volumes:
+      # - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./backend/ELK/kibana/token:/usr/share/elasticsearch/token
+      - ./backend/ELK/elasticsearch/hostname:/usr/share/elasticsearch/hostname
+      - ./backend/ELK/logstash/http_ca.crt:/usr/share/elasticsearch/http_ca.crt
+    networks:
+      - net
+    depends_on:
+      nginx:
+        condition: service_healthy
+    healthcheck:
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
+      retries: 50
+    env_file:
+      - .env
+
+  logstash: 
+    init: true
+    image: logstash
+    container_name: $LOGSTASH_HOST
+    build:
+      context: ./backend/ELK/logstash
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
+      - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
+      - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
+      - ./backend/ELK/logstash/http_ca.crt:/usr/share/logstash/config/certs/http_ca.crt
+      - ./backend/ELK/elasticsearch/hostname:/usr/share/logstash/es_hostname
+    networks:
+      - net
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    healthcheck:
+      test: healthcheck.sh
+      interval: 10s
+      timeout: 10s
+      retries: 30
+    env_file:
+      - .env
+
+  kibana:
+    init: true
+    image: kibana
+    container_name: $KIBANA_HOST
+    build:
+      context: ./backend/ELK/kibana
+      dockerfile: Dockerfile
+    ports:
+      - '$KIBANA_PORT:$KIBANA_PORT'
+    volumes:
+      - ./backend/ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ./backend/ELK/kibana/token:/usr/share/kibana/token
+    networks:
+      - net
+    depends_on:
+      logstash:
+        condition: service_healthy
     env_file:
       - .env
 
 networks:
-  our_net:
-    name: taeypark_hyeoan_network
+  net:
+    name: transcendence_network
     driver: bridge

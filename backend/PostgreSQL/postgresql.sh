@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 echo "PostgreSQL 데이터베이스 생성"
 

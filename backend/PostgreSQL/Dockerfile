@@ -1,8 +1,5 @@
 FROM postgres:latest
 
+COPY ./healthcheck.sh /usr/local/bin/healthcheck.sh
 
-COPY ./postgresql.sh /usr/local/bin/postgresql.sh
-
-RUN chmod +x /usr/local/bin/postgresql.sh
-
-ENTRYPOINT [ "postgresql.sh" ]
+RUN chmod +x /usr/local/bin/healthcheck.sh
