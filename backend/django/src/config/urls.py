@@ -16,7 +16,7 @@ Including another URLconf
 """
 
 from django.urls import path, include
-from login.views import fourtytwo_oauth, home, loginPage, logout
+from login.views import fourtytwo_oauth, home, loginPage
 from pongGame.views import game
 from django.http import HttpResponse
 from django_prometheus import exports as django_prometheus_expots
@@ -28,7 +28,6 @@ def health_check(request):
 
 urlpatterns = [
     path('', loginPage),
-    path('logout/', logout),
     path('42oauth/', fourtytwo_oauth),
     path('home/', home),
     path('v2/users/', include('users.urls')),

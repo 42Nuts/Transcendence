@@ -110,7 +110,7 @@ class OptionsPage extends Component {
   }
 
   logoutUser() {
-    fetch(`/logout/`, {
+    fetch(`/v2/users/${userId}/`, {
       method: "POST",
       headers: {
         "X-CSRFToken": getCookie("csrftoken"),

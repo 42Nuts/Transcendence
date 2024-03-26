@@ -92,14 +92,6 @@ def loginPage(request):
     return render(request, 'index.html', context)
 
 
-def logout(request):
-    if request.method == 'POST':
-        response = HttpResponseRedirect('/')
-        response.set_cookie('access_token', '', max_age=0)
-        response.set_cookie('refresh_token', '', max_age=0)
-        return response
-    return HttpResponseNotAllowed(['POST'])
-
 def home(request):
     context = {
         'requireNickName': (request.user.nickname == ''),
