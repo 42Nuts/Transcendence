@@ -109,6 +109,30 @@ class OptionsPage extends Component {
       });
   }
 
+  logoutUser() {
+    fetch(`/logout/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+    window.location.assign("/");
+  }
+
+  deleteUser() {
+    fetch(`/v2/users/${userId}/`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+    window.location.assign("/");
+  }
+
   render() {
     const container = document.createElement("div");
     container.className = "container mx-auto";
@@ -150,6 +174,7 @@ class OptionsPage extends Component {
       optionName: "toggleLogout",
       boxWidth: "505px",
       popupName: "logoutPopup",
+      confirm: this.logoutUser,
     };
     this.logoutPopup = createComponent(PopUp, logoutProps);
 
@@ -160,6 +185,7 @@ class OptionsPage extends Component {
       optionName: "toggleDeleteAccount",
       boxWidth: "605px",
       popupName: "deleteAccountPopup",
+      confirm: this.deleteUser,
     };
     this.deleteAccountPopup = createComponent(PopUp, deleteProps);
 
