@@ -1,0 +1,39 @@
+# ----------------------- Cluster -----------------------
+# 클러스터 이름 설정
+cluster.name: "docker-cluster"
+
+# ----------------------- Node -----------------------
+# 노드 이름 설정
+# node.name:
+# 노드 역할 지정
+# node.roles:
+
+# ----------------------- Network -----------------------
+# 노드가 통신을 위해 사용할 네트워크 인터페이스 설정
+network.host: 0.0.0.0
+
+# HTTP 통신에 사용할 포트 설정
+# http.port:
+
+# ----------------------- Directories -----------------------
+# 데이터 파일을 저장할 경로 설정
+# path.data:
+# 로그 파일을 저장할 경로 설정
+# path.logs:
+
+# ----------------------- Discovery -----------------------
+#  클러스터의 초기 노드 찾기에 사용할 호스트 목록
+# discovery.seed_hosts:
+# 클러스터 시작 시 마스터로 간주될 노드의 이름 목록
+# cluster.initial_master_nodes:
+discovery.type: single-node
+
+# ----------------------- X-Pack -----------------------
+# XPack 보안 기능을 활성화하거나 비활성화
+# xpack.security.enabled: true
+# xpack.security.transport.ssl.certificate: /usr/share/elasticsearch/config/certificate.crt
+# xpack.security.transport.ssl.key: /usr/share/elasticsearch/config/private.key
+
+# 클러스터 간 통신에 SSL/TLS 보안 사용 설정
+# xpack.security.transport.ssl.enabled: true
+
