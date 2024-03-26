@@ -7,6 +7,7 @@ import {
 } from "../components/Options/index.js";
 import { PopUp } from "../components/PopUp/index.js";
 import Store from "../store/index.js";
+import getCookie from "../utils/getCookie.js";
 
 class OptionsPage extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ class OptionsPage extends Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": document.cookie.split("=")[1],
+        "X-CSRFToken": getCookie("csrftoken"),
       },
       body: JSON.stringify({
         theme_index: Store.state.theme,
@@ -86,7 +87,7 @@ class OptionsPage extends Component {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "X-CSRFToken": document.cookie.split("=")[1],
+        "X-CSRFToken": getCookie("csrftoken"),
       },
       body: JSON.stringify({
         dark_mode: Store.state.darkMode,
