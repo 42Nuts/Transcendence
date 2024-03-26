@@ -31,12 +31,12 @@ filter {
     }
     else if [type] == 'django' {
         grok {
-            match => { 'message' => '%{LOGLEVEL:loglevel} %{TIMESTAMP_ISO8601:timestamp},%{NUMBER:microseconds} %{WORD:component} %{NUMBER:process_id} %{NUMBER:thread_id} %{DATA:request_info}: %{GREEDYDATA:request_detail}' }
+            match => { 'message' => '%{LOGLEVEL:loglevel} %{TIMESTAMP_ISO8601:timestamp},%{NUMBER:microseconds} %{WORD:component} %{NUMBER:process_id} %{NUMBER:thread_id} %{GREEDYDATA:request_detail}' }
         }
     }
     else if [type] == 'postgresql' {
         grok {
-            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} \[%{NUMBER:process_id}\] %{WORD:log_level}:  %{GREEDYDATA:message}' }
+            match => { 'message' => '%{TIMESTAMP_ISO8601:timestamp} %{DATA:timezone} \[%{NUMBER:process_id}\] %{WORD:log_level}:  %{GREEDYDATA:postgresql_message}' }
         }
     }
 }
@@ -56,9 +56,9 @@ echo "
 http.host: '0.0.0.0'
 xpack.monitoring.elasticsearch.hosts: [ 'https://$ELASTICSEARCH_HOSTNAME:$ELASTICSEARCH_PORT' ]
 xpack.monitoring.elasticsearch.username: '$ELASTICSEARCH_USER'
-xpack.monitoring.elasticsearch.password: => '$ELASTICSEARCH_PASSWORD'
+xpack.monitoring.elasticsearch.password: '$ELASTICSEARCH_PASSWORD'
 xpack.monitoring.elasticsearch.ssl.certificate_authority: '/usr/share/logstash/config/certs/http_ca.crt'
 xpack.monitoring.elasticsearch.ssl.verification_mode: certificate
 " > ./config/logstash.yml
 
-logstash -f ./logstash.conf
+logstash --log.level=debug -f ./logstash.conf
