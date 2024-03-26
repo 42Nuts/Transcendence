@@ -111,17 +111,14 @@ class TournamentTeam extends Component {
         this.showResult("win");
       } else {
         this.showResult("lose");
-        if (Store.state.gameMode == "tournament") {
-          this.props.gameSocket.close();
-          this.destroy();
-          return ;
+        if (Store.state.tournamentMode == 0) {
+          this.props.gameSocket.close(4000);
         }
+        this.destroy();
+        return ;
       }
-      //tournamet 인지 확인
-      if (Store.state.gameMode != "tournament") {
         this.props.gameSocket.close();
         this.destroy();
-      }
     }
   }
 
@@ -238,10 +235,8 @@ class TournamentTeam extends Component {
 
       if (data.type == "game_end") {
         this.showResult("win");
-        if (Store.state.gameMode != "tournament") {
           this.props.gameSocket.close();
           this.destroy();
-        }
         return;
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);

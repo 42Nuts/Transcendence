@@ -15,7 +15,7 @@ from urllib.parse import parse_qs
 logger = logging.getLogger('django')
 group_game_instances = {}
 group_member_count = {}
-tournament_winner = {}
+tournament_winner_room = {}
 
 matching_queue = {
     "2p": deque(),
@@ -178,30 +178,34 @@ class GameConsumer(AsyncWebsocketConsumer):
         group_game_instances[winner_room_name] = twoPlayer(winners)
         group_member_count[winner_room_name] = 2
         self.game = group_game_instances[winner_room_name]
+        winnerIds = []
 
+        logger.info(winners)
         for winner in winners:
-            await self.channel_layer.group_add(
+            await winner.channel_layer.group_add(
                 winner_room_name,
                 winner.channel_name
             )
             winner.game = self.game
             winner.room_group_name = winner_room_name
+            winnerIds.append(winner.userId)
             winner.update_task = asyncio.create_task(winner.game_update_task())
 
-            await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_start',
-                        'game_start': winners,
-                    }
-                )
+        logger.info('before send')
+        await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'game_start',
+                    'game_start': winnerIds,
+                }
+            )
+        logger.info('after send')
 
 
 
     async def disconnect(self, close_code):
         logger.info(f'disconnect')
         logger.info(f'queue:{matching_queue[self.mode]}')
-
 
         idx = 0           
         for playerId, player in matching_queue[self.mode]:
@@ -211,23 +215,24 @@ class GameConsumer(AsyncWebsocketConsumer):
                 return
             idx += 1
 
-        if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_end',
-                    'message': "game end",
-                }
-            )
+        if close_code != 4000:
+            if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_end',
+                        'message': "game end",
+                    }
+                )
 
-        elif group_member_count[self.room_group_name] == limit_size[self.mode]:
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_end',
-                    'message': "game end",
-                }
-            )
+            elif group_member_count[self.room_group_name] == limit_size[self.mode]:
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_end',
+                        'message': "game end",
+                    }
+                )
 
         await self.channel_layer.group_discard(
             self.room_group_name,
@@ -282,14 +287,15 @@ class GameConsumer(AsyncWebsocketConsumer):
                     if (check != "1" and check != "2"):
                         await self.close()
                         return
-                    if winner_room_name not in tournament_winner:
-                        tournament_winner[winner_room_name] = []
-                    tournament_winner[winner_room_name].append(game_data.get('winner'))
-                    if len(tournament_winner[winner_room_name]) == 2:
-                        logger.info('before final')
-                        await self.final_tournament_round(winner_room_name, tournament_winner[winner_room_name])
-                        logger.info('after final')
-                        return
+                    if winner_room_name not in tournament_winner_room:
+                        tournament_winner_room[winner_room_name] = []
+                    if self.userId == game_data.get('winner'):
+                        tournament_winner_room[winner_room_name].append(self)
+                        if len(tournament_winner_room[winner_room_name]) == 2:
+                            logger.info('before final')
+                            await self.final_tournament_round(winner_room_name, tournament_winner_room[winner_room_name])
+                            logger.info('after final')
+                            return
                 break
 
     async def receive(self, text_data):
