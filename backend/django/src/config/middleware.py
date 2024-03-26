@@ -27,6 +27,18 @@ def log_detail(request):
     logger.info("Request GET: %s", str(request.GET))
     logger.info("Request Headers: %s", str(request.headers))
 
+
+def is_authorized_path(user, request):
+    splitedUrl = list(request.path.strip('/').split('/'))
+
+    if splitedUrl[0] == 'v2' and len(splitedUrl) >= 3:
+        logger.info("user pk: %s", str(user.pk))
+        logger.info("splitedUrl0: %s", str(splitedUrl[1]))
+        logger.info("splitedUrl1: %s", str(splitedUrl[2]))
+        if (request.method in ('PUT', 'DELETE')) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
+            return False
+    return True
+
         if request.path in ('/health/', '/prometheus/metrics'):
             response = get_response(request)
             return response
