@@ -80,7 +80,7 @@ class ProfilePage extends Component {
   }
 
   sendSetting() {
-    fetch("/v2/users/1/profile-index/", {
+    fetch(`/v2/users/${userId}/profile-index/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
