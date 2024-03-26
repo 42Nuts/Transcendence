@@ -104,7 +104,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 elif mode == "4p":
                     group_game_instances[self.room_group_name] = fourPlayer(player_ids)
                 elif mode == "tournament":
-                    self.start_tournament(player_ids, players)
+                    await self.start_tournament(player_ids, players)
                     return
                 else:
                     await self.close()
@@ -131,46 +131,51 @@ class GameConsumer(AsyncWebsocketConsumer):
                 )
 
     async def start_tournament(self, player_ids, players):
-        group_game_instances[self.room_group_name + "_1"] = twoPlayer(player_ids[0:2])
-        group_game_instances[self.room_group_name + "_2"] = twoPlayer(player_ids[2:4])
-        group_member_count[self.room_group_name + "_1"] = 2
-        group_member_count[self.room_group_name + "_2"] = 2
+        room1 = self.room_group_name + "_1"
+        room2 = self.room_group_name + "_2"
+
+        group_game_instances[room1] = twoPlayer(player_ids[0:2])
+        group_game_instances[room2] = twoPlayer(player_ids[2:4])
+        group_member_count[room1] = 2
+        group_member_count[room2] = 2
 
         for player in players[0:2]:
-            player.room_group_name = self.room_group_name + "_1"
+            player.game = group_game_instances[room1]
+            player.room_group_name = room1
             await player.channel_layer.group_add(
                 player.room_group_name,
                 player.channel_name
             )
             player.update_task = asyncio.create_task(player.game_update_task())
 
+        await self.channel_layer.group_send(
+            room1,
+            {
+                'type': 'game_start',
+                'game_start': player_ids[0:2],
+            }
+        )
+
         for player in players[2:4]:
-            player.room_group_name = self.room_group_name + "_2"
+            player.game = group_game_instances[room2]
+            player.room_group_name = room2
             await player.channel_layer.group_add(
                 player.room_group_name,
                 player.channel_name
             )
             player.update_task = asyncio.create_task(player.game_update_task())
         
-        await self.channel_layer.group_send(
-            self.room_group_name + "_1",
-            {
-                'type': 'game_start',
-                'game_start': player_ids,
-            }
-        )
 
         await self.channel_layer.group_send(
-            self.room_group_name + "_2",
+            room2,
             {
                 'type': 'game_start',
-                'game_start': player_ids,
+                'game_start': player_ids[2:4],
             }
         )
     
     async def final_tournament_round(self, base_room_name, winners):
-        final_game = twoPlayer(winners)
-        group_game_instances[base_room_name] = final_game
+        group_game_instances[base_room_name] = twoPlayer(winners)
         group_member_count[base_room_name] = 2
         self.game = group_game_instances[base_room_name]
 
