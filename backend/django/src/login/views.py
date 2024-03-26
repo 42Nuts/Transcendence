@@ -37,6 +37,18 @@ def request_oauth_token(authorization_code):
     # HTTP 요청 실패 시 예외 발상
     token_response.raise_for_status()
     return token_response.json()
+
+# 엑세스 토큰을 사용하여 사용자 정보를 요청하는 함수
+def request_user_info(access_token):
+    # 사용자 정보를 요청하는 URL
+    user_info_url = os.environ.get('FOURTYTWO_USER_API')
+    # 인증 헤더 설정
+    headers = {'Authorization': f'Bearer {access_token}'}
+    # 사용자 정보 요청
+    user_response = requests.get(user_info_url, headers=headers)
+    # HTTP 요청 실패 시 예외 발생
+    user_response.raise_for_status()
+    return user_response.json()
 def fourtytwo_oauth(request):
     if request.method != 'GET':
         return JsonResponse({'status': 403})
