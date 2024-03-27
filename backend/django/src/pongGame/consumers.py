@@ -5,6 +5,7 @@ from .twoPlayerMode import twoPlayer
 from .threePlayerMode import threePlayer
 from .fourPlayerMode import fourPlayer
 from .tournamentMode import tournament
+from .onePlayerMode import onePlayer
 from collections import deque
 import json
 import logging
@@ -18,6 +19,7 @@ group_member_count = {}
 tournament_winner_room = {}
 
 matching_queue = {
+    "1p": deque(),
     "2p": deque(),
     "3p": deque(),
     "4p": deque(),
@@ -26,6 +28,7 @@ matching_queue = {
 }
 
 limit_size = {
+    "1p": 1,
     "2p": 2,
     "3p": 3,
     "4p": 4,
@@ -34,6 +37,7 @@ limit_size = {
 }
 
 room_id = {
+    "1p": 0,
     "2p": 0,
     "3p": 0,
     "4p": 0,
@@ -110,7 +114,9 @@ class GameConsumer(AsyncWebsocketConsumer):
 
                 # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
                 if self.room_group_name not in group_game_instances:
-                    if mode == "2p":
+                    if mode == "1p":
+                        group_game_instances[self.room_group_name] = onePlayer(player_ids)
+                    elif mode == "2p":
                         group_game_instances[self.room_group_name] = twoPlayer(player_ids)
                     elif mode == "3p":
                         group_game_instances[self.room_group_name] = threePlayer(player_ids)
