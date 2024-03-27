@@ -265,7 +265,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         group_member_count[self.room_group_name] -= 1
         if group_member_count[self.room_group_name] == 0:
             del group_game_instances[self.room_group_name]  # 게임 인스턴스 삭제
-            del group_member_count[self.room_group_name]  # 참여자 수 추적 삭제
+            del group_member_count[self.room_group_name]
+            if self.mode == "tournament2":
+                del tournament_winner_room[self.room_group_name]
 
         await self.close()
 
@@ -326,7 +328,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(game_data))
 
     async def game_end(self, event):
-        await self.send(text_data=json.dumps({'type' : 'game_end'}))
+        next_room = event['message']
+        if next_room == "game end":
+            await self.send(text_data=json.dumps({'type' : 'game_end'}))
+        else:
+            await self.send(text_data=json.dumps({'type' : 'game_end', 'next_room' : next_room}))
 
     async def game_start(self, event):
         player_ids = event['game_start']
