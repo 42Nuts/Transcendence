@@ -1,5 +1,5 @@
 import { Component, createComponent } from "../core/index.js";
-import { TwoPlayerMode, ThreePlayerMode, FourPlayerMode, TournamentMode } from "../game/index.js";
+import { OnePlayerMode, TwoPlayerMode, ThreePlayerMode, FourPlayerMode, TournamentMode } from "../game/index.js";
 import { GameRouter } from "../utils/index.js";
 import { Loading } from "../game/Loading/index.js";
 import Store from "../store/index.js";
@@ -10,6 +10,7 @@ class GamePage extends Component {
     Store.events.subscribe("gameStartChange", this.onGameStartChange.bind(this));
 
     this.gameRouter = new GameRouter({
+      "1p": OnePlayerMode,
       "2p": TwoPlayerMode,
       "3p": ThreePlayerMode,
       "4p": FourPlayerMode,

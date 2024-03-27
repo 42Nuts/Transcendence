@@ -225,7 +225,7 @@ class onePlayerMode extends Component {
     this.ctx = this.canvas.getContext("2d");
 
     this.gameSocket = new WebSocket(
-      "wss://" + window.location.host + `/ws/game/?mode=2p&userId=${userId}`
+      "wss://" + window.location.host + `/ws/game/?mode=1p&userId=${userId}`
     );
 
     this.gameSocket.onmessage = (e) => {
