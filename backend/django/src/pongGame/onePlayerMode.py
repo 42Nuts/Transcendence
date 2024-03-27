@@ -86,7 +86,7 @@ class onePlayer:
             a_press=False,
             d_press=False,
             angle = 180,
-            id=player_ids[1]
+            id=player_ids[0]
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -95,18 +95,18 @@ class onePlayer:
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
             radius=15,
-            velocity_x=2,
-            velocity_y=2,
-            speed=4,
+            velocity_x=3,
+            velocity_y=3,
+            speed=6,
             color="WHITE"
         )
 
     def reset_ball(self):
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.velocity_x = -2 if self.ball.velocity_x > 0 else 2
-        self.ball.velocity_y = -2 if self.ball.velocity_y > 0 else 2
-        self.ball.speed = 4
+        self.ball.velocity_x = -3 if self.ball.velocity_x > 0 else 3
+        self.ball.velocity_y = -3 if self.ball.velocity_y > 0 else 3
+        self.ball.speed = 6
 
     def collision(self, b, p):
         p.top = p.y
@@ -186,16 +186,12 @@ class onePlayer:
 
         # 키보드 입력에 따른 변수 변화
         if user_input:
-            player_id = user_input.get("playerId")
-            player = self.player_map.get(player_id)
-
-            if player:
+            for player in self.players:
                 player.leftArrow = user_input.get("leftArrow", False)
                 player.rightArrow = user_input.get("rightArrow", False)
                 player.a_press = user_input.get("a_press", False)
                 player.d_press = user_input.get("d_press", False)
 
-                # 두 키가 동시에 눌렸을 경우 움직임 없음
         for index, player in enumerate(self.players):
             self.update_player_movement(index, player)
 
