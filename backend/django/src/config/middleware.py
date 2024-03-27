@@ -44,7 +44,7 @@ def tokenCheck(get_response):
                     logger.info("user pk: %s", str(user.pk))
                     logger.info("splitedUrl0: %s", str(splitedUrl[1]))
                     logger.info("splitedUrl1: %s", str(splitedUrl[2]))
-                    if (request.method in ('PUT', 'DELETE')) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
+                    if (request.method in ('PUT', 'POST', 'DELETE')) and splitedUrl[1] == 'users' and user.pk != int(splitedUrl[2]):
                         return HttpResponseForbidden()
 
             logger.info('after checck')
@@ -62,7 +62,7 @@ def tokenCheck(get_response):
             if request.path in ('/', '/42oauth/'):  # 인증
                 response = get_response(request)
                 return response
-            return HttpResponse(str(e), status=401)
+            return HttpResponseRedirect('/')
         except Exception as e:
             logger.info("Unexpected error: %s", str(e))
             return HttpResponse('Unexpected error', status=500)

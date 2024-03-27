@@ -56,6 +56,7 @@ class PopUp extends Component {
       containerHeight: "h-[72px]",
       iconWidth: "w-[48px]",
       iconHeight: "h-[48px]",
+      onClick: this.props.confirm,
     });
 
     textContainer.appendChild(title);

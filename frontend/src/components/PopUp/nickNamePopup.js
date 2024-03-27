@@ -9,8 +9,8 @@ class NickNamePopUp extends Component {
   }
 
   putNickName() {
-    // this.name = this.input.value;
-    this.name = "test";
+    this.name = this.input.value;
+    // this.name = "test";
     this.overlay.style.display = "none";
     requireNickName = false;
 
@@ -18,7 +18,7 @@ class NickNamePopUp extends Component {
     // put nickname to store
     Store.dispatch("updateNickname", this.name);
     // fetch nickname to server
-    fetch("/v2/users/1/nickname/", {
+    fetch(`/v2/users/${userId}/nickname/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -41,8 +41,8 @@ class NickNamePopUp extends Component {
       "absolute m-auto fixed inset-0 bg-primary-text bg-opacity-50 flex justify-center items-center";
     this.overlay.id = "nickname";
     if (requireNickName === "True") {
-      // this.overlay.style.display = "flex";
-      this.putNickName();
+      this.overlay.style.display = "flex";
+      // this.putNickName();
     } else {
       this.overlay.style.display = "none";
     }
