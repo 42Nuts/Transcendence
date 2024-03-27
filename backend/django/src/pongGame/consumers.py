@@ -272,7 +272,11 @@ class GameConsumer(AsyncWebsocketConsumer):
     # 게임 상태 업데이트 및 그룹에 전송
     # member 제거
     async def game_update_task(self):
-        await asyncio.sleep(2.1)
+        if self.mode in ("tournament", "tournament2"):
+            await asyncio.sleep(4.1)
+        else:
+            await asyncio.sleep(2.1)
+
         while True:
             logger.info(self.userId)
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
