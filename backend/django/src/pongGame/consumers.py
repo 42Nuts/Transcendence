@@ -180,7 +180,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.game = group_game_instances[winner_room_name]
         winnerIds = []
 
-        logger.info(winners)
+        logger.info(f'winners : {winners}')
+        logger.info(f'newGame : {group_game_instances[winner_room_name]}')
         for winner in winners:
             await winner.channel_layer.group_add(
                 winner_room_name,
@@ -189,7 +190,6 @@ class GameConsumer(AsyncWebsocketConsumer):
             winner.game = self.game
             winner.room_group_name = winner_room_name
             winnerIds.append(winner.userId)
-            winner.update_task = asyncio.create_task(winner.game_update_task())
 
         logger.info('before send')
         await self.channel_layer.group_send(
@@ -215,6 +215,14 @@ class GameConsumer(AsyncWebsocketConsumer):
                 return
             idx += 1
 
+        await self.channel_layer.group_discard(
+            self.room_group_name,
+            self.channel_name
+        )
+        if self.update_task:
+            self.update_task.cancel()
+
+        logger.info(f'close_code : {close_code}')
         if close_code != 4000:
             if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
                 await self.channel_layer.group_send(
@@ -233,42 +241,34 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'message': "game end",
                     }
                 )
+        else:
+            group_member_count[self.room_group_name] = 1
 
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
-        if self.update_task:
-            self.update_task.cancel()
-        
+
         group_member_count[self.room_group_name] -= 1
         if group_member_count[self.room_group_name] == 0:
             del group_game_instances[self.room_group_name]  # 게임 인스턴스 삭제
             del group_member_count[self.room_group_name]  # 참여자 수 추적 삭제
 
-        self.close()
+        await self.close()
 
     # 게임 상태 업데이트 및 그룹에 전송
     # member 제거
     async def game_update_task(self):
         await asyncio.sleep(2.1)
         while True:
+            logger.info(self.userId)
             await asyncio.sleep(0.01)  # 게임 상태 업데이트 주기
 
             # if self.input_buffer:
                 # user_input = self.input_buffer.pop(0)
                 # game_data = self.game.update(user_input)
             # else:
-            game_data = self.game.update()  # 게임 상태 업데이트
-            
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_update',
-                    'game_data': game_data
-                }
-            )
-            if game_data.get('winner') is not None:
+            if self.game is not None:
+                game_data = self.game.update()  # 게임 상태 업데이트
+
+                logger.info(f'room_group_name : {self.room_group_name}')
+                logger.info(f'game_data : {game_data}')
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
@@ -276,27 +276,44 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
+                logger.info(f'after_update : {self.room_group_name}')
 
-                if self.mode == "tournament":
-                    await self.channel_layer.group_discard(
+                if game_data.get('winner') is not None:
+                    await self.channel_layer.group_send(
                         self.room_group_name,
-                        self.channel_name
+                        {
+                            'type': 'game_update',
+                            'game_data': game_data
+                        }
                     )
-                    winner_room_name = self.room_group_name.rsplit("_", 1)[0]
-                    check = self.room_group_name.rsplit("_", 1)[1]
-                    if (check != "1" and check != "2"):
-                        await self.close()
-                        return
-                    if winner_room_name not in tournament_winner_room:
-                        tournament_winner_room[winner_room_name] = []
-                    if self.userId == game_data.get('winner'):
-                        tournament_winner_room[winner_room_name].append(self)
-                        if len(tournament_winner_room[winner_room_name]) == 2:
-                            logger.info('before final')
-                            await self.final_tournament_round(winner_room_name, tournament_winner_room[winner_room_name])
-                            logger.info('after final')
+
+                    if self.mode == "tournament":
+                        await self.channel_layer.group_discard(
+                            self.room_group_name,
+                            self.channel_name
+                        )
+                        winner_room_name = self.room_group_name.rsplit("_", 1)[0]
+
+                        if winner_room_name not in tournament_winner_room:
+                            tournament_winner_room[winner_room_name] = []
+
+                        if self.userId == game_data.get('winner'):
+                            tournament_winner_room[winner_room_name].append(self)
+                            room_len = len(tournament_winner_room[winner_room_name])
+                            logger.info(f'room_len : {room_len}')
+                            if room_len == 1:
+                                self.game = None
+                            elif room_len == 2:
+                                logger.info('before final')
+                                await self.final_tournament_round(winner_room_name, tournament_winner_room[winner_room_name])
+                                logger.info('after final')
+                            else:
+                                # await self.close()
+                                logger.info(f'returned {self}')
+                                return
+                        else:
+                            await self.close()
                             return
-                break
 
     async def receive(self, text_data):
         user_input = json.loads(text_data)

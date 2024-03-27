@@ -113,12 +113,17 @@ class TournamentTeam extends Component {
         this.showResult("lose");
         if (Store.state.tournamentMode == 0) {
           this.props.gameSocket.close(4000);
+        } else {
+          this.props.gameSocket.close();
         }
         this.destroy();
-        return ;
+        return;
       }
+
+      if (Store.state.tournamentMode != 0) {
         this.props.gameSocket.close();
         this.destroy();
+      }
     }
   }
 
@@ -235,8 +240,8 @@ class TournamentTeam extends Component {
 
       if (data.type == "game_end") {
         this.showResult("win");
-          this.props.gameSocket.close();
-          this.destroy();
+        this.props.gameSocket.close();
+        this.destroy();
         return;
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);
@@ -258,7 +263,10 @@ class TournamentTeam extends Component {
   }
 
   closeWebSocketOnBack() {
-    if (this.props.gameSocket && this.props.gameSocket.readyState === WebSocket.OPEN) {
+    if (
+      this.props.gameSocket &&
+      this.props.gameSocket.readyState === WebSocket.OPEN
+    ) {
       this.props.gameSocket.close();
     }
   }
@@ -326,7 +334,10 @@ class TournamentTeam extends Component {
 
     this.exitButton.addEventListener("click", () => {
       // WebSocket 연결이 열려있다면 종료
-      if (this.props.gameSocket && this.props.gameSocket.readyState === WebSocket.OPEN) {
+      if (
+        this.props.gameSocket &&
+        this.props.gameSocket.readyState === WebSocket.OPEN
+      ) {
         this.props.gameSocket.close();
         console.log("WebSocket connection closed.");
       }
