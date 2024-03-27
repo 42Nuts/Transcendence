@@ -280,11 +280,14 @@ class TournamentTeam extends Component {
       const data = JSON.parse(e.data);
 
       if (data.type == "game_end") {
-        console.log("game_end");
-        this.showResult("win");
+        console.log('game_end')
         this.props.gameSocket.close();
         this.destroy();
-        return;
+        if (Store.state.tournamentMode == 0) {
+          Store.dispatch("updateNextRoom", `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`);
+        }
+
+        this.showResult("win");
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);
         Store.dispatch("updateGameStart");
