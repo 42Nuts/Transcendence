@@ -32,5 +32,8 @@ export default {
   },
   updateTournamentMode(context) {
     context.commit("updateTournamentMode");
-  }
+  },
+  updateNextRoom(context, payload) {
+    context.commit("updateNextRoom", payload);
+  },
 };

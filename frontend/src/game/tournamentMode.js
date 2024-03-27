@@ -13,9 +13,11 @@ class TournamentMode extends Component {
   }
 
   nextRound() {
-    console.log(`Store.state.tournamentMode : ${Store.state.tournamentMode}`)
     if (Store.state.tournamentMode == 1) {
+      this.initGame();
+      Store.dispatch("updateNextRoom", "");
       this.container.innerHTML = "";
+      console.log(this.gameSocket);
       const game = createComponent(TournamentTeam, {
         gameSocket: this.gameSocket,
       });
@@ -24,11 +26,10 @@ class TournamentMode extends Component {
   }
 
   initGame() {
-    this.gameSocket = new WebSocket(
-      "wss://" +
-        window.location.host +
-        `/ws/game/?mode=tournament&userId=${userId}`
-    );
+    const uri = Store.state.nextRoom
+      ? Store.state.nextRoom
+      : `/ws/game/?mode=tournament&userId=${userId}`;
+    this.gameSocket = new WebSocket("wss://" + window.location.host + uri);
   }
 
   render() {

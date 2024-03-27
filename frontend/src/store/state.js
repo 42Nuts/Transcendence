@@ -16,4 +16,5 @@ export default {
   gameMode: "2p",
   gameStart: false,
   tournamentMode: 0,
+  nextRoom: "",
 };

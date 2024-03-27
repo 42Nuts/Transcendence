@@ -23,7 +23,7 @@ class TournamentTeam extends Component {
 
   showResult(message) {
     const overlay = createComponent(Result, { result: message });
-    overlay.setAttribute("href", "/gameMode/");
+    // overlay.setAttribute("href", "/gameMode/");
 
     if (!this.result) {
       document.body.appendChild(overlay);
@@ -110,21 +110,12 @@ class TournamentTeam extends Component {
       if (data.winner == userId) {
         this.props.gameSocket.close();
         if (data.next_room) {
-          console.log(`next_room : ${data.next_room}`)
-          this.props.gameSocket = new WebSocket(
-            "wss://" +
-              window.location.host +
-              `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
-          );
+          Store.dispatch("updateNextRoom", `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`);
         }
         this.showResult("win");
       } else {
+        this.props.gameSocket.close();
         this.showResult("lose");
-        if (Store.state.tournamentMode == 0) {
-          this.props.gameSocket.close(4000);
-        } else {
-          this.props.gameSocket.close();
-        }
       }
       this.destroy();
     }

@@ -42,5 +42,9 @@ export default {
   updateTournamentMode(state) {
     state.tournamentMode = (state.tournamentMode + 1) % 3;
     return state;
-  }
+  },
+  updateNextRoom(state, payload) {
+    state.nextRoom = payload;
+    return state;
+  },
 };
