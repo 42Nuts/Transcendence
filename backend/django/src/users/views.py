@@ -103,7 +103,12 @@ def account_handler(request, user_id):
     if request.method == 'DELETE':
         request.user.delete()
         return HttpResponseRedirect('/')
-    return HttpResponseNotAllowed(['DELETE'])
+    elif request.method == 'POST':
+        response = HttpResponseRedirect('/')
+        response.set_cookie('access_token', '', max_age=0)
+        response.set_cookie('refresh_token', '', max_age=0)
+        return response
+    return HttpResponseNotAllowed(['POST, DELETE'])
 
 
 def background_color_handler(request, user_id):
