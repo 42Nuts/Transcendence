@@ -24,14 +24,14 @@ class GamePage extends Component {
 
   render() {
     const container = document.createElement("div");
-    console.log("Store theme", Store.state.theme);
 
-    // this.load = createComponent(Loading, {});
+    this.load = createComponent(Loading, {});
+    console.log("loading page is rendered");
 
     const game = this.gameRouter.getComponent(Store.state.gameMode);
 
     container.appendChild(game);
-    // container.appendChild(this.load);
+    container.appendChild(this.load);
 
     return container;
   }
