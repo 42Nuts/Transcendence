@@ -27,6 +27,14 @@ class GameModePage extends Component {
     gameBoardUp.className = "justify-start items-start gap-36 inline-flex";
 
     const card1 = createComponent(Card, {
+      title: "1 Players",
+      titleLeft: "left-[52px]",
+      image: "/static/assets/images/character-AI.svg",
+      gameMode: "1p",
+      optionName: "updateGameMode",
+    });
+
+    const card2 = createComponent(Card, {
       title: "2 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-vs.svg",
@@ -34,20 +42,10 @@ class GameModePage extends Component {
       optionName: "updateGameMode",
     });
 
-    const card2 = createComponent(Card, {
+    const card3 = createComponent(LockCard, {
       title: "3 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-triangle.svg",
-      gameMode: "3p",
-      optionName: "updateGameMode",
-    });
-
-    const card3 = createComponent(Card, {
-      title: "4 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-sonny.svg",
-      gameMode: "4p",
-      optionName: "updateGameMode",
     });
 
     gameBoardUp.appendChild(card1);
@@ -57,10 +55,12 @@ class GameModePage extends Component {
     const gameBoardDown = document.createElement("div");
     gameBoardDown.className = "justify-start items-start gap-36 inline-flex";
 
-    const card4 = createComponent(LockCard, {
-      title: "5 Players",
+    const card4 = createComponent(Card, {
+      title: "4 Players",
       titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-pentagon.svg",
+      image: "/static/assets/images/character-sonny.svg",
+      gameMode: "4p",
+      optionName: "updateGameMode",
     });
 
     const card5 = createComponent(Card, {
