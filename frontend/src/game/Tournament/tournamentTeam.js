@@ -4,7 +4,6 @@ import { ScoreBoard } from "../../components/Board/index.js";
 import { mapImages, themeImages, profileImages } from "../../config/index.js";
 import { Result } from "./../Result/index.js";
 import { Countdown } from "./../Loading/index.js";
-import { TournamentTable } from "./index.js";
 import Store from "../../store/index.js";
 
 class TournamentTeam extends Component {
@@ -227,49 +226,6 @@ class TournamentTeam extends Component {
     });
   }
 
-  showTable(playerIds) {
-    if (Store.state.tournamentMode == 0) {
-      Promise.all(
-        playerIds.map((playerId) =>
-          Promise.all([
-            fetch(`/v2/users/${playerId}/profile-index/`, {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-            }).then((response) => response.json()),
-            fetch(`/v2/users/${playerId}/nickname/`, {
-              method: "GET",
-              headers: { "Content-Type": "application/json" },
-            }).then((response) => response.json()),
-          ]).then(([profileResponse, nicknameResponse]) => ({
-            imageSrc: profileImages[profileResponse.profile_index],
-            name: nicknameResponse.nickname,
-          }))
-        )
-      )
-        .then((playersInfo) => {
-          const table = createComponent(TournamentTable, {
-            player1Image: playersInfo[0].imageSrc,
-            player1Name: playersInfo[0].name,
-            player2Image: playersInfo[1].imageSrc,
-            player2Name: playersInfo[1].name,
-            player3Image: playersInfo[2].imageSrc,
-            player3Name: playersInfo[2].name,
-            player4Image: playersInfo[3].imageSrc,
-            player4Name: playersInfo[3].name,
-            isFinal: false,
-          });
-          document.body.appendChild(table);
-
-          setTimeout(() => {
-            document.body.removeChild(table);
-          }, 2000);
-        })
-        .catch((error) => {
-          console.error("Error fetching player data:", error);
-        });
-    }
-  }
-
   initializeGame() {
     this.canvas.width = 700;
     this.canvas.height = 700;
@@ -280,21 +236,21 @@ class TournamentTeam extends Component {
       const data = JSON.parse(e.data);
 
       if (data.type == "game_end") {
-        console.log('game_end')
+        console.log("game_end");
         this.props.gameSocket.close();
         this.destroy();
         if (Store.state.tournamentMode == 0) {
-          Store.dispatch("updateNextRoom", `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`);
+          Store.dispatch(
+            "updateNextRoom",
+            `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
+          );
         }
 
         this.showResult("win");
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);
         Store.dispatch("updateGameStart");
-        this.showTable(data.player_ids);
-        setTimeout(() => {
-          document.body.appendChild(createComponent(Countdown, {}));
-        }, 2000);
+        document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
       } else {
         this.renderGame(data);
