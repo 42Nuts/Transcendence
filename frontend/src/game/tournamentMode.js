@@ -13,6 +13,7 @@ class TournamentMode extends Component {
   }
 
   nextRound() {
+    console.log(`Store.state.tournamentMode : ${Store.state.tournamentMode}`)
     if (Store.state.tournamentMode == 1) {
       this.container.innerHTML = "";
       const game = createComponent(TournamentTeam, {

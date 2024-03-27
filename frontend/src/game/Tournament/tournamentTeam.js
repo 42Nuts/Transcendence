@@ -22,22 +22,22 @@ class TournamentTeam extends Component {
   }
 
   showResult(message) {
-    // const overlay = createComponent(Result, { result: message });
-    // overlay.setAttribute("href", "/gameMode/");
+    const overlay = createComponent(Result, { result: message });
+    overlay.setAttribute("href", "/gameMode/");
 
-    // if (!this.result) {
-    //   document.body.appendChild(overlay);
-    // }
+    if (!this.result) {
+      document.body.appendChild(overlay);
+    }
 
     Store.dispatch("updateTournamentMode");
-    // overlay.addEventListener("click", (event) => {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   document.body.removeChild(overlay);
-    //   this.result = false;
-    // });
+    overlay.addEventListener("click", (event) => {
+      event.stopPropagation();
+      event.preventDefault();
+      document.body.removeChild(overlay);
+      this.result = false;
+    });
 
-    // this.result = true;
+    this.result = true;
   }
 
   renderGame(data) {
@@ -108,13 +108,16 @@ class TournamentTeam extends Component {
 
     if (data.winner) {
       if (data.winner == userId) {
-        this.showResult("win");
         this.props.gameSocket.close();
-        this.props.gameSocket = new WebSocket(
-          "wss://" +
-            window.location.host +
-            `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
-        );
+        if (data.next_room) {
+          console.log(`next_room : ${data.next_room}`)
+          this.props.gameSocket = new WebSocket(
+            "wss://" +
+              window.location.host +
+              `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
+          );
+        }
+        this.showResult("win");
       } else {
         this.showResult("lose");
         if (Store.state.tournamentMode == 0) {
@@ -239,6 +242,7 @@ class TournamentTeam extends Component {
       const data = JSON.parse(e.data);
 
       if (data.type == "game_end") {
+        console.log('game_end')
         this.showResult("win");
         this.props.gameSocket.close();
         this.destroy();

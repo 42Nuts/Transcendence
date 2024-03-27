@@ -79,6 +79,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'queue : {matching_queue[mode]}')
         # 큐에 넣기
 
+        self.mode = mode
+        self.userId = userId
         if mode == "tournament2":
             if nextRoom not in tournament_winner_room:
                 tournament_winner_room[nextRoom] = []
@@ -89,8 +91,6 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         else:
             matching_queue[mode].appendleft((userId, self))
-            self.mode = mode
-            self.userId = userId
             if (len(matching_queue[mode]) >= limit_size[mode]):
                 self.room_name = str(room_id[mode]) + '_' + mode
                 self.room_group_name = self.room_name + '_group'
@@ -188,10 +188,13 @@ class GameConsumer(AsyncWebsocketConsumer):
         )
     
     async def final_tournament_round(self, winner_room_name, winners):
-        group_game_instances[winner_room_name] = twoPlayer(winners)
+        winnerIds = []
+        for winner in winners:
+            winnerIds.append(winner.userId)
+
+        group_game_instances[winner_room_name] = twoPlayer(winnerIds)
         group_member_count[winner_room_name] = 2
         self.game = group_game_instances[winner_room_name]
-        winnerIds = []
 
         logger.info(f'winners : {winners}')
         logger.info(f'newGame : {group_game_instances[winner_room_name]}')
@@ -202,7 +205,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             )
             winner.game = self.game
             winner.room_group_name = winner_room_name
-            winnerIds.append(winner.userId)
+            self.update_task = asyncio.create_task(self.game_update_task())
 
         logger.info('before send')
         await self.channel_layer.group_send(
@@ -293,6 +296,8 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
+                await self.disconnect()
+                return
             else:
                 await self.channel_layer.group_send(
                     self.room_group_name,
