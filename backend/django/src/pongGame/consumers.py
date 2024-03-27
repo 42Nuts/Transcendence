@@ -22,6 +22,7 @@ matching_queue = {
     "3p": deque(),
     "4p": deque(),
     "tournament": deque(),
+    "tournament2": deque(),
 }
 
 limit_size = {
@@ -29,6 +30,7 @@ limit_size = {
     "3p": 3,
     "4p": 4,
     "tournament": 4,
+    "tournament2": 2,
 }
 
 room_id = {
@@ -36,6 +38,7 @@ room_id = {
     "3p": 0,
     "4p": 0,
     "tournament": 0,
+    "torunament2": 0,
 }
 
 
@@ -57,6 +60,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         parsed_query = parse_qs(query_str)
         mode = parsed_query.get('mode', [None])[0]
         userId = parsed_query.get('userId', [None])[0]
+        nextRoom = parsed_query.get('nextRoom', [None])[0]
 
         if None in (userId, mode):
             await self.close()
@@ -75,60 +79,69 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'queue : {matching_queue[mode]}')
         # 큐에 넣기
 
-        matching_queue[mode].appendleft((userId, self))
-        self.mode = mode
-        self.userId = userId
-        if (len(matching_queue[mode]) >= limit_size[mode]):
-            self.room_name = str(room_id[mode]) + '_' + mode
-            self.room_group_name = self.room_name + '_group'
-            logger.info("room_group_name = %s", self.room_group_name)
-            room_id[mode] += 1
+        if mode == "tournament2":
+            if nextRoom not in tournament_winner_room:
+                tournament_winner_room[nextRoom] = []
 
-            player_ids = []
-            players = []
+            tournament_winner_room[nextRoom].append(self)
+            if len(tournament_winner_room[nextRoom]) >= 2:
+                await self.final_tournament_round(nextRoom, tournament_winner_room[nextRoom])
 
-            for _ in range(limit_size[mode]):
-                playerId, player = matching_queue[mode].popleft()
-                player_ids.append(playerId)
-                players.append(player)
-                logger.info(
-                f'playerId : {playerId}, player : {player}, channel_name : {player.channel_name}')
+        else:
+            matching_queue[mode].appendleft((userId, self))
+            self.mode = mode
+            self.userId = userId
+            if (len(matching_queue[mode]) >= limit_size[mode]):
+                self.room_name = str(room_id[mode]) + '_' + mode
+                self.room_group_name = self.room_name + '_group'
+                logger.info("room_group_name = %s", self.room_group_name)
+                room_id[mode] += 1
+
+                player_ids = []
+                players = []
+
+                for _ in range(limit_size[mode]):
+                    playerId, player = matching_queue[mode].popleft()
+                    player_ids.append(playerId)
+                    players.append(player)
+                    logger.info(
+                    f'playerId : {playerId}, player : {player}, channel_name : {player.channel_name}')
 
 
-            # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
-            if self.room_group_name not in group_game_instances:
-                if mode == "2p":
-                    group_game_instances[self.room_group_name] = twoPlayer(player_ids)
-                elif mode == "3p":
-                    group_game_instances[self.room_group_name] = threePlayer(player_ids)
-                elif mode == "4p":
-                    group_game_instances[self.room_group_name] = fourPlayer(player_ids)
-                elif mode == "tournament":
-                    await self.start_tournament(player_ids, players)
-                    return
-                else:
-                    await self.close()
-                    return
+                # 그룹에 대한 게임 인스턴스가 존재하지 않으면 생성
+                if self.room_group_name not in group_game_instances:
+                    if mode == "2p":
+                        group_game_instances[self.room_group_name] = twoPlayer(player_ids)
+                    elif mode == "3p":
+                        group_game_instances[self.room_group_name] = threePlayer(player_ids)
+                    elif mode == "4p":
+                        group_game_instances[self.room_group_name] = fourPlayer(player_ids)
+                    elif mode == "tournament":
+                        await self.start_tournament(player_ids, players)
+                        return
+                    else:
+                        await self.close()
+                        return
 
-            self.game = group_game_instances[self.room_group_name]
-            group_member_count[self.room_group_name] = limit_size[mode]
+                self.game = group_game_instances[self.room_group_name]
+                group_member_count[self.room_group_name] = limit_size[mode]
 
-            for player in players:
-                player.game = self.game
-                player.room_group_name = self.room_group_name
-                await player.channel_layer.group_add(
-                    self.room_group_name,
-                    player.channel_name
-                )
-                player.update_task = asyncio.create_task(player.game_update_task())
+                for player in players:
+                    player.game = self.game
+                    player.room_group_name = self.room_group_name
+                    await player.channel_layer.group_add(
+                        self.room_group_name,
+                        player.channel_name
+                    )
+                    player.update_task = asyncio.create_task(player.game_update_task())
 
-            await self.channel_layer.group_send(
-                    self.room_group_name,
-                    {
-                        'type': 'game_start',
-                        'game_start': player_ids,
-                    }
-                )
+                await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'game_start',
+                            'game_start': player_ids,
+                        }
+                    )
 
     async def start_tournament(self, player_ids, players):
         room1 = self.room_group_name + "_1"
@@ -193,12 +206,12 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         logger.info('before send')
         await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'game_start',
-                    'game_start': winnerIds,
-                }
-            )
+            self.room_group_name,
+            {
+                'type': 'game_start',
+                'game_start': winnerIds,
+            }
+        )
         logger.info('after send')
 
 
@@ -264,11 +277,15 @@ class GameConsumer(AsyncWebsocketConsumer):
                 # user_input = self.input_buffer.pop(0)
                 # game_data = self.game.update(user_input)
             # else:
-            if self.game is not None:
-                game_data = self.game.update()  # 게임 상태 업데이트
+            game_data = self.game.update()  # 게임 상태 업데이트
 
-                logger.info(f'room_group_name : {self.room_group_name}')
-                logger.info(f'game_data : {game_data}')
+            logger.info(f'room_group_name : {self.room_group_name}')
+            logger.info(f'after_update : {self.room_group_name}')
+
+            if game_data.get('winner') is not None:
+                if self.mode == "tournament" and self.userId == game_data.get('winner'):
+                    winner_room_name = self.room_group_name.rsplit("_", 1)[0]
+                    game_data['next_room'] = winner_room_name 
                 await self.channel_layer.group_send(
                     self.room_group_name,
                     {
@@ -276,44 +293,48 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
-                logger.info(f'after_update : {self.room_group_name}')
+            else:
+                await self.channel_layer.group_send(
+                    self.room_group_name,
+                    {
+                        'type': 'game_update',
+                        'game_data': game_data
+                    }
+                )
+                # if self.mode == "tournament":
+                #     await self.channel_layer.group_discard(
+                #         self.room_group_name,
+                #         self.channel_name
+                #     )
+                #     winner_room_name = self.room_group_name.rsplit("_", 1)[0]
 
-                if game_data.get('winner') is not None:
-                    await self.channel_layer.group_send(
-                        self.room_group_name,
-                        {
-                            'type': 'game_update',
-                            'game_data': game_data
-                        }
-                    )
+                #     if winner_room_name not in tournament_winner_room:
+                #         tournament_winner_room[winner_room_name] = []
 
-                    if self.mode == "tournament":
-                        await self.channel_layer.group_discard(
-                            self.room_group_name,
-                            self.channel_name
-                        )
-                        winner_room_name = self.room_group_name.rsplit("_", 1)[0]
-
-                        if winner_room_name not in tournament_winner_room:
-                            tournament_winner_room[winner_room_name] = []
-
-                        if self.userId == game_data.get('winner'):
-                            tournament_winner_room[winner_room_name].append(self)
-                            room_len = len(tournament_winner_room[winner_room_name])
-                            logger.info(f'room_len : {room_len}')
-                            if room_len == 1:
-                                self.game = None
-                            elif room_len == 2:
-                                logger.info('before final')
-                                await self.final_tournament_round(winner_room_name, tournament_winner_room[winner_room_name])
-                                logger.info('after final')
-                            else:
-                                # await self.close()
-                                logger.info(f'returned {self}')
-                                return
-                        else:
-                            await self.close()
-                            return
+                #     if self.userId == game_data.get('winner'):
+                #         tournament_winner_room[winner_room_name].append(self)
+                #         room_len = len(tournament_winner_room[winner_room_name])
+                #         logger.info(f'room_len : {room_len}')
+                #         if room_len == 1:
+                #             self.game = None
+                #         elif room_len == 2:
+                #             logger.info('before final')
+                #             await self.final_tournament_round(winner_room_name, tournament_winner_room[winner_room_name])
+                #             await self.channel_layer.group_send(
+                #                 self.room_group_name,
+                #                 {
+                #                     'type': 'game_update',
+                #                     'game_data': game_data
+                #                 }
+                #             )
+                #             logger.info('after final')
+                #         else:
+                #             # await self.close()
+                #             logger.info(f'returned {self}')
+                #             return
+                    # else:
+                    #     await self.close()
+                    #     return
 
     async def receive(self, text_data):
         user_input = json.loads(text_data)

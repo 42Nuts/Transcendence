@@ -22,22 +22,22 @@ class TournamentTeam extends Component {
   }
 
   showResult(message) {
-    const overlay = createComponent(Result, { result: message });
+    // const overlay = createComponent(Result, { result: message });
     // overlay.setAttribute("href", "/gameMode/");
 
-    if (!this.result) {
-      document.body.appendChild(overlay);
-    }
+    // if (!this.result) {
+    //   document.body.appendChild(overlay);
+    // }
 
-    overlay.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      Store.dispatch("updateTournamentMode");
-      document.body.removeChild(overlay);
-      this.result = false;
-    });
+    Store.dispatch("updateTournamentMode");
+    // overlay.addEventListener("click", (event) => {
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    //   document.body.removeChild(overlay);
+    //   this.result = false;
+    // });
 
-    this.result = true;
+    // this.result = true;
   }
 
   renderGame(data) {
@@ -109,6 +109,12 @@ class TournamentTeam extends Component {
     if (data.winner) {
       if (data.winner == userId) {
         this.showResult("win");
+        this.props.gameSocket.close();
+        this.props.gameSocket = new WebSocket(
+          "wss://" +
+            window.location.host +
+            `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
+        );
       } else {
         this.showResult("lose");
         if (Store.state.tournamentMode == 0) {
@@ -116,14 +122,8 @@ class TournamentTeam extends Component {
         } else {
           this.props.gameSocket.close();
         }
-        this.destroy();
-        return;
       }
-
-      if (Store.state.tournamentMode != 0) {
-        this.props.gameSocket.close();
-        this.destroy();
-      }
+      this.destroy();
     }
   }
 
