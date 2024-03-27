@@ -171,7 +171,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             room1,
             {
                 'type': 'game_start',
-                'game_start': player_ids[0:2],
+                'game_start': player_ids,
             }
         )
 
@@ -189,7 +189,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             room2,
             {
                 'type': 'game_start',
-                'game_start': player_ids[2:4],
+                'game_start': player_ids,
             }
         )
     
@@ -250,7 +250,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'game_end',
-                    'message': "game end",
+                    'message': self.room_group_name.rsplit("_", 1)[0],
                 }
             )
         elif group_member_count[self.room_group_name] == limit_size[self.mode]:
