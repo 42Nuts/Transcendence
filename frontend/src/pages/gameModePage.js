@@ -27,8 +27,8 @@ class GameModePage extends Component {
     gameBoardUp.className = "justify-start items-start gap-36 inline-flex";
 
     const card1 = createComponent(Card, {
-      title: "1 Players",
-      titleLeft: "left-[52px]",
+      title: "Local",
+      titleLeft: "left-[85px]",
       image: "/static/assets/images/character-AI.svg",
       gameMode: "1p",
       optionName: "updateGameMode",

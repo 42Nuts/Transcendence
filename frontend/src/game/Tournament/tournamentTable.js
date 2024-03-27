@@ -5,7 +5,8 @@ import { TournamentCard } from "../../components/Card/index.js";
 class TournamentTable extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = "flex items-center justify-center min-h-screen";
+    container.className = "fixed inset-0 bg-primary z-50 flex justify-center items-center";
+    // container.className = "flex items-center justify-center min-h-screen";
 
     //round1
     const round1 = document.createElement("div");
@@ -22,8 +23,8 @@ class TournamentTable extends Component {
     const person1 = createComponent(TournamentCard, {
       size: "224.40px",
       imageSize: "116.64px",
-      imageSrc: "/static/assets/images/profile-taeypark.svg",
-      name: "taeypark",
+      imageSrc: this.props.player1Image,
+      name: this.props.player1Name,
     });
 
     const bridgeLeft = document.createElement("div");
@@ -39,8 +40,8 @@ class TournamentTable extends Component {
     const person2 = createComponent(TournamentCard, {
       size: "224.40px",
       imageSize: "116.64px",
-      imageSrc: "/static/assets/images/profile-jinheo.svg",
-      name: "jinheo",
+      imageSrc: this.props.player2Image,
+      name: this.props.player2Name,
     });
 
     leftContainer.appendChild(person1);
@@ -50,23 +51,42 @@ class TournamentTable extends Component {
     const middleContainer = document.createElement("div");
     middleContainer.className = "justify-start items-start gap-[280px] flex";
 
-    const nextRoundLeft = document.createElement("div");
-    nextRoundLeft.className = "w-[224.40px] h-[224.40px]";
 
-    const nextRoundLeftImage = document.createElement("img");
-    nextRoundLeftImage.className = "w-[224.40px] h-[224.40px]";
-    nextRoundLeftImage.src = "/static/assets/images/empty-area-big.svg";
+    let nextRoundLeft = document.createElement("div");
+    let nextRoundRight = document.createElement("div");
 
-    nextRoundLeft.appendChild(nextRoundLeftImage);
+    if (this.props.isFinal) {
+      nextRoundLeft = createComponent(TournamentCard, {
+        size: "224.40px",
+        imageSize: "116.64px",
+        imageSrc: this.props.playerLeftImage,
+        name: this.props.playerLeftName,
+      });
 
-    const nextRoundRight = document.createElement("div");
-    nextRoundRight.className = "w-[224.40px] h-[224.40px]";
+      nextRoundRight = createComponent(TournamentCard, {
+        size: "224.40px",
+        imageSize: "116.64px",
+        imageSrc: this.props.playerRightImage,
+        name: this.props.playerRightName,
+      });
 
-    const nextRoundRightImage = document.createElement("img");
-    nextRoundRightImage.className = "w-[224.40px] h-[224.40px]";
-    nextRoundRightImage.src = "/static/assets/images/empty-area-big.svg";
+    } else {
+      nextRoundLeft.className = "w-[224.40px] h-[224.40px]";
 
-    nextRoundRight.appendChild(nextRoundRightImage);
+      const nextRoundLeftImage = document.createElement("img");
+      nextRoundLeftImage.className = "w-[224.40px] h-[224.40px]";
+      nextRoundLeftImage.src = "/static/assets/images/empty-area-big.svg";
+
+      nextRoundLeft.appendChild(nextRoundLeftImage);
+
+      nextRoundRight.className = "w-[224.40px] h-[224.40px]";
+
+      const nextRoundRightImage = document.createElement("img");
+      nextRoundRightImage.className = "w-[224.40px] h-[224.40px]";
+      nextRoundRightImage.src = "/static/assets/images/empty-area-big.svg";
+
+      nextRoundRight.appendChild(nextRoundRightImage);
+    }
 
     middleContainer.appendChild(nextRoundLeft);
     middleContainer.appendChild(nextRoundRight);
@@ -78,8 +98,8 @@ class TournamentTable extends Component {
     const person3 = createComponent(TournamentCard, {
       size: "224.40px",
       imageSize: "116.64px",
-      imageSrc: "/static/assets/images/profile-hyeoan.svg",
-      name: "hyeoan",
+      imageSrc: this.props.player3Image,
+      name: this.props.player3Name,
     });
 
     const bridgeRight = document.createElement("div");
@@ -95,8 +115,8 @@ class TournamentTable extends Component {
     const person4 = createComponent(TournamentCard, {
       size: "224.40px",
       imageSize: "116.64px",
-      imageSrc: "/static/assets/images/profile-yim.svg",
-      name: "yim",
+      imageSrc: this.props.player4Image,
+      name: this.props.player4Name,
     });
 
     rightContainer.appendChild(person3);
@@ -108,37 +128,6 @@ class TournamentTable extends Component {
     roundContainer.appendChild(rightContainer);
     round1.appendChild(roundContainer);
 
-    //round2
-    const round2 = document.createElement("div");
-    round2.className = "absolute top-2/3";
-
-    const round2Container = document.createElement("div");
-    round2Container.className =
-      "w-[314px] h-[117px] justify-start items-start gap-20 inline-flex";
-
-    const round2Left = document.createElement("div");
-    round2Left.className = "w-[117px] h-[117px] relative";
-
-    const round2LeftImage = document.createElement("img");
-    round2LeftImage.className = "w-[117px] h-[117px] left-0 top-0 absolute";
-    round2LeftImage.src = "/static/assets/images/empty-area-small.svg";
-
-    round2Left.appendChild(round2LeftImage);
-
-    const round2Right = document.createElement("div");
-    round2Right.className = "w-[117px] h-[117px] relative";
-
-    const round2RightImage = document.createElement("img");
-    round2RightImage.className = "w-[117px] h-[117px] left-0 top-0 absolute";
-    round2RightImage.src = "/static/assets/images/empty-area-small.svg";
-
-    round2Right.appendChild(round2RightImage);
-
-    round2Container.appendChild(round2Left);
-    round2Container.appendChild(round2Right);
-
-    round2.appendChild(round2Container);
-
     //image
     const imageContainer = document.createElement("div");
     imageContainer.className = "absolute";
@@ -148,23 +137,8 @@ class TournamentTable extends Component {
 
     imageContainer.appendChild(image);
 
-    //play button
-    const playButtonPos = document.createElement("div");
-    playButtonPos.className = "absolute top-[80%]";
-
-    const playButtonHref = document.createElement("a");
-    playButtonHref.setAttribute("href", "/gameMode/");
-    const playButton = createComponent(BasicButton, {
-      text: "Play",
-    });
-
-    playButtonHref.appendChild(playButton);
-    playButtonPos.appendChild(playButtonHref);
-
     container.appendChild(round1);
-    container.appendChild(round2);
     container.appendChild(imageContainer);
-    container.appendChild(playButtonPos);
     return container;
   }
 }
