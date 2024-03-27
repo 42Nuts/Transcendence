@@ -6,7 +6,6 @@ class TournamentTable extends Component {
   render() {
     const container = document.createElement("div");
     container.className = "fixed inset-0 bg-primary z-50 flex justify-center items-center";
-    // container.className = "flex items-center justify-center min-h-screen";
 
     //round1
     const round1 = document.createElement("div");
@@ -21,8 +20,6 @@ class TournamentTable extends Component {
       "flex-col justify-start items-start gap-0 inline-flex";
 
     const person1 = createComponent(TournamentCard, {
-      size: "224.40px",
-      imageSize: "116.64px",
       imageSrc: this.props.player1Image,
       name: this.props.player1Name,
     });
@@ -38,8 +35,6 @@ class TournamentTable extends Component {
     bridgeLeft.appendChild(bridgeLeftImage);
 
     const person2 = createComponent(TournamentCard, {
-      size: "224.40px",
-      imageSize: "116.64px",
       imageSrc: this.props.player2Image,
       name: this.props.player2Name,
     });
@@ -57,15 +52,11 @@ class TournamentTable extends Component {
 
     if (this.props.isFinal) {
       nextRoundLeft = createComponent(TournamentCard, {
-        size: "224.40px",
-        imageSize: "116.64px",
         imageSrc: this.props.playerLeftImage,
         name: this.props.playerLeftName,
       });
 
       nextRoundRight = createComponent(TournamentCard, {
-        size: "224.40px",
-        imageSize: "116.64px",
         imageSrc: this.props.playerRightImage,
         name: this.props.playerRightName,
       });
@@ -96,8 +87,6 @@ class TournamentTable extends Component {
       "flex-col justify-start items-start gap-0 inline-flex";
 
     const person3 = createComponent(TournamentCard, {
-      size: "224.40px",
-      imageSize: "116.64px",
       imageSrc: this.props.player3Image,
       name: this.props.player3Name,
     });
@@ -113,8 +102,6 @@ class TournamentTable extends Component {
     bridgeRight.appendChild(bridgeRightImage);
 
     const person4 = createComponent(TournamentCard, {
-      size: "224.40px",
-      imageSize: "116.64px",
       imageSrc: this.props.player4Image,
       name: this.props.player4Name,
     });
