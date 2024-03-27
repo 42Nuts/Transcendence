@@ -1,5 +1,6 @@
 import { Component, createComponent } from "../core/index.js";
 import { TournamentTable, TournamentTeam } from "./Tournament/index.js";
+import { profileImages } from "../config/index.js";
 import Store from "../store/index.js";
 
 class TournamentMode extends Component {
@@ -29,17 +30,30 @@ class TournamentMode extends Component {
   }
 
   render() {
-    this.initGame();
+    // this.initGame();
 
-    this.container = document.createElement("div");
+    // this.container = document.createElement("div");
 
-    const game = createComponent(TournamentTeam, {
-      gameSocket: this.gameSocket,
+    // const game = createComponent(TournamentTeam, {
+    //   gameSocket: this.gameSocket,
+    // });
+
+    // this.container.appendChild(game);
+
+    // return this.container;
+    const container = createComponent(TournamentTable, {
+      player1Name: "player1",
+      player1Image: profileImages[0],
+      player2Name: "player2",
+      player2Image: profileImages[1],
+      player3Name: "player3",
+      player3Image: profileImages[2],
+      player4Name: "player4",
+      player4Image: profileImages[3],
+      isFinal: false,
     });
 
-    this.container.appendChild(game);
-
-    return this.container;
+    return container;
   }
 }
 
