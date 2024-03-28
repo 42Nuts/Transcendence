@@ -4,6 +4,7 @@ import { ScoreBoard } from "../../components/Board/index.js";
 import { mapImages, themeImages, profileImages } from "../../config/index.js";
 import { Result } from "./../Result/index.js";
 import { Countdown } from "./../Loading/index.js";
+import { TournamentTable, TournamentResult } from "./index.js";
 import Store from "../../store/index.js";
 
 class TournamentTeam extends Component {
@@ -29,10 +30,10 @@ class TournamentTeam extends Component {
       document.body.appendChild(overlay);
     }
 
-    Store.dispatch("updateTournamentMode");
     overlay.addEventListener("click", (event) => {
       event.stopPropagation();
       event.preventDefault();
+      Store.dispatch("updateTournamentMode");
       document.body.removeChild(overlay);
       this.result = false;
     });
@@ -226,6 +227,52 @@ class TournamentTeam extends Component {
     });
   }
 
+  updateMatchTable(playerIds) {
+    // 모든 플레이어에 대한 프로미스를 저장할 배열을 선언합니다.
+    const promises = [];
+
+    // 각 플레이어 ID에 대해 프로필 인덱스와 닉네임을 가져오는 프로미스를 생성합니다.
+    playerIds.forEach((playerId) => {
+      const profilePromise = fetch(`/v2/users/${playerId}/profile-index/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.json());
+
+      const nicknamePromise = fetch(`/v2/users/${playerId}/nickname/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.json());
+
+      // 각 플레이어에 대한 프로미스를 배열에 추가합니다.
+      promises.push(Promise.all([profilePromise, nicknamePromise]));
+    });
+
+    // 모든 플레이어의 정보를 가져오는 프로미스가 완료되면, DOM을 업데이트합니다.
+    Promise.all(promises)
+      .then((results) => {
+        results.forEach((data, index) => {
+          const [profileResponse, nicknameResponse] = data;
+          const playerImage = document.getElementById(
+            `tournamentCardImage${index + 1}`
+          );
+          const playerName = document.getElementById(
+            `tournamentCardName${index + 1}`
+          );
+          if (playerImage && playerName) {
+            playerImage.src = profileImages[profileResponse.profile_index];
+            playerName.innerText = nicknameResponse.nickname;
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching player data:", error);
+      });
+  }
+
   initializeGame() {
     this.canvas.width = 700;
     this.canvas.height = 700;
@@ -245,13 +292,18 @@ class TournamentTeam extends Component {
             `/ws/game/?mode=tournament2&userId=${userId}&nextRoom=${data.next_room}`
           );
         }
-
         this.showResult("win");
       } else if (data.type == "game_start") {
+        console.log(data.player_ids);
         this.updateScoreBoard(data.player_ids);
-        Store.dispatch("updateGameStart");
-        document.body.appendChild(createComponent(Countdown, {}));
-        this.keyboardEvent();
+        Promise.all([
+          this.updateMatchTable(data.player_ids),
+        ]).then(() => {
+          // 모든 작업이 완료된 후 실행되어야 하는 코드
+          Store.dispatch("updateGameStart");
+          document.body.appendChild(createComponent(Countdown, {}));
+          this.keyboardEvent();
+        });
       } else {
         this.renderGame(data);
         this.updateScore(data.players);
@@ -346,6 +398,20 @@ class TournamentTeam extends Component {
         console.log("WebSocket connection closed.");
       }
     });
+
+    // match table
+    const matchTable = createComponent(TournamentTable, {
+      player1Image: "/static/assets/images/profile-default.svg",
+      player2Image: "/static/assets/images/profile-default.svg",
+      player3Image: "/static/assets/images/profile-default.svg",
+      player4Image: "/static/assets/images/profile-default.svg",
+      player1Name: "Player 1",
+      player2Name: "Player 2",
+      player3Name: "Player 3",
+      player4Name: "Player 4",
+    });
+
+    this.container.appendChild(matchTable);
 
     return this.container;
   }
