@@ -235,6 +235,23 @@ class TournamentTeam extends Component {
     });
   }
 
+  changePlayerIds(playerIds) {
+    const myIndex = playerIds.indexOf(userId);
+    let newPlayerIds = [];
+
+    if (myIndex === 0) {
+      newPlayerIds = playerIds;
+    } else if (myIndex === 1) {
+      newPlayerIds = [playerIds[1], playerIds[0], playerIds[3], playerIds[2]];
+    } else if (myIndex === 2) {
+      newPlayerIds = [playerIds[2], playerIds[3], playerIds[0], playerIds[1]];
+    } else if (myIndex === 3) {
+      newPlayerIds = [playerIds[3], playerIds[2], playerIds[1], playerIds[0]];
+    }
+
+    return newPlayerIds;
+  }
+
   updateMatchTable(playerIds) {
     // 모든 플레이어에 대한 프로미스를 저장할 배열을 선언합니다.
     const promises = [];
@@ -308,8 +325,13 @@ class TournamentTeam extends Component {
         this.showResult("win");
       } else if (data.type == "game_start") {
         console.log(data.player_ids);
-        this.updateScoreBoard(data.player_ids);
-        Promise.all([this.updateMatchTable(data.player_ids)]).then(() => {
+        // userId의 위치에 따라 playerIds 배열을 조정합니다.
+        let playerIds = data.player_ids;
+        if (data.player_ids.length === 4) {
+          playerIds = this.changePlayerIds(data.player_ids);
+        }
+        this.updateScoreBoard(playerIds);
+        Promise.all([this.updateMatchTable(playerIds)]).then(() => {
           // 모든 작업이 완료된 후 실행되어야 하는 코드
           Store.dispatch("updateGameStart");
           setTimeout(() => {
