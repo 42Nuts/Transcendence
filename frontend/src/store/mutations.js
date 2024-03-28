@@ -39,8 +39,12 @@ export default {
     state.gameStart = !state.gameStart;
     return state;
   },
-  updateTournamentMode(state) {
-    state.tournamentMode = (state.tournamentMode + 1) % 3;
+  updateTournamentMode(state, payload) {
+    if (payload == 0) {
+      state.tournamentMode = 0;
+    } else {
+      state.tournamentMode = (state.tournamentMode + 1) % 3;
+    }
     return state;
   },
   updateNextRoom(state, payload) {

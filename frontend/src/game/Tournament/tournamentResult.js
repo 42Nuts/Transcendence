@@ -4,6 +4,7 @@ import {
   TournamentWinnerCard,
 } from "../../components/Card/index.js";
 import { BasicButton } from "../../components/Button/index.js";
+import Store from "../../store/index.js";
 
 class TournamentResult extends Component {
   render() {
@@ -26,6 +27,10 @@ class TournamentResult extends Component {
     exitButtonHref.setAttribute("href", "/gameMode/");
 
     const exitButton = createComponent(BasicButton, { text: "Exit" });
+
+    exitButton.addEventListener("click", () => {
+      Store.dispatch("updateTournamentMode", 0);
+    });
 
     exitButtonHref.appendChild(exitButton);
     exitButtonPos.appendChild(exitButtonHref);

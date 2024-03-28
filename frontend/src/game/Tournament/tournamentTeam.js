@@ -30,6 +30,7 @@ class TournamentTeam extends Component {
     }
 
     overlay.addEventListener("click", (event) => {
+      console.log(Store.state.tournamentMode);
       event.stopPropagation();
       event.preventDefault();
       if (message == "lose") {
