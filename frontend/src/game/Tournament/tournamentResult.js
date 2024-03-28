@@ -18,26 +18,12 @@ class TournamentResult extends Component {
     resultBox.className =
       "w-[1118px] h-[390.43px] justify-start items-end gap-[152px] inline-flex";
 
-    const second = createComponent(TournamentResultCard, {
-      imageSrc: "/static/assets/images/profile-taeypark.svg",
-      name: "taeypark",
-      order: "2nd",
-    });
-
     const first = createComponent(TournamentWinnerCard, {
-      imageSrc: "/static/assets/images/profile-hyeoan.svg",
-      name: "hyeoan",
+      imageSrc: this.props.imageSrc,
+      name: this.props.name,
     });
 
-    const third = createComponent(TournamentResultCard, {
-      imageSrc: "/static/assets/images/profile-yim.svg",
-      name: "yim",
-      order: "3rd",
-    });
-
-    resultBox.appendChild(second);
     resultBox.appendChild(first);
-    resultBox.appendChild(third);
 
     resultContainer.appendChild(resultBox);
 

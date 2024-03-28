@@ -24,9 +24,9 @@ class GamePage extends Component {
 
   render() {
     const container = document.createElement("div");
-    console.log("Store theme", Store.state.theme);
 
     this.load = createComponent(Loading, {});
+    console.log("loading page is rendered");
 
     const game = this.gameRouter.getComponent(Store.state.gameMode);
 

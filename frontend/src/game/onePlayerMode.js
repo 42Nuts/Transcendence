@@ -187,37 +187,6 @@ class onePlayerMode extends Component {
     }
   }
 
-  updateScoreBoard(playerIds) {
-    playerIds.forEach((playerId, index) => {
-      Promise.all([
-        fetch(`/v2/users/${playerId}/profile-index/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response) => response.json()),
-        fetch(`/v2/users/${playerId}/nickname/`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }).then((response) => response.json()),
-      ])
-        .then((data) => {
-          const [profileResponse, nicknameResponse] = data;
-          const playerImage = document.getElementById(`Img${index + 1}`);
-          const playerName = document.getElementById(`Name${index + 1}`);
-          if (playerImage && playerName) {
-            playerImage.src = profileImages[profileResponse.profile_index];
-            playerName.innerText = nicknameResponse.nickname;
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching player data:", error);
-        });
-    });
-  }
-
   initializeGame() {
     this.canvas.width = 700;
     this.canvas.height = 700;
@@ -237,7 +206,6 @@ class onePlayerMode extends Component {
         this.destroy();
         return;
       } else if (data.type == "game_start") {
-        this.updateScoreBoard(data.player_ids);
         Store.dispatch("updateGameStart");
         document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
@@ -282,9 +250,9 @@ class onePlayerMode extends Component {
     this.scoreContainer.style = "left: 100%; top:0; margin-left: 64px;";
 
     this.player1 = createComponent(ScoreBoard, {
-      imgSrc: "/static/assets/images/profile-default.svg",
+      imgSrc: profileImages[Store.state.profile],
       tierSrc: "/static/assets/images/tier-bronze.svg",
-      name: "Player 1",
+      name: Store.state.nickname,
       id: "1",
     });
 

@@ -284,7 +284,7 @@ class GameConsumer(AsyncWebsocketConsumer):
     # member 제거
     async def game_update_task(self):
         if self.mode in ("tournament", "tournament2"):
-            await asyncio.sleep(4.1)
+            await asyncio.sleep(2.1)
         else:
             await asyncio.sleep(2.1)
 

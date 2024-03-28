@@ -19,7 +19,7 @@ class HomePage extends Component {
 
   initState() {
     Promise.all([
-      fetch(`/v2/users/${userId}/profile-index/`, {
+      fetch(`/v2/users/${userId}/profile-index/`, { 
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -37,11 +37,18 @@ class HomePage extends Component {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json()),
+      fetch(`/v2/users/${userId}/nickname/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((response) => response.json()),
     ])
       .then((data) => {
         Store.state.profile = data[0].profile_index;
         Store.state.theme = data[1].theme_index;
         Store.state.darkMode = data[2].dark_mode;
+        Store.state.nickname = data[3].nickname;
 
         // 모든 fetch 요청이 완료된 후에 UI 업데이트를 위한 코드 실행
         this.updateUI();
