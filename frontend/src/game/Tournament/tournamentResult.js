@@ -30,7 +30,6 @@ class TournamentResult extends Component {
     exitButtonHref.appendChild(exitButton);
     exitButtonPos.appendChild(exitButtonHref);
 
-    container.appendChild(resultContainer);
     container.appendChild(exitButtonPos);
 
     const canvas = document.createElement("canvas");
