@@ -16,6 +16,7 @@ class TournamentCard extends Component {
 
 
     const image = document.createElement("img");
+    image.id = "tournamentCardImage" + this.props.id;
     image.src = this.props.imageSrc;
     image.className = `w-[116.64px] h-[116.64px] relative`;
 
@@ -25,6 +26,7 @@ class TournamentCard extends Component {
     textContainer.className = "justify-center items-center gap-2 inline-flex";
 
     const name = document.createElement("div");
+    name.id = "tournamentCardName" + this.props.id;
     name.className = "text-primary-text dark:text-secondary-text text-2xl font-semibold font-['Inter']";
     name.innerHTML = this.props.name;
 

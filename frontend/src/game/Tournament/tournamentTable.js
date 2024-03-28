@@ -22,6 +22,7 @@ class TournamentTable extends Component {
     const person1 = createComponent(TournamentCard, {
       imageSrc: this.props.player1Image,
       name: this.props.player1Name,
+      id: "1",
     });
 
     const bridgeLeft = document.createElement("div");
@@ -37,6 +38,7 @@ class TournamentTable extends Component {
     const person2 = createComponent(TournamentCard, {
       imageSrc: this.props.player2Image,
       name: this.props.player2Name,
+      id: "2",
     });
 
     leftContainer.appendChild(person1);
@@ -89,6 +91,7 @@ class TournamentTable extends Component {
     const person3 = createComponent(TournamentCard, {
       imageSrc: this.props.player3Image,
       name: this.props.player3Name,
+      id: "3",
     });
 
     const bridgeRight = document.createElement("div");
@@ -104,6 +107,7 @@ class TournamentTable extends Component {
     const person4 = createComponent(TournamentCard, {
       imageSrc: this.props.player4Image,
       name: this.props.player4Name,
+      id: "4",
     });
 
     rightContainer.appendChild(person3);
