@@ -336,7 +336,11 @@ class TournamentTeam extends Component {
           // 모든 작업이 완료된 후 실행되어야 하는 코드
           Store.dispatch("updateGameStart");
           setTimeout(() => {
-            this.container.querySelector("#matchTable").remove();
+            const table = document.getElementById("matchTable");
+            if (table) {
+              console.log("remove");
+              table.remove();
+            }
             document.body.appendChild(createComponent(Countdown, {}));
           }, 3000);
           this.keyboardEvent();
