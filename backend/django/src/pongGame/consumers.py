@@ -1,4 +1,3 @@
-
 # consumers.py
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -54,13 +53,10 @@ async def get_user2(access_token):
     if access_token is None:
         raise AuthenticationFailed()
 
-    logger.info('before validated')
     validated_token = JWT_authenticator.get_validated_token(access_token)
-    logger.info('after validated')
 
     async_get_user = sync_to_async(JWT_authenticator.get_user)
     user = await async_get_user(validated_token)
-    logger.info('after getting user')
     return user
 
 class GameConsumer(AsyncWebsocketConsumer):
@@ -105,8 +101,7 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.userId = userId
         if mode == "tournament2":
             if nextRoom not in tournament_winner_room:
-                await self.close()
-                return
+                tournament_winner_room[nextRoom] = []
 
             tournament_winner_room[nextRoom].append(self)
             if len(tournament_winner_room[nextRoom]) >= 2:
@@ -269,10 +264,7 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.update_task.cancel()
 
         logger.info(f'close_code : {close_code}')
-        logger.info(f'group_member_count[self.room_group_name] : {group_member_count[self.room_group_name]}')
-        logger.info(f'limit_size[self.mode] : {limit_size[self.mode]}')
         if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
-            logger.info('tournament')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -281,7 +273,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif group_member_count[self.room_group_name] == limit_size[self.mode]:
-            logger.info('tournament2')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -303,7 +294,7 @@ class GameConsumer(AsyncWebsocketConsumer):
     # member 제거
     async def game_update_task(self):
         if self.mode in ("tournament", "tournament2"):
-            await asyncio.sleep(5.1)
+            await asyncio.sleep(4.1)
         else:
             await asyncio.sleep(2.1)
 
@@ -324,7 +315,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                 if self.mode == "tournament":
                     winner_room_name = self.room_group_name.rsplit("_", 1)[0]
                     game_data['next_room'] = winner_room_name
-                    tournament_winner_room[winner_room_name] = []
 
                 await self.channel_layer.group_send(
                     self.room_group_name,

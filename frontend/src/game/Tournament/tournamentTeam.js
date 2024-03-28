@@ -39,13 +39,14 @@ class TournamentTeam extends Component {
         Store.dispatch("updateTournamentMode", 0);
         Store.dispatch("updateNextRoom", "");
       } else if (message == "win" && Store.state.tournamentMode == 1) {
+        this.result = false;
         const tournamentResult = createComponent(TournamentResult, {
           imageSrc: profileImages[Store.state.profile],
           name: Store.state.nickname,
         });
         this.container.appendChild(tournamentResult);
       }
-      Store.dispatch("updateTournamentMode");
+      Store.dispatch("updateTournamentMode", Store.state.tournamentMode + 1);
       document.body.removeChild(overlay);
       this.result = false;
     });
@@ -311,6 +312,7 @@ class TournamentTeam extends Component {
 
     this.props.gameSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
+      console.log(`data.type : ${data.type}`)
 
       if (data.type == "game_end") {
         console.log("game_end");

@@ -22,6 +22,7 @@ class TournamentMode extends Component {
   }
 
   initGame() {
+    console.log(`websocket 열림!`)
     const uri = Store.state.nextRoom
       ? Store.state.nextRoom
       : `/ws/game/?mode=tournament&userId=${userId}`;

@@ -40,11 +40,7 @@ export default {
     return state;
   },
   updateTournamentMode(state, payload) {
-    if (payload == 0) {
-      state.tournamentMode = 0;
-    } else {
-      state.tournamentMode = (state.tournamentMode + 1) % 3;
-    }
+    state.tournamentMode = payload;
     return state;
   },
   updateNextRoom(state, payload) {
