@@ -9,9 +9,9 @@ from .onePlayerMode import onePlayer
 from collections import deque
 import json
 import logging
-from asgiref.sync import async_to_sync
 from urllib.parse import parse_qs
-# from users.views import get_user
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
 
 logger = logging.getLogger('django')
 group_game_instances = {}
@@ -45,6 +45,16 @@ room_id = {
     "torunament2": 0,
 }
 
+JWT_authenticator = JWTAuthentication()
+
+def get_user2(access_token):
+    if access_token is None:
+        raise AuthenticationFailed()
+    logger.info(f'access_token : {str(access_token)}')
+
+    validated_token = JWT_authenticator.get_validated_token(access_token)
+    user = JWT_authenticator.get_user(validated_token)
+    return user
 
 class GameConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -59,6 +69,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'scope : {self.scope}')
         logger.info(f'query_string : {self.scope["query_string"]}')
 
+        try:
+            user = get_user2(self.scope['cookies']['access_token'])
+        except:
+            return
+
         query_string = self.scope["query_string"]
         query_str = query_string.decode("utf-8")
         parsed_query = parse_qs(query_str)
@@ -66,17 +81,11 @@ class GameConsumer(AsyncWebsocketConsumer):
         userId = parsed_query.get('userId', [None])[0]
         nextRoom = parsed_query.get('nextRoom', [None])[0]
 
-        if None in (userId, mode):
-            await self.close()
+        if None in (userId, mode) or user.pk != userId or mode not in matching_queue:
             return
-
 
         logger.info('mode = %s', str(mode))
         logger.info('userId = %s', str(userId))
-        # user = get_user(self.scope["access_token"])
-        # logger.info(user)
-        # if mode not in ('2p', '3p', '4p', 'tournament') or user.pk != userId:
-        #     return
 
         await self.accept()
 
