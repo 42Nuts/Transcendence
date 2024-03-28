@@ -8,24 +8,15 @@ import { BasicButton } from "../../components/Button/index.js";
 class TournamentResult extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = "flex items-center justify-center min-h-screen";
+    container.className = "fixed inset-0 bg-primary dark:bg-secondary z-50 flex justify-center items-center";
 
     // result
-    const resultContainer = document.createElement("div");
-    resultContainer.className = "absolute";
-
-    const resultBox = document.createElement("div");
-    resultBox.className =
-      "w-[1118px] h-[390.43px] justify-start items-end gap-[152px] inline-flex";
-
-    const first = createComponent(TournamentWinnerCard, {
+    const winner = createComponent(TournamentWinnerCard, {
       imageSrc: this.props.imageSrc,
       name: this.props.name,
     });
 
-    resultBox.appendChild(first);
-
-    resultContainer.appendChild(resultBox);
+    container.appendChild(winner);
 
     // exit button
     const exitButtonPos = document.createElement("div");

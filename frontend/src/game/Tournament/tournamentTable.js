@@ -6,7 +6,7 @@ import Store from "../../store/index.js";
 class TournamentTable extends Component {
   render() {
     const container = document.createElement("div");
-    container.className = "fixed inset-0 bg-primary z-50 flex justify-center items-center";
+    container.className = "fixed inset-0 bg-primary dark:dg-secondary z-50 flex justify-center items-center";
 
     //round1
     const round1 = document.createElement("div");

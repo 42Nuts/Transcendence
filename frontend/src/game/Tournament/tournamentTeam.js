@@ -36,6 +36,12 @@ class TournamentTeam extends Component {
       document.body.removeChild(overlay);
       if (message == "lose") {
         window.location.assign("/home/");
+      } else if (message == "win" && Store.state.tournamentMode != 0) {
+        const tournamentResult = createComponent(TournamentResult, {
+          imageSrc: profileImages[Store.state.profile],
+          name: Store.state.nickname,
+        });
+        document.body.appendChild(tournamentResult);
       }
       this.result = false;
     });
