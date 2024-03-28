@@ -105,7 +105,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         self.userId = userId
         if mode == "tournament2":
             if nextRoom not in tournament_winner_room:
-                tournament_winner_room[nextRoom] = []
+                await self.close()
+                return
 
             tournament_winner_room[nextRoom].append(self)
             if len(tournament_winner_room[nextRoom]) >= 2:
@@ -122,7 +123,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 player_ids = []
                 players = []
 
-                for _ in range(limit_size[mode]):
+                while matching_queue[mode]:
                     playerId, player = matching_queue[mode].popleft()
                     player_ids.append(playerId)
                     players.append(player)
@@ -222,7 +223,8 @@ class GameConsumer(AsyncWebsocketConsumer):
 
         logger.info(f'winners : {winners}')
         logger.info(f'newGame : {group_game_instances[winner_room_name]}')
-        for winner in winners:
+        while winners:
+            winner = winners.pop()
             await winner.channel_layer.group_add(
                 winner_room_name,
                 winner.channel_name
@@ -250,11 +252,12 @@ class GameConsumer(AsyncWebsocketConsumer):
             await self.close()
             return
 
-        idx = 0           
+        logger.info(f'queue : {matching_queue[self.mode]}')
+        idx = 0
         for playerId, player in matching_queue[self.mode]:
             if playerId == self.userId:
                 del matching_queue[self.mode][idx]
-                self.close()
+                await self.close()
                 return
             idx += 1
 
@@ -266,7 +269,10 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.update_task.cancel()
 
         logger.info(f'close_code : {close_code}')
+        logger.info(f'group_member_count[self.room_group_name] : {group_member_count[self.room_group_name]}')
+        logger.info(f'limit_size[self.mode] : {limit_size[self.mode]}')
         if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
+            logger.info('tournament')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -275,6 +281,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif group_member_count[self.room_group_name] == limit_size[self.mode]:
+            logger.info('tournament2')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -317,6 +324,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 if self.mode == "tournament":
                     winner_room_name = self.room_group_name.rsplit("_", 1)[0]
                     game_data['next_room'] = winner_room_name
+                    tournament_winner_room[winner_room_name] = []
 
                 await self.channel_layer.group_send(
                     self.room_group_name,
@@ -325,7 +333,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
-                await self.disconnect()
+                await self.disconnect(4999)
                 return
             else:
                 await self.channel_layer.group_send(

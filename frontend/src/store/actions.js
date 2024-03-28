@@ -27,8 +27,8 @@ export default {
   updateGameMode(context, payload) {
     context.commit("updateGameMode", payload);
   },
-  updateGameStart(context) {
-    context.commit("updateGameStart");
+  updateGameStart(context, payload) {
+    context.commit("updateGameStart", payload);
   },
   updateTournamentMode(context, payload) {
     context.commit("updateTournamentMode", payload);

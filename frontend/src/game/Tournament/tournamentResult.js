@@ -30,6 +30,7 @@ class TournamentResult extends Component {
 
     exitButton.addEventListener("click", () => {
       Store.dispatch("updateTournamentMode", 0);
+      Store.dispatch("updateNextRoom", "");
     });
 
     exitButtonHref.appendChild(exitButton);

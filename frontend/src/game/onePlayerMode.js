@@ -24,6 +24,7 @@ class onePlayerMode extends Component {
   }
 
   showResult(message) {
+    Store.dispatch("updateGameStart", false);
     const overlay = createComponent(Result, { result: message });
     overlay.setAttribute("href", "/gameMode/");
 
@@ -206,7 +207,7 @@ class onePlayerMode extends Component {
         this.destroy();
         return;
       } else if (data.type == "game_start") {
-        Store.dispatch("updateGameStart");
+        Store.dispatch("updateGameStart", true);
         document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
       } else {

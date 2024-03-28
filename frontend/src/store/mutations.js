@@ -35,8 +35,8 @@ export default {
     state.gameMode = payload;
     return state;
   },
-  updateGameStart(state) {
-    state.gameStart = !state.gameStart;
+  updateGameStart(state, payload) {
+    state.gameStart = payload;
     return state;
   },
   updateTournamentMode(state, payload) {

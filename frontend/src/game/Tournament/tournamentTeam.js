@@ -23,6 +23,7 @@ class TournamentTeam extends Component {
   }
 
   showResult(message) {
+    Store.dispatch("updateGameStart", false);
     const overlay = createComponent(Result, { result: message });
 
     if (!this.result) {
@@ -35,6 +36,8 @@ class TournamentTeam extends Component {
       event.preventDefault();
       if (message == "lose") {
         window.location.assign("/home/");
+        Store.dispatch("updateTournamentMode", 0);
+        Store.dispatch("updateNextRoom", "");
       } else if (message == "win" && Store.state.tournamentMode == 1) {
         const tournamentResult = createComponent(TournamentResult, {
           imageSrc: profileImages[Store.state.profile],
@@ -330,7 +333,7 @@ class TournamentTeam extends Component {
         this.updateScoreBoard(playerIds);
         Promise.all([this.updateMatchTable(playerIds)]).then(() => {
           // 모든 작업이 완료된 후 실행되어야 하는 코드
-          Store.dispatch("updateGameStart");
+          Store.dispatch("updateGameStart", true);
           setTimeout(() => {
             const table = document.getElementById("matchTable");
             if (table) {
@@ -432,32 +435,28 @@ class TournamentTeam extends Component {
         this.props.gameSocket.readyState === WebSocket.OPEN
       ) {
         this.props.gameSocket.close();
+        this.destroy();
         console.log("WebSocket connection closed.");
       }
+      Store.dispatch("updateTournamentMode", 0);
+      Store.dispatch("updateNextRoom", "");
     });
 
     // match table
-    this.matchTable = document.createElement("div");
-
-    if (Store.state.tournamentMode == 0) {
-      this.matchTable = createComponent(TournamentTable, {
-        player1Image: "/static/assets/images/profile-default.svg",
-        player2Image: "/static/assets/images/profile-default.svg",
-        player3Image: "/static/assets/images/profile-default.svg",
-        player4Image: "/static/assets/images/profile-default.svg",
-        player1Name: "Player 1",
-        player2Name: "Player 2",
-        player3Name: "Player 3",
-        player4Name: "Player 4",
-      });
-    } else if (Store.state.tournamentMode == 1) {
-      this.matchTable = createComponent(TournamentTable, {
-        playerLeftImage: "/static/assets/images/profile-default.svg",
-        playerRightImage: "/static/assets/images/profile-default.svg",
-        playerLeftName: "Left",
-        playerRightName: "Right",
-      });
-    }
+    this.matchTable = createComponent(TournamentTable, {
+      player1Image: "/static/assets/images/profile-default.svg",
+      player2Image: "/static/assets/images/profile-default.svg",
+      player3Image: "/static/assets/images/profile-default.svg",
+      player4Image: "/static/assets/images/profile-default.svg",
+      player1Name: "Player 1",
+      player2Name: "Player 2",
+      player3Name: "Player 3",
+      player4Name: "Player 4",
+      playerLeftImage: "/static/assets/images/profile-default.svg",
+      playerRightImage: "/static/assets/images/profile-default.svg",
+      playerLeftName: "Left",
+      playerRightName: "Right",
+    });
     this.matchTable.id = "matchTable";
 
     this.container.appendChild(this.matchTable);

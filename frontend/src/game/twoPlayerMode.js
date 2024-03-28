@@ -22,6 +22,7 @@ class TwoPlayerMode extends Component {
   }
 
   showResult(message) {
+    Store.dispatch("updateGameStart", false);
     const overlay = createComponent(Result, { result: message });
     overlay.setAttribute("href", "/gameMode/");
 
@@ -237,7 +238,7 @@ class TwoPlayerMode extends Component {
         return;
       } else if (data.type == "game_start") {
         this.updateScoreBoard(data.player_ids);
-        Store.dispatch("updateGameStart");
+        Store.dispatch("updateGameStart", true);
         document.body.appendChild(createComponent(Countdown, {}));
         this.keyboardEvent();
       } else {
