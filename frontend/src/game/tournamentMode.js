@@ -1,6 +1,5 @@
 import { Component, createComponent } from "../core/index.js";
-import { TournamentTable, TournamentTeam } from "./Tournament/index.js";
-import { profileImages } from "../config/index.js";
+import { TournamentTeam } from "./Tournament/index.js";
 import Store from "../store/index.js";
 
 class TournamentMode extends Component {
