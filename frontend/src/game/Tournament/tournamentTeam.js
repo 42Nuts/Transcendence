@@ -240,14 +240,10 @@ class TournamentTeam extends Component {
     const myIndex = playerIds.indexOf(userId);
     let newPlayerIds = [];
 
-    if (myIndex === 0) {
+    if (myIndex === 0 || myIndex === 1) {
       newPlayerIds = playerIds;
-    } else if (myIndex === 1) {
-      newPlayerIds = [playerIds[1], playerIds[0], playerIds[3], playerIds[2]];
-    } else if (myIndex === 2) {
+    } else if (myIndex === 2 || myIndex === 3) {
       newPlayerIds = [playerIds[2], playerIds[3], playerIds[0], playerIds[1]];
-    } else if (myIndex === 3) {
-      newPlayerIds = [playerIds[3], playerIds[2], playerIds[1], playerIds[0]];
     }
 
     return newPlayerIds;
