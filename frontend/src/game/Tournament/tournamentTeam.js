@@ -24,7 +24,6 @@ class TournamentTeam extends Component {
 
   showResult(message) {
     const overlay = createComponent(Result, { result: message });
-    // overlay.setAttribute("href", "/gameMode/");
 
     if (!this.result) {
       document.body.appendChild(overlay);
@@ -35,6 +34,9 @@ class TournamentTeam extends Component {
       event.preventDefault();
       Store.dispatch("updateTournamentMode");
       document.body.removeChild(overlay);
+      if (message == "lose") {
+        window.location.assign("/home/");
+      }
       this.result = false;
     });
 
@@ -231,8 +233,11 @@ class TournamentTeam extends Component {
     // 모든 플레이어에 대한 프로미스를 저장할 배열을 선언합니다.
     const promises = [];
 
+    // tournamentMode가 1이면 시작 인덱스를 5로 설정합니다.
+    const startIndex = Store.state.tournamentMode === 1 ? 5 : 1;
+
     // 각 플레이어 ID에 대해 프로필 인덱스와 닉네임을 가져오는 프로미스를 생성합니다.
-    playerIds.forEach((playerId) => {
+    playerIds.forEach((playerId, index) => {
       const profilePromise = fetch(`/v2/users/${playerId}/profile-index/`, {
         method: "GET",
         headers: {
@@ -256,11 +261,13 @@ class TournamentTeam extends Component {
       .then((results) => {
         results.forEach((data, index) => {
           const [profileResponse, nicknameResponse] = data;
+          // Store.state.tournamentMode의 값에 따라 조정된 인덱스를 사용합니다.
+          const adjustedIndex = startIndex + index;
           const playerImage = document.getElementById(
-            `tournamentCardImage${index + 1}`
+            `tournamentCardImage${adjustedIndex}`
           );
           const playerName = document.getElementById(
-            `tournamentCardName${index + 1}`
+            `tournamentCardName${adjustedIndex}`
           );
           if (playerImage && playerName) {
             playerImage.src = profileImages[profileResponse.profile_index];
@@ -296,12 +303,13 @@ class TournamentTeam extends Component {
       } else if (data.type == "game_start") {
         console.log(data.player_ids);
         this.updateScoreBoard(data.player_ids);
-        Promise.all([
-          this.updateMatchTable(data.player_ids),
-        ]).then(() => {
+        Promise.all([this.updateMatchTable(data.player_ids)]).then(() => {
           // 모든 작업이 완료된 후 실행되어야 하는 코드
           Store.dispatch("updateGameStart");
-          document.body.appendChild(createComponent(Countdown, {}));
+          setTimeout(() => {
+            this.container.querySelector("#matchTable").remove();
+            document.body.appendChild(createComponent(Countdown, {}));
+          }, 3000);
           this.keyboardEvent();
         });
       } else {
@@ -400,18 +408,30 @@ class TournamentTeam extends Component {
     });
 
     // match table
-    const matchTable = createComponent(TournamentTable, {
-      player1Image: "/static/assets/images/profile-default.svg",
-      player2Image: "/static/assets/images/profile-default.svg",
-      player3Image: "/static/assets/images/profile-default.svg",
-      player4Image: "/static/assets/images/profile-default.svg",
-      player1Name: "Player 1",
-      player2Name: "Player 2",
-      player3Name: "Player 3",
-      player4Name: "Player 4",
-    });
+    this.matchTable = document.createElement("div");
 
-    this.container.appendChild(matchTable);
+    if (Store.state.tournamentMode == 0) {
+      this.matchTable = createComponent(TournamentTable, {
+        player1Image: "/static/assets/images/profile-default.svg",
+        player2Image: "/static/assets/images/profile-default.svg",
+        player3Image: "/static/assets/images/profile-default.svg",
+        player4Image: "/static/assets/images/profile-default.svg",
+        player1Name: "Player 1",
+        player2Name: "Player 2",
+        player3Name: "Player 3",
+        player4Name: "Player 4",
+      });
+    } else if (Store.state.tournamentMode == 1) {
+      this.matchTable = createComponent(TournamentTable, {
+        playerLeftImage: "/static/assets/images/profile-default.svg",
+        playerRightImage: "/static/assets/images/profile-default.svg",
+        playerLeftName: "Left",
+        playerRightName: "Right",
+      });
+    }
+    this.matchTable.id = "matchTable";
+
+    this.container.appendChild(this.matchTable);
 
     return this.container;
   }

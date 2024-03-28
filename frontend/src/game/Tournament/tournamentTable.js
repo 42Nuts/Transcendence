@@ -1,6 +1,7 @@
 import { Component, createComponent } from "../../core/index.js";
 import { BasicButton } from "../../components/Button/index.js";
 import { TournamentCard } from "../../components/Card/index.js";
+import Store from "../../store/index.js";
 
 class TournamentTable extends Component {
   render() {
@@ -13,7 +14,7 @@ class TournamentTable extends Component {
 
     const roundContainer = document.createElement("div");
     roundContainer.className =
-      "w-[1337.60px] h-[688.80px] justify-start items-center gap-20 inline-flex";
+      "w-[1337.60px] h-[688.80px] flex justify-center items-center gap-20 inline-flex";
 
     const leftContainer = document.createElement("div");
     leftContainer.className =
@@ -52,15 +53,17 @@ class TournamentTable extends Component {
     let nextRoundLeft = document.createElement("div");
     let nextRoundRight = document.createElement("div");
 
-    if (this.props.isFinal) {
+    if (Store.state.tournamentMode == 1) {
       nextRoundLeft = createComponent(TournamentCard, {
         imageSrc: this.props.playerLeftImage,
         name: this.props.playerLeftName,
+        id: "5",
       });
 
       nextRoundRight = createComponent(TournamentCard, {
         imageSrc: this.props.playerRightImage,
         name: this.props.playerRightName,
+        id: "6",
       });
 
     } else {
@@ -114,9 +117,13 @@ class TournamentTable extends Component {
     rightContainer.appendChild(bridgeRight);
     rightContainer.appendChild(person4);
 
-    roundContainer.appendChild(leftContainer);
-    roundContainer.appendChild(middleContainer);
-    roundContainer.appendChild(rightContainer);
+    if (Store.state.tournamentMode == 0) {
+      roundContainer.appendChild(leftContainer);
+      roundContainer.appendChild(middleContainer);
+      roundContainer.appendChild(rightContainer);
+    } else {
+      roundContainer.appendChild(middleContainer);
+    }
     round1.appendChild(roundContainer);
 
     //image
