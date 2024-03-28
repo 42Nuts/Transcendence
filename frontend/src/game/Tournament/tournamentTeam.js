@@ -32,17 +32,17 @@ class TournamentTeam extends Component {
     overlay.addEventListener("click", (event) => {
       event.stopPropagation();
       event.preventDefault();
-      Store.dispatch("updateTournamentMode");
-      document.body.removeChild(overlay);
       if (message == "lose") {
         window.location.assign("/home/");
-      } else if (message == "win" && Store.state.tournamentMode != 0) {
+      } else if (message == "win" && Store.state.tournamentMode == 1) {
         const tournamentResult = createComponent(TournamentResult, {
           imageSrc: profileImages[Store.state.profile],
           name: Store.state.nickname,
         });
-        document.body.appendChild(tournamentResult);
+        this.container.appendChild(tournamentResult);
       }
+      Store.dispatch("updateTournamentMode");
+      document.body.removeChild(overlay);
       this.result = false;
     });
 
