@@ -301,7 +301,10 @@ class TournamentTeam extends Component {
         ]).then(() => {
           // 모든 작업이 완료된 후 실행되어야 하는 코드
           Store.dispatch("updateGameStart");
-          document.body.appendChild(createComponent(Countdown, {}));
+          setTimeout(() => {
+            this.container.querySelector("#matchTable").remove();
+            document.body.appendChild(createComponent(Countdown, {}));
+          }, 3000);
           this.keyboardEvent();
         });
       } else {
@@ -400,7 +403,7 @@ class TournamentTeam extends Component {
     });
 
     // match table
-    const matchTable = createComponent(TournamentTable, {
+    this.matchTable = createComponent(TournamentTable, {
       player1Image: "/static/assets/images/profile-default.svg",
       player2Image: "/static/assets/images/profile-default.svg",
       player3Image: "/static/assets/images/profile-default.svg",
@@ -410,8 +413,9 @@ class TournamentTeam extends Component {
       player3Name: "Player 3",
       player4Name: "Player 4",
     });
+    this.matchTable.id = "matchTable";
 
-    this.container.appendChild(matchTable);
+    this.container.appendChild(this.matchTable);
 
     return this.container;
   }
