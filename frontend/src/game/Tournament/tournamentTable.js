@@ -57,13 +57,13 @@ class TournamentTable extends Component {
       nextRoundLeft = createComponent(TournamentCard, {
         imageSrc: this.props.playerLeftImage,
         name: this.props.playerLeftName,
-        id: "Left",
+        id: "5",
       });
 
       nextRoundRight = createComponent(TournamentCard, {
         imageSrc: this.props.playerRightImage,
         name: this.props.playerRightName,
-        id: "Right",
+        id: "6",
       });
 
     } else {
