@@ -1,3 +1,4 @@
+
 # consumers.py
 import asyncio
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -12,6 +13,7 @@ import logging
 from urllib.parse import parse_qs
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed
+from asgiref.sync import async_to_sync, sync_to_async
 
 logger = logging.getLogger('django')
 group_game_instances = {}
@@ -47,13 +49,18 @@ room_id = {
 
 JWT_authenticator = JWTAuthentication()
 
-def get_user2(access_token):
+async def get_user2(access_token):
+    logger.info(f'access_token : {access_token}')
     if access_token is None:
         raise AuthenticationFailed()
-    logger.info(f'access_token : {str(access_token)}')
 
+    logger.info('before validated')
     validated_token = JWT_authenticator.get_validated_token(access_token)
-    user = JWT_authenticator.get_user(validated_token)
+    logger.info('after validated')
+
+    async_get_user = sync_to_async(JWT_authenticator.get_user)
+    user = await async_get_user(validated_token)
+    logger.info('after getting user')
     return user
 
 class GameConsumer(AsyncWebsocketConsumer):
@@ -70,8 +77,9 @@ class GameConsumer(AsyncWebsocketConsumer):
         logger.info(f'query_string : {self.scope["query_string"]}')
 
         try:
-            user = get_user2(self.scope['cookies']['access_token'])
-        except:
+            user = await get_user2(self.scope['cookies']['access_token'])
+        except Exception as e:
+            logger.info(e)
             return
 
         query_string = self.scope["query_string"]
@@ -81,7 +89,8 @@ class GameConsumer(AsyncWebsocketConsumer):
         userId = parsed_query.get('userId', [None])[0]
         nextRoom = parsed_query.get('nextRoom', [None])[0]
 
-        if None in (userId, mode) or user.pk != userId or mode not in matching_queue:
+        if None in (userId, mode) or user.pk != int(userId) or mode not in matching_queue:
+            logger.info('invalid request')
             return
 
         logger.info('mode = %s', str(mode))
@@ -236,7 +245,10 @@ class GameConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         logger.info(f'disconnect')
-        logger.info(f'queue:{matching_queue[self.mode]}')
+        if self.mode is None:
+            logger.info(f'Mode is None or not found in matching queue: {self.mode}')
+            await self.close()
+            return
 
         idx = 0           
         for playerId, player in matching_queue[self.mode]:
