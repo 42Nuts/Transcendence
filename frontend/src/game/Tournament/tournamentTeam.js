@@ -408,10 +408,14 @@ class TournamentTeam extends Component {
       player2Image: "/static/assets/images/profile-default.svg",
       player3Image: "/static/assets/images/profile-default.svg",
       player4Image: "/static/assets/images/profile-default.svg",
+      playerLeftImage: "/static/assets/images/profile-default.svg",
+      playerRightImage: "/static/assets/images/profile-default.svg",
       player1Name: "Player 1",
       player2Name: "Player 2",
       player3Name: "Player 3",
       player4Name: "Player 4",
+      playerLeftName: "Left",
+      playerRightName: "Right",
     });
     this.matchTable.id = "matchTable";
 

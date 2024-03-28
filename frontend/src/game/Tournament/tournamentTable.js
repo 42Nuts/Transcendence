@@ -1,6 +1,7 @@
 import { Component, createComponent } from "../../core/index.js";
 import { BasicButton } from "../../components/Button/index.js";
 import { TournamentCard } from "../../components/Card/index.js";
+import Store from "../../store/index.js";
 
 class TournamentTable extends Component {
   render() {
@@ -52,15 +53,17 @@ class TournamentTable extends Component {
     let nextRoundLeft = document.createElement("div");
     let nextRoundRight = document.createElement("div");
 
-    if (this.props.isFinal) {
+    if (Store.state.tournamentMode == 1) {
       nextRoundLeft = createComponent(TournamentCard, {
         imageSrc: this.props.playerLeftImage,
         name: this.props.playerLeftName,
+        id: "Left",
       });
 
       nextRoundRight = createComponent(TournamentCard, {
         imageSrc: this.props.playerRightImage,
         name: this.props.playerRightName,
+        id: "Right",
       });
 
     } else {
