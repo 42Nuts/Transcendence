@@ -264,7 +264,9 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.update_task.cancel()
 
         logger.info(f'close_code : {close_code}')
+        logger.info(f'mode: {self.mode}')
         if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
+            logger.info('tournament1 group_send end')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {
@@ -273,6 +275,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                 }
             )
         elif group_member_count[self.room_group_name] == limit_size[self.mode]:
+            logger.info('group_send end')
             await self.channel_layer.group_send(
                 self.room_group_name,
                 {

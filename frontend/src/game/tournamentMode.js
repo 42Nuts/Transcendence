@@ -9,7 +9,7 @@ class TournamentMode extends Component {
   }
 
   nextRound() {
-    if (Store.state.tournamentMode == 1) {
+    if (Store.state.tournamentMode == 1 && Store.state.nextRoom) {
       this.initGame();
       Store.dispatch("updateNextRoom", "");
       this.container.innerHTML = "";

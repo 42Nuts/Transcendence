@@ -23,18 +23,19 @@ class TournamentResult extends Component {
     const exitButtonPos = document.createElement("div");
     exitButtonPos.className = "absolute top-[85%]";
 
-    const exitButtonHref = document.createElement("a");
-    exitButtonHref.setAttribute("href", "/gameMode/");
+    // const exitButtonHref = document.createElement("a");
+    // exitButtonHref.setAttribute("href", "/gameMode/");
 
     const exitButton = createComponent(BasicButton, { text: "Exit" });
 
     exitButton.addEventListener("click", () => {
+      window.location.assign("/home/");
       Store.dispatch("updateTournamentMode", 0);
       Store.dispatch("updateNextRoom", "");
     });
 
-    exitButtonHref.appendChild(exitButton);
-    exitButtonPos.appendChild(exitButtonHref);
+    // exitButtonHref.appendChild(exitButton);
+    exitButtonPos.appendChild(exitButton);
 
     container.appendChild(exitButtonPos);
 

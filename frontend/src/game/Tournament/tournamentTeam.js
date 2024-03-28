@@ -46,7 +46,7 @@ class TournamentTeam extends Component {
         });
         this.container.appendChild(tournamentResult);
       }
-      Store.dispatch("updateTournamentMode", Store.state.tournamentMode + 1);
+      Store.dispatch("updateTournamentMode", 1);
       document.body.removeChild(overlay);
       this.result = false;
     });
@@ -440,6 +440,7 @@ class TournamentTeam extends Component {
         this.destroy();
         console.log("WebSocket connection closed.");
       }
+      window.location.assign("/home/");
       Store.dispatch("updateTournamentMode", 0);
       Store.dispatch("updateNextRoom", "");
     });
