@@ -14,7 +14,7 @@ class TournamentTable extends Component {
 
     const roundContainer = document.createElement("div");
     roundContainer.className =
-      "w-[1337.60px] h-[688.80px] justify-start items-center gap-20 inline-flex";
+      "w-[1337.60px] h-[688.80px] flex justify-center items-center gap-20 inline-flex";
 
     const leftContainer = document.createElement("div");
     leftContainer.className =
@@ -117,9 +117,13 @@ class TournamentTable extends Component {
     rightContainer.appendChild(bridgeRight);
     rightContainer.appendChild(person4);
 
-    roundContainer.appendChild(leftContainer);
-    roundContainer.appendChild(middleContainer);
-    roundContainer.appendChild(rightContainer);
+    if (Store.state.tournamentMode == 0) {
+      roundContainer.appendChild(leftContainer);
+      roundContainer.appendChild(middleContainer);
+      roundContainer.appendChild(rightContainer);
+    } else {
+      roundContainer.appendChild(middleContainer);
+    }
     round1.appendChild(roundContainer);
 
     //image
