@@ -230,38 +230,39 @@ class TournamentTeam extends Component {
   updateMatchTable(playerIds) {
     // 모든 플레이어에 대한 프로미스를 저장할 배열을 선언합니다.
     const promises = [];
-
+  
+    // tournamentMode가 1이면 시작 인덱스를 5로 설정합니다.
+    const startIndex = Store.state.tournamentMode === 1 ? 5 : 1;
+  
     // 각 플레이어 ID에 대해 프로필 인덱스와 닉네임을 가져오는 프로미스를 생성합니다.
-    playerIds.forEach((playerId) => {
+    playerIds.forEach((playerId, index) => {
       const profilePromise = fetch(`/v2/users/${playerId}/profile-index/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json());
-
+  
       const nicknamePromise = fetch(`/v2/users/${playerId}/nickname/`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       }).then((response) => response.json());
-
+  
       // 각 플레이어에 대한 프로미스를 배열에 추가합니다.
       promises.push(Promise.all([profilePromise, nicknamePromise]));
     });
-
+  
     // 모든 플레이어의 정보를 가져오는 프로미스가 완료되면, DOM을 업데이트합니다.
     Promise.all(promises)
       .then((results) => {
         results.forEach((data, index) => {
           const [profileResponse, nicknameResponse] = data;
-          const playerImage = document.getElementById(
-            `tournamentCardImage${index + 1}`
-          );
-          const playerName = document.getElementById(
-            `tournamentCardName${index + 1}`
-          );
+          // Store.state.tournamentMode의 값에 따라 조정된 인덱스를 사용합니다.
+          const adjustedIndex = startIndex + index;
+          const playerImage = document.getElementById(`tournamentCardImage${adjustedIndex}`);
+          const playerName = document.getElementById(`tournamentCardName${adjustedIndex}`);
           if (playerImage && playerName) {
             playerImage.src = profileImages[profileResponse.profile_index];
             playerName.innerText = nicknameResponse.nickname;
