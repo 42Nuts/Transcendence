@@ -102,7 +102,7 @@ class NickNamePopUp extends Component {
     this.input.className =
       "w-full opacity-50 text-primary-text text-2xl font-medium font-['Inter'] outline-none";
     this.input.setAttribute("type", "text");
-    this.input.setAttribute("maxlength", "8");
+    this.input.setAttribute("maxlength", "7");
     this.input.setAttribute("placeholder", "search");
 
     const checkContainer = document.createElement("div");
