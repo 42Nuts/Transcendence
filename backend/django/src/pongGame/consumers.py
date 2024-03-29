@@ -260,8 +260,8 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        if self.update_task is not None:
-            self.update_task.cancel()
+        # if self.update_task is not None:
+        #     self.update_task.cancel()
 
         logger.info(f'close_code : {close_code}')
         logger.info(f'mode: {self.mode}')
