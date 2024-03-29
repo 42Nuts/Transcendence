@@ -5,6 +5,7 @@ import { mapImages, themeImages, profileImages } from "../../config/index.js";
 import { Result } from "./../Result/index.js";
 import { Countdown } from "./../Loading/index.js";
 import { TournamentTable, TournamentResult } from "./index.js";
+import { GamePage, GameModePage } from "../../pages/index.js";
 import Store from "../../store/index.js";
 
 class TournamentTeam extends Component {
@@ -22,6 +23,38 @@ class TournamentTeam extends Component {
     this.ballImage.src = themeImages[Store.state.theme];
   }
 
+  gotoGamePage() {
+    window.history.pushState({}, "", "/gameMode/");
+
+    // 페이지 컨텐츠를 동적으로 변경합니다.
+    const rootElement = document.querySelector("#root");
+    if (rootElement) {
+      rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+      // GamePage 컴포넌트를 생성하고 초기화합니다.
+      const gamePageComponent = new GameModePage();
+      const gamePageElement = gamePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+      // 생성된 페이지 요소를 rootElement에 추가합니다.
+      rootElement.appendChild(gamePageElement);
+    }
+
+    // 뒤로 가기를 위한 onpopstate 이벤트 처리
+    window.onpopstate = () => {
+      const rootElement = document.querySelector("#root");
+      if (rootElement) {
+        rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+        // GameModePage 컴포넌트를 생성하고 초기화합니다.
+        const gameModePageComponent = new GamePage();
+        const gameModePageElement = gameModePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+        // 생성된 페이지 요소를 rootElement에 추가합니다.
+        rootElement.appendChild(gameModePageElement);
+      }
+    };
+  }
+
   showResult(message) {
     Store.dispatch("updateGameStart", false);
     const overlay = createComponent(Result, { result: message });
@@ -35,9 +68,9 @@ class TournamentTeam extends Component {
       event.stopPropagation();
       event.preventDefault();
       if (message == "lose") {
-        window.location.assign("/home/");
         Store.dispatch("updateTournamentMode", 0);
         Store.dispatch("updateNextRoom", "");
+        this.gotoGamePage();
       } else if (message == "win" && Store.state.tournamentMode == 1) {
         this.result = false;
         const tournamentResult = createComponent(TournamentResult, {
@@ -312,7 +345,7 @@ class TournamentTeam extends Component {
 
     this.props.gameSocket.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.log(`data.type : ${data.type}`)
+      console.log(`data.type : ${data.type}`);
 
       if (data.type == "game_end") {
         console.log("game_end");
@@ -440,7 +473,6 @@ class TournamentTeam extends Component {
         this.destroy();
         console.log("WebSocket connection closed.");
       }
-      window.location.assign("/home/");
       Store.dispatch("updateTournamentMode", 0);
       Store.dispatch("updateNextRoom", "");
     });
