@@ -9,8 +9,10 @@ import getCookie from "../utils/getCookie.js";
 class GameModePage extends Component {
   constructor(props) {
     super(props);
-    Store.dispatch("updateTournamentMode", 0);
-    Store.dispatch("updateNextRoom", "");
+    if (Store.state.gameMode == "tournament") {
+      Store.dispatch("updateTournamentMode", 0);
+      Store.dispatch("updateNextRoom", "");
+    }
   }
 
   render() {
