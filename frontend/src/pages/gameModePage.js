@@ -7,6 +7,12 @@ import Store from "../store/index.js";
 import getCookie from "../utils/getCookie.js";
 
 class GameModePage extends Component {
+  constructor(props) {
+    super(props);
+    Store.dispatch("updateTournamentMode", 0);
+    Store.dispatch("updateNextRoom", "");
+  }
+
   render() {
     const container = document.createElement("div");
     container.className =
