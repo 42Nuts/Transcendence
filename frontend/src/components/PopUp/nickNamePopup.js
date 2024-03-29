@@ -1,4 +1,5 @@
 import { Component, createComponent } from "../../core/index.js";
+import { GamePage, GameModePage } from "../../pages/index.js";
 import Store from "../../store/index.js";
 import getCookie from "../../utils/getCookie.js"
 
@@ -6,6 +7,38 @@ class NickNamePopUp extends Component {
   constructor(props) {
     super(props);
     this.name = "";
+  }
+
+  gotoGamePage() {
+    window.history.pushState({}, "", "/game/");
+
+    // 페이지 컨텐츠를 동적으로 변경합니다.
+    const rootElement = document.querySelector("#root");
+    if (rootElement) {
+      rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+      // GamePage 컴포넌트를 생성하고 초기화합니다.
+      const gamePageComponent = new GamePage();
+      const gamePageElement = gamePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+      // 생성된 페이지 요소를 rootElement에 추가합니다.
+      rootElement.appendChild(gamePageElement);
+    }
+
+    // 뒤로 가기를 위한 onpopstate 이벤트 처리
+    window.onpopstate = () => {
+      const rootElement = document.querySelector("#root");
+      if (rootElement) {
+        rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+        // GameModePage 컴포넌트를 생성하고 초기화합니다.
+        const gameModePageComponent = new GameModePage();
+        const gameModePageElement = gameModePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+        // 생성된 페이지 요소를 rootElement에 추가합니다.
+        rootElement.appendChild(gameModePageElement);
+      }
+    };
   }
 
   putNickName() {
@@ -123,12 +156,18 @@ class NickNamePopUp extends Component {
     this.input.addEventListener("keypress", (event) => {
       if (event.key === "Enter" && this.input.value.length > 0) {
         this.putNickName();
+        if (this.props.mode == "tournament") {
+          this.gotoGamePage();
+        }
       }
     });
 
     buttonContainer.addEventListener("click", () => {
       if (this.input.value.length > 0) {
         this.putNickName();
+        if (this.props.mode == "tournament") {
+          this.gotoGamePage();
+        }
       }
     });
 
