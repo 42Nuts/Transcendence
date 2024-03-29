@@ -66,7 +66,7 @@ class OptionsPage extends Component {
   }
 
   sendOptionSetting() {
-    fetch("/v2/users/1/theme-index/", {
+    fetch(`/v2/users/${userId}/theme-index/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +83,7 @@ class OptionsPage extends Component {
       .catch((error) => {
         console.error("Error:", error);
       });
-    fetch("/v2/users/1/dark-mode/", {
+    fetch(`/v2/users/${userId}/dark-mode/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -107,6 +107,30 @@ class OptionsPage extends Component {
       .catch((error) => {
         console.error("Error:", error);
       });
+  }
+
+  logoutUser() {
+    fetch(`/v2/users/${userId}/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+    window.location.assign("/");
+  }
+
+  deleteUser() {
+    fetch(`/v2/users/${userId}/`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    }).catch((error) => {
+      console.error("Error:", error);
+    });
+    window.location.assign("/");
   }
 
   render() {
@@ -150,6 +174,7 @@ class OptionsPage extends Component {
       optionName: "toggleLogout",
       boxWidth: "505px",
       popupName: "logoutPopup",
+      confirm: this.logoutUser,
     };
     this.logoutPopup = createComponent(PopUp, logoutProps);
 
@@ -160,6 +185,7 @@ class OptionsPage extends Component {
       optionName: "toggleDeleteAccount",
       boxWidth: "605px",
       popupName: "deleteAccountPopup",
+      confirm: this.deleteUser,
     };
     this.deleteAccountPopup = createComponent(PopUp, deleteProps);
 

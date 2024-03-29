@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseNotAllowed
 from users.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render
