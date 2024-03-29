@@ -260,12 +260,12 @@ class GameConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        if self.update_task:
+        if self.update_task is not None:
             self.update_task.cancel()
 
         logger.info(f'close_code : {close_code}')
         logger.info(f'mode: {self.mode}')
-        if self.mode == "tournament" and group_member_count[self.room_group_name] == 2:
+        if self.mode == "tournament":
             logger.info('tournament1 group_send end')
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -274,7 +274,7 @@ class GameConsumer(AsyncWebsocketConsumer):
                     'message': self.room_group_name.rsplit("_", 1)[0],
                 }
             )
-        elif group_member_count[self.room_group_name] == limit_size[self.mode]:
+        else:
             logger.info('group_send end')
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -326,7 +326,6 @@ class GameConsumer(AsyncWebsocketConsumer):
                         'game_data': game_data
                     }
                 )
-                await self.disconnect(4999)
                 return
             else:
                 await self.channel_layer.group_send(
