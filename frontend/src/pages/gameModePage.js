@@ -1,6 +1,8 @@
 import { Component, createComponent } from "../core/index.js";
 import { BackIconButton, BasicButton } from "../components/Button/index.js";
 import { Card, LockCard } from "../components/Card/index.js";
+import { NickNamePopup } from "../components/PopUp/index.js";
+import { GamePage } from "../pages/index.js";
 import Store from "../store/index.js";
 import getCookie from "../utils/getCookie.js";
 
@@ -27,6 +29,14 @@ class GameModePage extends Component {
     gameBoardUp.className = "justify-start items-start gap-36 inline-flex";
 
     const card1 = createComponent(Card, {
+      title: "Local",
+      titleLeft: "left-[85px]",
+      image: "/static/assets/images/character-AI.svg",
+      gameMode: "1p",
+      optionName: "updateGameMode",
+    });
+
+    const card2 = createComponent(Card, {
       title: "2 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-vs.svg",
@@ -34,20 +44,10 @@ class GameModePage extends Component {
       optionName: "updateGameMode",
     });
 
-    const card2 = createComponent(Card, {
+    const card3 = createComponent(LockCard, {
       title: "3 Players",
       titleLeft: "left-[52px]",
       image: "/static/assets/images/character-triangle.svg",
-      gameMode: "3p",
-      optionName: "updateGameMode",
-    });
-
-    const card3 = createComponent(Card, {
-      title: "4 Players",
-      titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-sonny.svg",
-      gameMode: "4p",
-      optionName: "updateGameMode",
     });
 
     gameBoardUp.appendChild(card1);
@@ -57,10 +57,12 @@ class GameModePage extends Component {
     const gameBoardDown = document.createElement("div");
     gameBoardDown.className = "justify-start items-start gap-36 inline-flex";
 
-    const card4 = createComponent(LockCard, {
-      title: "5 Players",
+    const card4 = createComponent(Card, {
+      title: "4 Players",
       titleLeft: "left-[52px]",
-      image: "/static/assets/images/character-pentagon.svg",
+      image: "/static/assets/images/character-sonny.svg",
+      gameMode: "4p",
+      optionName: "updateGameMode",
     });
 
     const card5 = createComponent(Card, {
@@ -88,36 +90,62 @@ class GameModePage extends Component {
     const playButtonPos = document.createElement("div");
     playButtonPos.className = "absolute top-[80%]";
 
-    const playButtonHref = document.createElement("a");
-    playButtonHref.setAttribute("href", "/game/");
+    // const playButtonHref = document.createElement("a");
+    // playButtonHref.setAttribute("href", "/game/");
     const playButton = createComponent(BasicButton, {
       text: "Play",
-      // onClink: () => {
-      //   fetch("/v2/users/1/profile-index/", {
-      //     method: "PUT",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "X-CSRFToken": getCookie("csrftoken"),
-      //     },
-      //     body: JSON.stringify({
-      //       profile_index: Store.state.profile,
-      //     }),
-      //   })
-      //     .then((response) => response.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //     })
-      //     .catch((error) => {
-      //       console.error("Error:", error);
-      //     });
-      // },
     });
-    playButtonHref.appendChild(playButton);
-    playButtonPos.appendChild(playButtonHref);
+
+    playButton.addEventListener("click", () => {
+      if (Store.state.gameMode == "tournament") {
+        const nickname = document.getElementById("nickname");
+        if (nickname) {
+          nickname.style.display = "flex";
+        }
+      } else {
+        window.history.pushState({}, "", "/game/");
+
+        // 페이지 컨텐츠를 동적으로 변경합니다.
+        const rootElement = document.querySelector("#root");
+        if (rootElement) {
+          rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+          // GamePage 컴포넌트를 생성하고 초기화합니다.
+          const gamePageComponent = new GamePage();
+          const gamePageElement = gamePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+          // 생성된 페이지 요소를 rootElement에 추가합니다.
+          rootElement.appendChild(gamePageElement);
+        }
+
+        // 뒤로 가기를 위한 onpopstate 이벤트 처리
+        window.onpopstate = () => {
+          const rootElement = document.querySelector("#root");
+          if (rootElement) {
+            rootElement.innerHTML = ""; // 기존 컨텐츠를 지웁니다.
+
+            // GameModePage 컴포넌트를 생성하고 초기화합니다.
+            const gameModePageComponent = new GameModePage();
+            const gameModePageElement = gameModePageComponent.initialize(); // 가정: initialize 메서드가 DOM 요소를 반환
+
+            // 생성된 페이지 요소를 rootElement에 추가합니다.
+            rootElement.appendChild(gameModePageElement);
+          }
+        };
+      }
+    });
+    // playButtonHref.appendChild(playButton);
+    playButtonPos.appendChild(playButton);
 
     container.appendChild(this.gridContainer);
     container.appendChild(gameBoard);
     container.appendChild(playButtonPos);
+
+    const nickNamePopup = createComponent(NickNamePopup, {
+      mode: "tournament",
+    });
+    container.appendChild(nickNamePopup);
+
     return container;
   }
 }

@@ -102,153 +102,153 @@ services:
     env_file:
       - .env
 
-  grafana:
-    init: true
-    image: grafana/grafana
-    container_name: $GRAFANA_HOST
-    build: 
-      context: ./backend/grafana 
-      dockerfile: Dockerfile
-    ports:
-      - "$GRAFANA_PORT:$GRAFANA_PORT"
-    volumes:
-      - ./backend/grafana/data:/var/lib/grafana
-    networks:
-      - net
-    depends_on:
-      prometheus:
-        condition: service_healthy
-    env_file:
-      - .env
+  # grafana:
+  #   init: true
+  #   image: grafana/grafana
+  #   container_name: $GRAFANA_HOST
+  #   build: 
+  #     context: ./backend/grafana 
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "$GRAFANA_PORT:$GRAFANA_PORT"
+  #   volumes:
+  #     - ./backend/grafana/data:/var/lib/grafana
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     prometheus:
+  #       condition: service_healthy
+  #   env_file:
+  #     - .env
 
-  prometheus:
-    init: true
-    image: prom/prometheus
-    container_name: $PROMETHEUS_HOST
-    build:
-      context: ./backend/prometheus
-      dockerfile: Dockerfile
-    ports:
-      - "$PROMETHEUS_PORT:$PROMETHEUS_PORT"
-    volumes:
-      - ./backend/prometheus/data:/prometheus
-    networks:
-      - net
-    healthcheck:
-      test: healthcheck.sh
-      interval: 5s
-      timeout: 10s
-      retries: 30
-    env_file:
-      - .env
+  # prometheus:
+  #   init: true
+  #   image: prom/prometheus
+  #   container_name: $PROMETHEUS_HOST
+  #   build:
+  #     context: ./backend/prometheus
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "$PROMETHEUS_PORT:$PROMETHEUS_PORT"
+  #   volumes:
+  #     - ./backend/prometheus/data:/prometheus
+  #   networks:
+  #     - net
+  #   healthcheck:
+  #     test: healthcheck.sh
+  #     interval: 5s
+  #     timeout: 10s
+  #     retries: 30
+  #   env_file:
+  #     - .env
 
-  node-exporter:
-    init: true
-    image: prom/node-exporter
-    container_name: $NODE_EXPORTER_HOST
-    command:
-     - '--collector.disable-defaults'
-     - '--collector.cpu'
-     - '--collector.loadavg'
-    ports:
-     - "$NODE_EXPORTER_PORT:$NODE_EXPORTER_PORT"
-    networks:
-      - net
-    env_file:
-      - .env
+  # node-exporter:
+  #   init: true
+  #   image: prom/node-exporter
+  #   container_name: $NODE_EXPORTER_HOST
+  #   command:
+  #    - '--collector.disable-defaults'
+  #    - '--collector.cpu'
+  #    - '--collector.loadavg'
+  #   ports:
+  #    - "$NODE_EXPORTER_PORT:$NODE_EXPORTER_PORT"
+  #   networks:
+  #     - net
+  #   env_file:
+  #     - .env
 
-  nginx-prometheus-exporter:
-    init: true
-    image: nginx/nginx-prometheus-exporter
-    container_name: $NGINX_EXPORTER_HOST
-    command:
-     - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
-    networks:
-      - net
-    env_file:
-      - .env
+  # nginx-prometheus-exporter:
+  #   init: true
+  #   image: nginx/nginx-prometheus-exporter
+  #   container_name: $NGINX_EXPORTER_HOST
+  #   command:
+  #    - '--nginx.scrape-uri=https://$NGINX_HOST:$NGINX_PORT/metrics'
+  #   networks:
+  #     - net
+  #   env_file:
+  #     - .env
 
-  postgres-exporter:
-    init: true
-    image: prometheuscommunity/postgres-exporter
-    container_name: $POSTGRES_EXPORTER_HOST
-    networks:
-      - net
-    env_file:
-      - .env
+  # postgres-exporter:
+  #   init: true
+  #   image: prometheuscommunity/postgres-exporter
+  #   container_name: $POSTGRES_EXPORTER_HOST
+  #   networks:
+  #     - net
+  #   env_file:
+  #     - .env
 
-  elasticsearch:
-    init: true
-    image: elasticsearch
-    container_name: $ELASTICSEARCH_HOST
-    build:
-      context: ./backend/ELK/elasticsearch
-      dockerfile: Dockerfile
-    ports:
-      - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
-    volumes:
-      # - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./backend/ELK/kibana/token:/usr/share/elasticsearch/token
-      - ./backend/ELK/elasticsearch/hostname:/usr/share/elasticsearch/hostname
-      - ./backend/ELK/logstash/http_ca.crt:/usr/share/elasticsearch/http_ca.crt
-    networks:
-      - net
-    depends_on:
-      nginx:
-        condition: service_healthy
-    healthcheck:
-      test: healthcheck.sh
-      interval: 10s
-      timeout: 10s
-      retries: 50
-    env_file:
-      - .env
+  # elasticsearch:
+  #   init: true
+  #   image: elasticsearch
+  #   container_name: $ELASTICSEARCH_HOST
+  #   build:
+  #     context: ./backend/ELK/elasticsearch
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '$ELASTICSEARCH_PORT:$ELASTICSEARCH_PORT'
+  #   volumes:
+  #     # - ./backend/ELK/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+  #     - ./backend/ELK/kibana/token:/usr/share/elasticsearch/token
+  #     - ./backend/ELK/elasticsearch/hostname:/usr/share/elasticsearch/hostname
+  #     - ./backend/ELK/logstash/http_ca.crt:/usr/share/elasticsearch/http_ca.crt
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     nginx:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: healthcheck.sh
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 50
+  #   env_file:
+  #     - .env
 
-  logstash: 
-    init: true
-    image: logstash
-    container_name: $LOGSTASH_HOST
-    build:
-      context: ./backend/ELK/logstash
-      dockerfile: Dockerfile
-    volumes:
-      - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
-      - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
-      - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
-      - ./backend/ELK/logstash/http_ca.crt:/usr/share/logstash/config/certs/http_ca.crt
-      - ./backend/ELK/elasticsearch/hostname:/usr/share/logstash/es_hostname
-    networks:
-      - net
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    healthcheck:
-      test: healthcheck.sh
-      interval: 10s
-      timeout: 10s
-      retries: 30
-    env_file:
-      - .env
+  # logstash: 
+  #   init: true
+  #   image: logstash
+  #   container_name: $LOGSTASH_HOST
+  #   build:
+  #     context: ./backend/ELK/logstash
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./backend/django/src/logs/log.log:/usr/share/logstash/logs/django.log
+  #     - ./backend/nginx/logs/access.log:/usr/share/logstash/logs/nginx.log
+  #     - ./backend/PostgreSQL/logs/postgresql.log:/usr/share/logstash/logs/postgresql.log
+  #     - ./backend/ELK/logstash/http_ca.crt:/usr/share/logstash/config/certs/http_ca.crt
+  #     - ./backend/ELK/elasticsearch/hostname:/usr/share/logstash/es_hostname
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     elasticsearch:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: healthcheck.sh
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 30
+  #   env_file:
+  #     - .env
 
-  kibana:
-    init: true
-    image: kibana
-    container_name: $KIBANA_HOST
-    build:
-      context: ./backend/ELK/kibana
-      dockerfile: Dockerfile
-    ports:
-      - '$KIBANA_PORT:$KIBANA_PORT'
-    volumes:
-      - ./backend/ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
-      - ./backend/ELK/kibana/token:/usr/share/kibana/token
-    networks:
-      - net
-    depends_on:
-      logstash:
-        condition: service_healthy
-    env_file:
-      - .env
+  # kibana:
+  #   init: true
+  #   image: kibana
+  #   container_name: $KIBANA_HOST
+  #   build:
+  #     context: ./backend/ELK/kibana
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - '$KIBANA_PORT:$KIBANA_PORT'
+  #   volumes:
+  #     - ./backend/ELK/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+  #     - ./backend/ELK/kibana/token:/usr/share/kibana/token
+  #   networks:
+  #     - net
+  #   depends_on:
+  #     logstash:
+  #       condition: service_healthy
+  #   env_file:
+  #     - .env
 
 networks:
   net:

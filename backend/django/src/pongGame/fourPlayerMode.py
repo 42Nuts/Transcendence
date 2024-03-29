@@ -48,15 +48,17 @@ class Paddle:
             "width": self.width, 
             "height": self.height, 
             "color": self.color,
-			"angle": self.angle
+			"angle": self.angle,
+            "playerId": self.id
         }
 
-class PongGame:
-    def __init__(self):
-        self.canvas = GameCanvas(width=600, height=600, paddle_length=100)
+class fourPlayer:
+    def __init__(self, player_ids):
+        self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
         self.last_touch_player = None
         self.reset_angle = 0
+        self.winner = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -67,7 +69,7 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="player1",
+            id=player_ids[0],
             angle=0
         ))
 
@@ -80,7 +82,7 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player2",
+            id=player_ids[1],
             angle=90
         ))
 
@@ -93,7 +95,7 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player3",
+            id=player_ids[2],
             angle=180
         ))
 
@@ -106,7 +108,7 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="player4",
+            id=player_ids[3],
             angle=270
         ))
 
@@ -115,26 +117,26 @@ class PongGame:
         self.ball = GameBall(
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
-            radius=10,
-            velocity_x=7,
+            radius=15,
+            velocity_x=1,
             velocity_y=1,
-            speed=7,
+            speed=1,
             color="WHITE"
         )
 
     def reset_ball(self):
-        self.reset_angle += 90
-        if self.reset_angle == 360:
+        self.reset_angle += 92
+        if self.reset_angle >= 360:
             self.reset_angle = 0
 
         self.ball.x = self.canvas.width / 2
         self.ball.y = self.canvas.height / 2
-        self.ball.speed = 5
+        self.ball.speed = 1
         self.last_touch_player = None
 
         angle_radians = math.radians(self.reset_angle)
-        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians) + 1
-        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians) + 1
+        self.ball.velocity_x = self.ball.speed * math.cos(angle_radians)
+        self.ball.velocity_y = self.ball.speed * math.sin(angle_radians)
 
     def collision(self, b, p):
         p.top = p.y
@@ -167,7 +169,7 @@ class PongGame:
     
     def update_player_movement(self, index, player):
         angle_radians = math.radians(180 - player.angle)
-        move_distance = 8  # 움직임의 기본 단위
+        move_distance = 4  # 움직임의 기본 단위
         # index 0: 바닥 변을 따라 움직임
         if index == 0:
             if player.leftArrow and player.x > 0:
@@ -176,20 +178,19 @@ class PongGame:
                 player.x += move_distance
         # index 1: 왼쪽 변을 따라 움직임
         elif index == 1:
-            if player.leftArrow and player.y - player.width / 2 + 5 > 0:
+            if player.leftArrow and player.y > 0:
                 player.y -= move_distance 
-            if player.rightArrow and player.y + player.width / 2  < self.canvas.height:
+            if player.rightArrow and player.y + player.height  < self.canvas.height:
                 player.y += move_distance 
-        # index 2: 오른쪽 변을 따라 움직임
         elif index == 2:
             if player.leftArrow and player.x < self.canvas.width - player.width:
                 player.x += move_distance 
             if player.rightArrow and player.x > 0:
                 player.x -= move_distance
         elif index == 3:
-            if player.rightArrow and player.y - player.width / 2 + 5 > 0:
+            if player.rightArrow and player.y > 0:
                 player.y -= move_distance 
-            if player.leftArrow and player.y + player.width / 2  < self.canvas.height:
+            if player.leftArrow and player.y + player.height  < self.canvas.height:
                 player.y += move_distance
 
     def update_score(self, ball):
@@ -218,6 +219,13 @@ class PongGame:
                     self.players[3].score += 1
             self.reset_ball()
 
+    def check_winner(self):
+        for player in self.players:
+            if player.score >= 5:
+                self.winner = player.id
+                return True
+        return False
+
     def update(self, user_input=None):
         # score
         self.update_score(self.ball)
@@ -225,9 +233,6 @@ class PongGame:
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
-
-        # computer ai
-        # self.players[2].x += ((self.ball.x - (self.players[2].x + self.players[2].width / 2)) * 0.1)
 
         # 공의 위치에 따른 플레이어 확인 (야매로  함,  확인  필요!)
         index, player = self.find_closest_paddle()
@@ -268,8 +273,10 @@ class PongGame:
         for index, player in enumerate(self.players):
             self.update_player_movement(index, player)
 
+        self.check_winner()
         # 프론트엔드에 필요한 정보 보내기
         return {
+            "winner": self.winner,
             "ball": self.ball.to_dict(),
             "players": [player.to_dict() for player in self.players]
         }

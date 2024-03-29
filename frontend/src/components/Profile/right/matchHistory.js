@@ -43,23 +43,23 @@ class MatchHistory extends Component {
     const histories = document.createElement("div");
     histories.className = "flex-col justify-start items-start gap-6 flex";
 
-    // const match = createComponent(MatchBoard, {
-    //   gameMode: "2 Players",
-    //   gameResult: "VICTORY",
-    // });
-
-    // histories.appendChild(match);
-
-    const messageContainer = document.createElement("div");
-    messageContainer.className = "w-[359px] flex-col justify-start items-center flex";
-
-    const message = createComponent(CannotFind, {
-      text: "Sorry, there is no match history.",
+    const match = createComponent(MatchBoard, {
+      gameMode: "2 Players",
+      gameResult: "VICTORY",
     });
 
-    messageContainer.appendChild(message);
+    histories.appendChild(match);
 
-    histories.appendChild(messageContainer);
+    // const messageContainer = document.createElement("div");
+    // messageContainer.className = "w-[359px] flex-col justify-start items-center flex";
+
+    // const message = createComponent(CannotFind, {
+    //   text: "Sorry, there is no match history.",
+    // });
+
+    // messageContainer.appendChild(message);
+
+    // histories.appendChild(messageContainer);
 
     matchHistory.appendChild(title);
     matchHistory.appendChild(this.line);

@@ -13,5 +13,8 @@ export default {
   deleteAccount: false,
 
   //Game Mode
-  gameMode: "2p",
+  gameMode: "1p",
+  gameStart: false,
+  tournamentMode: 0,
+  nextRoom: "",
 };

@@ -84,7 +84,7 @@ def profile_url_handler(request, user_id):
             logger.info("GET: %s", str(user))
         except User.DoesNotExist:
             raise Http404()
-        return JsonResponse({'profile_index': request.user.profile_index})
+        return JsonResponse({'profile_index': user.profile_index})
     elif request.method == 'PUT':
         data = json.loads(request.body.decode('utf-8'))
         profile_index = data.get('profile_index')

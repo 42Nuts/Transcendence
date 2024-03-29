@@ -139,7 +139,9 @@ class HomePage extends Component {
     mainContentDiv.appendChild(buttonContainer);
 
     // 닉네임 팝업 컴포넌트 추가
-    const nickNamePopup = createComponent(NickNamePopup, {});
+    const nickNamePopup = createComponent(NickNamePopup, {
+      mode: "home",
+    });
     this.bgDiv.appendChild(nickNamePopup);
 
     return this.bgDiv;

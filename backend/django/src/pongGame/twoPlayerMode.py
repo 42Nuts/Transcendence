@@ -27,7 +27,7 @@ class GameBall:
         }
 
 class Paddle:
-    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id):
+    def __init__(self, x, y, width, height, score, color, leftArrow, rightArrow, id, angle):
         self.x = x
         self.y = y
         self.width = width
@@ -37,6 +37,7 @@ class Paddle:
         self.leftArrow = leftArrow  
         self.rightArrow = rightArrow
         self.id = id
+        self.angle = angle
 
     def to_dict(self):
         return {
@@ -45,13 +46,16 @@ class Paddle:
             "score": self.score, 
             "width": self.width, 
             "height": self.height, 
-            "color": self.color
+            "color": self.color,
+            "angle": self.angle,
+            "playerId": self.id
         }
 
-class PongGame:
-    def __init__(self):
+class twoPlayer:
+    def __init__(self, player_ids):
         self.canvas = GameCanvas(width=700, height=700, paddle_length=100)
         self.players = []
+        self.winner = None
 
         self.players.append(Paddle(
             x=(self.canvas.width - self.canvas.paddle_length) / 2,
@@ -62,7 +66,8 @@ class PongGame:
             color="white",
             leftArrow=False,
             rightArrow=False,
-            id="1"
+            angle = 0,
+            id=player_ids[0]
         ))
 
         self.players.append(Paddle(
@@ -74,7 +79,8 @@ class PongGame:
             color="WHITE",
             leftArrow=False,
             rightArrow=False,
-            id="2"
+            angle = 180,
+            id=player_ids[1]
         ))
 
         self.player_map = {player.id: player for player in self.players}
@@ -82,10 +88,10 @@ class PongGame:
         self.ball = GameBall(
             x=self.canvas.width / 2,
             y=self.canvas.height / 2,
-            radius=10,
+            radius=15,
             velocity_x=2,
             velocity_y=2,
-            speed=2,
+            speed=4,
             color="WHITE"
         )
 
@@ -94,7 +100,7 @@ class PongGame:
         self.ball.y = self.canvas.height / 2
         self.ball.velocity_x = -2 if self.ball.velocity_x > 0 else 2
         self.ball.velocity_y = -2 if self.ball.velocity_y > 0 else 2
-        self.ball.speed = 2
+        self.ball.speed = 4
 
     def collision(self, b, p):
         p.top = p.y
@@ -109,21 +115,39 @@ class PongGame:
 
         return p.left < b.right and p.top < b.bottom and p.right > b.left and p.bottom > b.top
 
+    def update_player_movement(self, index, player):
+        if player.leftArrow and player.rightArrow:
+            return
+        if index == 0:
+            if player.leftArrow and player.x > 0:
+                player.x -= 8
+            if player.rightArrow and player.x < self.canvas.width - player.width:
+                player.x += 8
+        if index == 1:
+            if player.leftArrow and player.x < self.canvas.width - player.width:
+                player.x += 8
+            if player.rightArrow and player.x > 0:
+                player.x -= 8
+    
+    def check_winner(self):
+        for player in self.players:
+            if player.score >= 5:
+                self.winner = player.id
+                return True
+        return False
+
     def update(self, user_input=None):
         # score
         if self.ball.y - self.ball.radius < 0:
-            self.players[1].score += 1
+            self.players[0].score += 1
             self.reset_ball()
         elif self.ball.y + self.ball.radius > self.canvas.height:
-            self.players[0].score += 1
+            self.players[1].score += 1
             self.reset_ball()
         
         # 공의 위치 변경
         self.ball.x += self.ball.velocity_x
         self.ball.y += self.ball.velocity_y
-
-        # computer ai
-        # self.players[1].x += ((self.ball.x - (self.players[1].x + self.players[1].width / 2)) * 0.1)
 
         # 공의 벽 튕김
         if self.ball.x - self.ball.radius < 0:
@@ -162,17 +186,13 @@ class PongGame:
                 player.rightArrow = user_input.get("rightArrow", False)
 
                 # 두 키가 동시에 눌렸을 경우 움직임 없음
-        for cur in self.players:
-           if cur.leftArrow and cur.rightArrow:
-               continue
+        for index, player in enumerate(self.players):
+            self.update_player_movement(index, player)
 
-           if cur.leftArrow and cur.x > 0:
-               cur.x -= 8
-           if cur.rightArrow and cur.x < self.canvas.width - cur.width:
-               cur.x += 8
-
+        self.check_winner()
         # 프론트엔드에 필요한 정보 보내기
         return {
+            "winner": self.winner,
             "ball": self.ball.to_dict(),
             "players": [player.to_dict() for player in self.players]
         }

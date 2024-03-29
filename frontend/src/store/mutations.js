@@ -35,4 +35,16 @@ export default {
     state.gameMode = payload;
     return state;
   },
+  updateGameStart(state, payload) {
+    state.gameStart = payload;
+    return state;
+  },
+  updateTournamentMode(state, payload) {
+    state.tournamentMode = payload;
+    return state;
+  },
+  updateNextRoom(state, payload) {
+    state.nextRoom = payload;
+    return state;
+  },
 };
