@@ -3,7 +3,7 @@ djangorestframework-simplejwt==5.3.1 # django, djangorestframework, djangorestfr
 daphne==4.0.0 
 gunicorn==21.2.0
 psycopg2==2.9.9
-pillow==10.2.0
+pillow==10.3.0
 requests==2.31.0
 channels_redis
 django-prometheus
