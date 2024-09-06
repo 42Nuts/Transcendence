@@ -117,11 +117,8 @@
 
 ## 스크린샷
 ![1](https://github.com/user-attachments/assets/cbf3673f-1d66-4dff-8b52-b3805b6f2e3c)
-![2](https://github.com/user-attachments/assets/4d309c7b-43fc-4a85-b282-18a5adf426ad)
 ![3](https://github.com/user-attachments/assets/18d703c5-f241-4b14-a6cd-6769d2bda9d1)
-![4](https://github.com/user-attachments/assets/f790054b-3f96-4980-90ae-9144dd02c7c0)
 ![8](https://github.com/user-attachments/assets/7ab67c71-a097-42b7-a642-f66434919752)
-![6](https://github.com/user-attachments/assets/86b62c71-a051-45bb-8e16-b2b65bb7ea8b)
 
 ## 아키텍처
 
