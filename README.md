@@ -182,3 +182,6 @@
 | **Frontend && Design** | **Backend && Devops** | **Backend && Devops** | **Game** |
 
 </div>
+
+## Etc.
+- **[TREAMREADME](TEAMREADME.md)** : 협업 규칙
