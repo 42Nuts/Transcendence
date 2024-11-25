@@ -81,10 +81,6 @@ services:
   postgresql:
     image: postgresql
     container_name: $POSTGRES_HOST
-    command:
-      - "postgres"
-      - "-c"
-      - "config_file=/var/lib/postgresql/postgresql.conf"
     build:
       context: ./backend/PostgreSQL
       dockerfile: Dockerfile
